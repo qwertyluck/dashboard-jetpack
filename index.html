@@ -160,10 +160,10 @@
                             Sistem Aktif & Terintegrasi
                         </div>
                         <h2 class="text-3xl md:text-5xl font-extrabold text-white tracking-tight leading-tight">
-                            Selamat Datang di <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-kejaksaan-400 to-emerald-300">Pusat Generator Dokumen</span>
+                            Pusat Tata Usaha & <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-kejaksaan-400 to-emerald-300">Generator Dokumen Resmi</span>
                         </h2>
                         <p class="text-slate-400 text-sm md:text-base max-w-xl leading-relaxed">
-                            Aplikasi berbasis web untuk mempercepat tata usaha pembuatan Surat Perintah Perjalanan Dinas (SPPD), Surat Pernyataan Tanggung Jawab Mutlak (SPTJM), dan Nota Dinas secara otomatis dan presisi.
+                            Platform terpadu instansi untuk mempercepat penyusunan Surat Perintah Perjalanan Dinas (SPPD), Surat Pernyataan Tanggung Jawab Mutlak (SPTJM), dan Nota Dinas secara instan, aman, dan presisi tinggi.
                         </p>
                     </div>
                     
@@ -185,9 +185,9 @@
                             <i class="ph-fill ph-envelope-open text-2xl text-blue-500 group-hover:text-white"></i>
                         </div>
                         <h3 class="text-xl font-bold text-white mb-3">Generator Nota Dinas</h3>
-                        <p class="text-slate-400 text-sm leading-relaxed mb-6">Susun Nota Dinas pencairan anggaran lengkap dengan rincian DIPA dan Tembusan secara instan.</p>
+                        <p class="text-slate-400 text-sm leading-relaxed mb-6">Susun Nota Dinas pencairan anggaran lengkap dengan rincian DIPA, pilihan BAS K/L, dan Tembusan secara instan.</p>
                         <div class="flex items-center text-blue-400 text-sm font-bold group-hover:text-blue-300">
-                            Mulai Buat <i class="ph-bold ph-arrow-right ml-2 transform group-hover:translate-x-1 transition-transform"></i>
+                            Akses Modul <i class="ph-bold ph-arrow-right ml-2 transform group-hover:translate-x-1 transition-transform"></i>
                         </div>
                     </div>
 
@@ -200,9 +200,9 @@
                             <i class="ph-fill ph-car-profile text-2xl text-kejaksaan-500 group-hover:text-white"></i>
                         </div>
                         <h3 class="text-xl font-bold text-white mb-3">Generator SPPD</h3>
-                        <p class="text-slate-400 text-sm leading-relaxed mb-6">Buat lembar SPPD resmi, lengkap dengan perhitungan hari otomatis dan pengikut menggunakan template Anda.</p>
+                        <p class="text-slate-400 text-sm leading-relaxed mb-6">Buat lembar SPPD resmi, lengkap dengan perhitungan hari otomatis, tabel pengikut, serta pratinjau dokumen A4.</p>
                         <div class="flex items-center text-kejaksaan-400 text-sm font-bold group-hover:text-kejaksaan-300">
-                            Mulai Buat <i class="ph-bold ph-arrow-right ml-2 transform group-hover:translate-x-1 transition-transform"></i>
+                            Akses Modul <i class="ph-bold ph-arrow-right ml-2 transform group-hover:translate-x-1 transition-transform"></i>
                         </div>
                     </div>
 
@@ -215,17 +215,46 @@
                             <i class="ph-fill ph-file-text text-2xl text-purple-500 group-hover:text-white"></i>
                         </div>
                         <h3 class="text-xl font-bold text-white mb-3">Generator SPTJM</h3>
-                        <p class="text-slate-400 text-sm leading-relaxed mb-6">Hasilkan Surat Pernyataan Tanggung Jawab Mutlak dalam format F4 langsung dari browser Anda.</p>
+                        <p class="text-slate-400 text-sm leading-relaxed mb-6">Hasilkan Surat Pernyataan Tanggung Jawab Mutlak dalam format F4 terstandarisasi langsung dari peramban.</p>
                         <div class="flex items-center text-purple-400 text-sm font-bold group-hover:text-purple-300">
-                            Mulai Buat <i class="ph-bold ph-arrow-right ml-2 transform group-hover:translate-x-1 transition-transform"></i>
+                            Akses Modul <i class="ph-bold ph-arrow-right ml-2 transform group-hover:translate-x-1 transition-transform"></i>
                         </div>
+                    </div>
+                </div>
+
+                <!-- Informasi Sistem & Fitur Unggulan -->
+                <div class="bg-slate-800/40 border border-slate-700/50 rounded-3xl p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-6">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-2xl">
+                            <i class="ph-bold ph-shield-check"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-white text-base">Penyimpanan Otomatis (Autosave)</h4>
+                            <p class="text-slate-400 text-xs mt-0.5">Data yang Anda masukkan tersimpan aman di memori lokal browser sehingga tidak akan hilang saat berpindah menu.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3 w-full md:w-auto">
+                        <button onclick="switchTab('nota')" class="flex-1 md:flex-none px-5 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-bold text-white transition-colors text-center">
+                            Buka Nota Dinas
+                        </button>
+                        <button onclick="switchTab('sppd')" class="flex-1 md:flex-none px-5 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-bold text-white transition-colors text-center">
+                            Buka SPPD
+                        </button>
                     </div>
                 </div>
             </div>
             
             <!-- TAB 1: NOTA DINAS -->
             <div id="tab-nota" class="p-4 md:p-8 hidden pb-20 animate-fade-in">
-                <div class="max-w-4xl mx-auto">
+                <div class="max-w-4xl mx-auto space-y-6">
+                    <!-- Tombol Kembali Responsif -->
+                    <div class="flex items-center justify-between">
+                        <button onclick="switchTab('home')" class="inline-flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white px-4 py-2.5 rounded-xl text-xs font-bold transition-all border border-slate-700 shadow-sm">
+                            <i class="ph-bold ph-arrow-left text-base"></i> Kembali ke Beranda
+                        </button>
+                        <span class="text-xs text-slate-500 font-medium">Modul Nota Dinas</span>
+                    </div>
+
                     <form id="notaForm" class="space-y-6">
                         <!-- Blok 1 -->
                         <div class="card-modern">
@@ -256,7 +285,7 @@
                             <div class="space-y-6">
                                 <div><label class="label-modern">Detail Kegiatan (Sehubungan dengan...)</label><textarea id="kegiatan" class="input-modern" rows="2" required>kegiatan operasional sehari-hari</textarea></div>
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <div><label class="label-modern">Nominal Anggaran (Rp)</label><input type="number" id="nominal" class="input-modern" value="10000000" required></div>
+                                    <div><label class="label-modern">Nomor Nominal Anggaran (Rp)</label><input type="number" id="nominal" class="input-modern" value="10000000" required></div>
                                     <div><label class="label-modern">DIPA Tahun</label><input type="text" id="dipaTahun" class="input-modern" value="2024" required></div>
                                 </div>
                                 <div>
@@ -326,7 +355,15 @@
 
             <!-- TAB 2: SPPD -->
             <div id="tab-sppd" class="p-4 md:p-8 flex flex-col xl:flex-row gap-8 hidden pb-20 animate-fade-in">
-                <section class="w-full xl:w-5/12 flex flex-col">
+                <section class="w-full xl:w-5/12 flex flex-col space-y-6">
+                    <!-- Tombol Kembali Responsif -->
+                    <div class="flex items-center justify-between">
+                        <button onclick="switchTab('home')" class="inline-flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white px-4 py-2.5 rounded-xl text-xs font-bold transition-all border border-slate-700 shadow-sm">
+                            <i class="ph-bold ph-arrow-left text-base"></i> Kembali ke Beranda
+                        </button>
+                        <span class="text-xs text-slate-500 font-medium">Modul SPPD</span>
+                    </div>
+
                     <form id="sppdForm" class="space-y-6">
                         <div class="card-modern">
                             <div class="absolute top-0 left-0 w-1.5 h-full bg-kejaksaan-500"></div>
@@ -411,7 +448,15 @@
 
             <!-- TAB 3: SPTJM -->
             <div id="tab-sptjm" class="p-4 md:p-8 flex flex-col xl:flex-row gap-8 hidden pb-20 animate-fade-in">
-                <section class="w-full xl:w-5/12 flex flex-col">
+                <section class="w-full xl:w-5/12 flex flex-col space-y-6">
+                    <!-- Tombol Kembali Responsif -->
+                    <div class="flex items-center justify-between">
+                        <button onclick="switchTab('home')" class="inline-flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white px-4 py-2.5 rounded-xl text-xs font-bold transition-all border border-slate-700 shadow-sm">
+                            <i class="ph-bold ph-arrow-left text-base"></i> Kembali ke Beranda
+                        </button>
+                        <span class="text-xs text-slate-500 font-medium">Modul SPTJM</span>
+                    </div>
+
                     <form id="sptjmForm" class="space-y-6">
                         <div class="card-modern">
                             <div class="absolute top-0 left-0 w-1.5 h-full bg-kejaksaan-500"></div>
@@ -455,13 +500,13 @@
                         </div>
                         <div class="overflow-y-auto max-h-[70vh] flex flex-col items-center gap-8 pb-4 custom-scrollbar rounded-xl">
                             <div id="sptjm_previewPage" class="p-[20mm] w-full max-w-[215mm] min-h-[330mm] shadow-2xl sptjm-document print-area rounded-md">
-                                <div class="text-center font-bold text-xs uppercase leading-tight mb-1">KEJAKSAAN REPUBLIK INDONESIA</div>
-                                <div class="text-center font-bold text-xs uppercase leading-tight mb-1" id="sptjm_prev_unit_wilayah">KEJAKSAAN TINGGI MALUKU</div>
-                                <div class="text-center font-bold text-sm uppercase leading-tight mb-4" id="sptjm_prev_satuan_kerja">KEJAKSAAN NEGERI MALUKU TENGGARA</div>
-                                <div class="text-[9pt] text-center border-b border-black pb-3 mb-6">Jl. Cempaka Perumahan Pemda, Kel. Ohoijang Watdek, Kec. Kei Kecil, Kabupaten Maluku Tenggara</div>
+                                <div class="text-center font-bold text-xs uppercase leading-tight mb-1">KEJAKSAAN REPUBLIK INDONESIA[cite: 2]</div>
+                                <div class="text-center font-bold text-xs uppercase leading-tight mb-1" id="sptjm_prev_unit_wilayah">KEJAKSAAN TINGGI MALUKU[cite: 2]</div>
+                                <div class="text-center font-bold text-sm uppercase leading-tight mb-4" id="sptjm_prev_satuan_kerja">KEJAKSAAN NEGERI MALUKU TENGGARA[cite: 2]</div>
+                                <div class="text-[9pt] text-center border-b border-black pb-3 mb-6">Jl. Cempaka Perumahan Pemda, Kel. Ohoijang Watdek, Kec. Kei Kecil, Kabupaten Maluku Tenggara[cite: 2]</div>
                                 <div class="text-center font-bold text-sm mb-6 underline tracking-wide">SURAT PERNYATAAN TANGGUNG JAWAB MUTLAK</div>
                                 <div class="text-center text-xs font-bold mb-6">Nomor : <span id="sptjm_prev_nomor">{nomor}</span></div>
-                                <div class="text-xs mb-3">Yang bertanda tangan di bawah ini :</div>
+                                <div class="text-xs mb-3">Yang bertanda tangan di bawah ini[cite: 2] :</div>
                                 <table class="w-full text-xs mb-4 align-top">
                                     <tr><td class="w-36 py-1">Nama</td><td class="w-4 py-1">:</td><td class="py-1 font-bold uppercase" id="sptjm_prev_nama_pejabat">-</td></tr>
                                     <tr><td class="py-1">NIP</td><td class="py-1">:</td><td class="py-1 font-mono" id="sptjm_prev_nip">-</td></tr>
@@ -470,12 +515,12 @@
                                     <tr><td class="py-1">Unit Wilayah</td><td class="py-1">:</td><td class="py-1 uppercase" id="sptjm_prev_unit_wilayah_baris">-</td></tr>
                                     <tr><td class="py-1">Kementerian/Lembaga</td><td class="py-1">:</td><td class="py-1 uppercase" id="sptjm_prev_kementerian">-</td></tr>
                                 </table>
-                                <div class="text-xs mb-2">Menyatakan dengan sesungguhnya bahwa :</div>
+                                <div class="text-xs mb-2">Menyatakan dengan sesungguhnya bahwa[cite: 2] :</div>
                                 <ol class="list-decimal list-inside text-xs space-y-2 mb-6 pl-2 leading-relaxed">
-                                    <li>Perhitungan yang terdapat dalam <span id="sptjm_prev_uraian" class="font-medium">...</span> telah dihitung dengan benar;</li>
-                                    <li>Apabila dikemudian hari terbukti pernyataan ini tidak benar, menimbulkan kerugian negara, dan/atau menimbulkan permasalahan hukum, maka saya bersedia bertanggung jawab secara mutlak untuk menyetor kerugian negara tersebut ke Kas Negara sesuai dengan ketentuan peraturan perundang-undangan.</li>
+                                    <li>Perhitungan yang terdapat dalam <span id="sptjm_prev_uraian" class="font-medium">...</span> telah dihitung dengan benar[cite: 2];</li>
+                                    <li>Apabila dikemudian hari terbukti pernyataan ini tidak benar, menimbulkan kerugian negara, dan/atau menimbulkan permasalahan hukum, maka saya bersedia bertanggung jawab secara mutlak untuk menyetor kerugian negara tersebut ke Kas Negara sesuai dengan ketentuan peraturan perundang-undangan[cite: 2].</li>
                                 </ol>
-                                <div class="text-xs mb-8 leading-relaxed">Demikian surat pernyataan ini dibuat dengan sebenarnya, untuk dapat dipergunakan sebagaimana mestinya.</div>
+                                <div class="text-xs mb-8 leading-relaxed">Demikian surat pernyataan ini dibuat dengan sebenarnya, untuk dapat dipergunakan sebagaimana mestinya[cite: 2].</div>
                                 <div class="flex justify-end text-xs">
                                     <div class="w-64 text-left">
                                         <p><span id="sptjm_prev_lokasi">-</span>, <span id="sptjm_prev_tanggal_surat">-</span></p>
