@@ -26,6 +26,14 @@
                 extend: {
                     colors: {
                         kejaksaan: { 50: '#f0fdf4', 100: '#dcfce7', 500: '#22c55e', 700: '#15803d', 900: '#14532d' }
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.4s ease-out forwards',
+                        'slide-up': 'slideUp 0.5s ease-out forwards',
+                    },
+                    keyframes: {
+                        fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
+                        slideUp: { '0%': { opacity: '0', transform: 'translateY(20px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } }
                     }
                 }
             }
@@ -33,14 +41,14 @@
     </script>
 
     <style type="text/tailwindcss">
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
         
         body { font-family: 'Inter', sans-serif; background-color: #0f172a; color: #e2e8f0; color-scheme: dark; overflow: hidden; }
         
-        .custom-scrollbar::-webkit-scrollbar { width: 8px; height: 8px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: #1e293b; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #64748b; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #475569; }
 
         @media print { 
             @page { size: 215mm 330mm; margin: 0; }
@@ -55,139 +63,205 @@
         .sptjm-document { font-family: 'Arial', sans-serif; color: #000; background-color: #ffffff; line-height: 1.5; font-size: 11pt; color-scheme: light; width: 215mm; min-height: 330mm; }
         
         /* UI Komponen */
-        .input-modern { @apply w-full bg-[#1e293b] border border-slate-600 rounded-lg px-4 py-3 text-sm focus:bg-[#0f172a] focus:border-kejaksaan-500 focus:ring-2 focus:ring-kejaksaan-500/50 transition-all outline-none text-white placeholder-slate-400 shadow-inner; }
-        .label-modern { @apply block text-[12px] font-bold text-slate-300 mb-2 uppercase tracking-wider; }
-        .card-modern { @apply bg-[#1e293b] p-6 rounded-2xl border border-slate-700 shadow-xl mb-6 relative overflow-hidden; }
+        .input-modern { @apply w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-3.5 text-sm focus:bg-[#0f172a] focus:border-kejaksaan-500 focus:ring-2 focus:ring-kejaksaan-500/30 transition-all outline-none text-white placeholder-slate-500 shadow-inner; }
+        .label-modern { @apply block text-[11px] font-bold text-slate-400 mb-2 uppercase tracking-widest; }
+        .card-modern { @apply bg-slate-800/80 backdrop-blur-md p-6 md:p-8 rounded-3xl border border-slate-700/50 shadow-2xl mb-6 relative overflow-hidden; }
     </style>
 </head>
 <body class="antialiased selection:bg-kejaksaan-500 selection:text-white flex h-screen">
 
+    <!-- OVERLAY MOBILE -->
+    <div id="mobile-overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-40 hidden md:hidden transition-opacity opacity-0"></div>
+
     <!-- SIDEBAR NAVIGASI -->
-    <aside class="w-72 bg-slate-900 border-r border-slate-800 flex flex-col hidden md:flex z-50 shadow-2xl">
-        <div class="h-20 flex items-center justify-center border-b border-slate-800 bg-slate-900/50">
-            <div class="bg-gradient-to-br from-kejaksaan-500 to-kejaksaan-700 p-2 rounded-xl text-white mr-3 shadow-lg shadow-kejaksaan-900/50">
+    <aside id="sidebar" class="fixed md:static inset-y-0 left-0 w-72 bg-slate-900/95 backdrop-blur-xl border-r border-slate-800 flex flex-col z-50 shadow-2xl transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out">
+        <div class="h-20 flex items-center px-6 border-b border-slate-800/80">
+            <div class="bg-gradient-to-br from-kejaksaan-500 to-kejaksaan-700 p-2.5 rounded-xl text-white mr-3 shadow-lg shadow-kejaksaan-900/50">
                 <i class="ph-bold ph-scales text-xl"></i>
             </div>
-            <h1 class="font-bold text-white tracking-wide text-lg">KEJAKSAAN<span class="text-kejaksaan-500">DIGITAL</span></h1>
+            <div>
+                <h1 class="font-extrabold text-white tracking-wide text-lg leading-tight">KEJAKSAAN<span class="text-kejaksaan-500">DIGITAL</span></h1>
+                <p class="text-[9px] text-slate-400 font-bold tracking-widest uppercase mt-0.5">Sistem Tata Usaha</p>
+            </div>
+            <button onclick="toggleSidebar()" class="md:hidden ml-auto text-slate-400 hover:text-white"><i class="ph-bold ph-x text-2xl"></i></button>
         </div>
         
-        <nav class="flex-1 px-4 py-6 space-y-3 overflow-y-auto custom-scrollbar">
-            <p class="px-2 text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">Modul Aplikasi</p>
+        <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto custom-scrollbar">
+            <p class="px-3 text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-3">Menu Utama</p>
             
-            <button id="btn-nota" onclick="switchTab('nota')" class="w-full text-left flex items-center px-4 py-3.5 rounded-xl text-sm font-bold bg-gradient-to-r from-kejaksaan-500 to-kejaksaan-700 text-white shadow-md shadow-kejaksaan-900/20 transition-all duration-200">
-                <i class="ph-bold ph-envelope-open text-xl mr-3"></i> Nota Dinas
+            <button id="btn-home" onclick="switchTab('home')" class="w-full text-left flex items-center px-4 py-3.5 rounded-2xl text-sm font-bold bg-slate-800 text-white shadow-md transition-all duration-200 border border-slate-700">
+                <div class="p-1.5 rounded-lg bg-slate-700 text-white mr-3"><i class="ph-bold ph-squares-four text-lg"></i></div>
+                Beranda Utama
             </button>
-            <button id="btn-sppd" onclick="switchTab('sppd')" class="w-full text-left flex items-center px-4 py-3.5 rounded-xl text-sm font-bold text-slate-300 hover:bg-slate-800 hover:text-white transition-all duration-200">
-                <i class="ph-bold ph-car-profile text-xl mr-3"></i> Generator SPPD
+
+            <p class="px-3 text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-6 mb-3">Generator Dokumen</p>
+
+            <button id="btn-nota" onclick="switchTab('nota')" class="w-full text-left flex items-center px-4 py-3 rounded-2xl text-sm font-bold text-slate-400 hover:bg-slate-800 hover:text-white transition-all duration-200 border border-transparent">
+                <div class="p-1.5 rounded-lg bg-slate-800/50 text-slate-400 mr-3"><i class="ph-bold ph-envelope-open text-lg"></i></div>
+                Nota Dinas
             </button>
-            <button id="btn-sptjm" onclick="switchTab('sptjm')" class="w-full text-left flex items-center px-4 py-3.5 rounded-xl text-sm font-bold text-slate-300 hover:bg-slate-800 hover:text-white transition-all duration-200">
-                <i class="ph-bold ph-file-text text-xl mr-3"></i> Generator SPTJM
+            <button id="btn-sppd" onclick="switchTab('sppd')" class="w-full text-left flex items-center px-4 py-3 rounded-2xl text-sm font-bold text-slate-400 hover:bg-slate-800 hover:text-white transition-all duration-200 border border-transparent">
+                <div class="p-1.5 rounded-lg bg-slate-800/50 text-slate-400 mr-3"><i class="ph-bold ph-car-profile text-lg"></i></div>
+                Generator SPPD
+            </button>
+            <button id="btn-sptjm" onclick="switchTab('sptjm')" class="w-full text-left flex items-center px-4 py-3 rounded-2xl text-sm font-bold text-slate-400 hover:bg-slate-800 hover:text-white transition-all duration-200 border border-transparent">
+                <div class="p-1.5 rounded-lg bg-slate-800/50 text-slate-400 mr-3"><i class="ph-bold ph-file-text text-lg"></i></div>
+                Generator SPTJM
             </button>
         </nav>
         
-        <div class="p-4 border-t border-slate-800 bg-slate-900/50 text-center text-xs text-slate-500">
-            Dibuat oleh <strong class="text-slate-300">Jalo Tuharea</strong>
+        <div class="p-5 m-4 rounded-2xl border border-slate-800 bg-slate-800/30 text-center relative overflow-hidden">
+            <div class="absolute -top-4 -right-4 w-16 h-16 bg-kejaksaan-500/10 rounded-full blur-xl"></div>
+            <p class="text-[10px] text-slate-500 font-medium">Dibuat oleh</p>
+            <p class="text-xs font-bold text-slate-300 mt-1">Jalo Tuharea</p>
         </div>
     </aside>
 
     <!-- KONTEN UTAMA -->
-    <main class="flex-1 flex flex-col h-screen overflow-hidden relative">
+    <main class="flex-1 flex flex-col h-screen overflow-hidden relative bg-[#0f172a]">
         
         <!-- HEADER ATAS -->
-        <header class="bg-slate-800/80 backdrop-blur-md border-b border-slate-700 h-20 flex items-center justify-between px-6 z-40 no-print">
-            <div>
-                <h2 id="header-title" class="text-lg font-bold text-white tracking-tight">NOTA DINAS</h2>
-                <p id="header-subtitle" class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Sistem Generator Nota Dinas</p>
+        <header class="bg-slate-900/60 backdrop-blur-xl border-b border-slate-800 h-20 flex items-center justify-between px-4 md:px-8 z-30 no-print sticky top-0">
+            <div class="flex items-center gap-4">
+                <button onclick="toggleSidebar()" class="md:hidden text-slate-300 p-2 rounded-xl bg-slate-800 border border-slate-700 hover:text-white">
+                    <i class="ph-bold ph-list text-xl"></i>
+                </button>
+                <div>
+                    <h2 id="header-title" class="text-base md:text-xl font-bold text-white tracking-tight">BERANDA UTAMA</h2>
+                    <p id="header-subtitle" class="text-[9px] md:text-[11px] font-bold text-kejaksaan-500 uppercase tracking-widest">Dashboard Ringkasan</p>
+                </div>
             </div>
             
-            <div id="header-actions" class="flex items-center gap-3 hidden">
-                <label for="templateUpload" class="cursor-pointer flex items-center gap-2 bg-slate-700 hover:bg-slate-600 text-slate-200 px-4 py-2.5 rounded-xl text-sm font-semibold transition-colors border border-slate-600 shadow-sm" title="Upload template.docx manual">
-                    <i class="ph-bold ph-upload-simple text-lg text-slate-300"></i> Manual Upload
+            <div id="header-actions" class="flex items-center gap-2 md:gap-3 hidden">
+                <label for="templateUpload" class="cursor-pointer hidden sm:flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-2.5 rounded-xl text-xs md:text-sm font-semibold transition-colors border border-slate-700 shadow-sm">
+                    <i class="ph-bold ph-upload-simple text-lg"></i> <span class="hidden md:inline">Upload Template</span>
                 </label>
                 <input type="file" id="templateUpload" accept=".docx" class="hidden" onchange="generateFromLocalTemplate_SPPD(this)" />
 
-                <button id="btnDownload" onclick="downloadWord_SPPD()" class="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white px-6 py-2.5 rounded-xl text-sm font-bold shadow-lg shadow-blue-900/50 transition-all transform hover:-translate-y-0.5">
-                    <i class="ph-bold ph-file-doc text-lg"></i> Unduh Dokumen
+                <button id="btnDownload" onclick="downloadWord_SPPD()" class="flex items-center gap-2 bg-kejaksaan-600 hover:bg-kejaksaan-500 text-white px-5 py-2.5 rounded-xl text-xs md:text-sm font-bold shadow-lg shadow-kejaksaan-900/50 transition-all transform hover:-translate-y-0.5">
+                    <i class="ph-bold ph-download-simple text-lg"></i> <span class="hidden sm:inline">Unduh Dokumen</span>
                 </button>
             </div>
         </header>
 
         <!-- AREA TAB KONTEN -->
-        <div class="flex-1 overflow-y-auto custom-scrollbar pb-20">
+        <div class="flex-1 overflow-y-auto custom-scrollbar relative">
+            
+            <!-- TAB 0: BERANDA (HOME) -->
+            <div id="tab-home" class="p-4 md:p-8 max-w-7xl mx-auto space-y-6 md:space-y-8 animate-fade-in block pb-20">
+                <!-- Hero Section -->
+                <div class="bg-gradient-to-r from-slate-800 to-slate-900 rounded-[2rem] p-8 md:p-12 border border-slate-700/50 shadow-2xl relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-8">
+                    <div class="absolute -top-24 -right-24 w-96 h-96 bg-kejaksaan-500/20 rounded-full blur-3xl pointer-events-none"></div>
+                    <div class="absolute -bottom-24 -left-24 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
+                    
+                    <div class="relative z-10 w-full md:w-2/3 space-y-4">
+                        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-800/50 border border-slate-700 text-[10px] font-bold text-kejaksaan-400 uppercase tracking-widest backdrop-blur-sm">
+                            <span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-kejaksaan-400 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-kejaksaan-500"></span></span>
+                            Sistem Aktif & Terintegrasi
+                        </div>
+                        <h2 class="text-3xl md:text-5xl font-extrabold text-white tracking-tight leading-tight">
+                            Selamat Datang di <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-kejaksaan-400 to-emerald-300">Pusat Generator Dokumen</span>
+                        </h2>
+                        <p class="text-slate-400 text-sm md:text-base max-w-xl leading-relaxed">
+                            Aplikasi berbasis web untuk mempercepat tata usaha pembuatan Surat Perintah Perjalanan Dinas (SPPD), Surat Pernyataan Tanggung Jawab Mutlak (SPTJM), dan Nota Dinas secara otomatis dan presisi.
+                        </p>
+                    </div>
+                    
+                    <div class="relative z-10 hidden md:block">
+                        <div class="w-32 h-32 bg-slate-800/80 rounded-3xl border border-slate-700 flex items-center justify-center backdrop-blur-md shadow-2xl transform rotate-6 hover:rotate-0 transition-transform duration-500">
+                            <i class="ph-fill ph-files text-6xl text-kejaksaan-500"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modul Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 animate-slide-up" style="animation-delay: 0.1s;">
+                    <!-- Nota Dinas Card -->
+                    <div onclick="switchTab('nota')" class="group cursor-pointer bg-slate-800/50 hover:bg-slate-800 border border-slate-700/50 hover:border-blue-500/50 rounded-[2rem] p-8 transition-all duration-300 hover:-translate-y-2 shadow-lg hover:shadow-blue-900/20 relative overflow-hidden">
+                        <div class="absolute top-0 right-0 p-8 opacity-5 transform group-hover:scale-125 transition-transform duration-500">
+                            <i class="ph-fill ph-envelope-open text-9xl"></i>
+                        </div>
+                        <div class="w-14 h-14 rounded-2xl bg-blue-500/10 flex items-center justify-center mb-6 group-hover:bg-blue-500 transition-colors duration-300">
+                            <i class="ph-fill ph-envelope-open text-2xl text-blue-500 group-hover:text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3">Generator Nota Dinas</h3>
+                        <p class="text-slate-400 text-sm leading-relaxed mb-6">Susun Nota Dinas pencairan anggaran lengkap dengan rincian DIPA dan Tembusan secara instan.</p>
+                        <div class="flex items-center text-blue-400 text-sm font-bold group-hover:text-blue-300">
+                            Mulai Buat <i class="ph-bold ph-arrow-right ml-2 transform group-hover:translate-x-1 transition-transform"></i>
+                        </div>
+                    </div>
+
+                    <!-- SPPD Card -->
+                    <div onclick="switchTab('sppd')" class="group cursor-pointer bg-slate-800/50 hover:bg-slate-800 border border-slate-700/50 hover:border-kejaksaan-500/50 rounded-[2rem] p-8 transition-all duration-300 hover:-translate-y-2 shadow-lg hover:shadow-kejaksaan-900/20 relative overflow-hidden">
+                        <div class="absolute top-0 right-0 p-8 opacity-5 transform group-hover:scale-125 transition-transform duration-500">
+                            <i class="ph-fill ph-car-profile text-9xl"></i>
+                        </div>
+                        <div class="w-14 h-14 rounded-2xl bg-kejaksaan-500/10 flex items-center justify-center mb-6 group-hover:bg-kejaksaan-500 transition-colors duration-300">
+                            <i class="ph-fill ph-car-profile text-2xl text-kejaksaan-500 group-hover:text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3">Generator SPPD</h3>
+                        <p class="text-slate-400 text-sm leading-relaxed mb-6">Buat lembar SPPD resmi, lengkap dengan perhitungan hari otomatis dan pengikut menggunakan template Anda.</p>
+                        <div class="flex items-center text-kejaksaan-400 text-sm font-bold group-hover:text-kejaksaan-300">
+                            Mulai Buat <i class="ph-bold ph-arrow-right ml-2 transform group-hover:translate-x-1 transition-transform"></i>
+                        </div>
+                    </div>
+
+                    <!-- SPTJM Card -->
+                    <div onclick="switchTab('sptjm')" class="group cursor-pointer bg-slate-800/50 hover:bg-slate-800 border border-slate-700/50 hover:border-purple-500/50 rounded-[2rem] p-8 transition-all duration-300 hover:-translate-y-2 shadow-lg hover:shadow-purple-900/20 relative overflow-hidden">
+                        <div class="absolute top-0 right-0 p-8 opacity-5 transform group-hover:scale-125 transition-transform duration-500">
+                            <i class="ph-fill ph-file-text text-9xl"></i>
+                        </div>
+                        <div class="w-14 h-14 rounded-2xl bg-purple-500/10 flex items-center justify-center mb-6 group-hover:bg-purple-500 transition-colors duration-300">
+                            <i class="ph-fill ph-file-text text-2xl text-purple-500 group-hover:text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3">Generator SPTJM</h3>
+                        <p class="text-slate-400 text-sm leading-relaxed mb-6">Hasilkan Surat Pernyataan Tanggung Jawab Mutlak dalam format F4 langsung dari browser Anda.</p>
+                        <div class="flex items-center text-purple-400 text-sm font-bold group-hover:text-purple-300">
+                            Mulai Buat <i class="ph-bold ph-arrow-right ml-2 transform group-hover:translate-x-1 transition-transform"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
             
             <!-- TAB 1: NOTA DINAS -->
-            <div id="tab-nota" class="p-4 md:p-8">
+            <div id="tab-nota" class="p-4 md:p-8 hidden pb-20 animate-fade-in">
                 <div class="max-w-4xl mx-auto">
                     <form id="notaForm" class="space-y-6">
                         <!-- Blok 1 -->
                         <div class="card-modern">
-                            <div class="absolute top-0 left-0 w-1.5 h-full bg-kejaksaan-500"></div>
-                            <h3 class="flex items-center gap-2 text-sm font-bold text-slate-200 mb-5 pb-3 border-b border-slate-700">
-                                <i class="ph-fill ph-file-text text-kejaksaan-500 text-lg"></i> 1. Administrasi Nota Dinas
+                            <div class="absolute top-0 left-0 w-1.5 h-full bg-blue-500"></div>
+                            <h3 class="flex items-center gap-2 text-sm font-bold text-white mb-6 pb-4 border-b border-slate-700/50">
+                                <i class="ph-fill ph-file-text text-blue-500 text-xl"></i> 1. Administrasi Nota Dinas
                             </h3>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                                <div>
-                                    <label class="label-modern">Nomor ND (Angka saja)</label>
-                                    <input type="text" id="nomorNd" class="input-modern" placeholder="Contoh: 99" required>
-                                </div>
-                                <div>
-                                    <label class="label-modern">Bulan ND (Otomatis)</label>
-                                    <input type="text" id="bulanNd" class="input-modern bg-slate-900/50 text-slate-400" readonly>
-                                </div>
-                                <div>
-                                    <label class="label-modern">Kepada</label>
-                                    <input type="text" id="kepada" class="input-modern" value="Pejabat Pembuat Komitmen" required>
-                                </div>
-                                <div>
-                                    <label class="label-modern">Dari</label>
-                                    <input type="text" id="dari" class="input-modern" value="Kuasa Pengguna Anggaran" required>
-                                </div>
-                                <div>
-                                    <label class="label-modern">Pilih Tanggal</label>
-                                    <input type="date" id="tanggalKalender" class="input-modern" onchange="updateFormatTanggal_Nota()" required>
-                                    <input type="hidden" id="tanggalTeks">
-                                </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div><label class="label-modern">Nomor ND (Angka saja)</label><input type="text" id="nomorNd" class="input-modern" placeholder="Contoh: 99" required></div>
+                                <div><label class="label-modern">Bulan ND (Otomatis)</label><input type="text" id="bulanNd" class="input-modern bg-slate-900/30 text-slate-500 border-slate-800" readonly></div>
+                                <div><label class="label-modern">Kepada</label><input type="text" id="kepada" class="input-modern" value="Pejabat Pembuat Komitmen" required></div>
+                                <div><label class="label-modern">Dari</label><input type="text" id="dari" class="input-modern" value="Kuasa Pengguna Anggaran" required></div>
+                                <div><label class="label-modern">Pilih Tanggal</label><input type="date" id="tanggalKalender" class="input-modern" onchange="updateFormatTanggal_Nota()" required><input type="hidden" id="tanggalTeks"></div>
                                 <div class="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <label class="label-modern">Sifat</label>
-                                        <input type="text" id="sifat" class="input-modern" value="Biasa" required>
-                                    </div>
-                                    <div>
-                                        <label class="label-modern">Lampiran</label>
-                                        <input type="text" id="lampiran" class="input-modern" value="-" required>
-                                    </div>
+                                    <div><label class="label-modern">Sifat</label><input type="text" id="sifat" class="input-modern" value="Biasa" required></div>
+                                    <div><label class="label-modern">Lampiran</label><input type="text" id="lampiran" class="input-modern" value="-" required></div>
                                 </div>
-                                <div class="md:col-span-2">
-                                    <label class="label-modern">Perihal</label>
-                                    <input type="text" id="perihal" class="input-modern" value="Nota Dinas Pencairan Anggaran" required>
-                                </div>
+                                <div class="md:col-span-2"><label class="label-modern">Perihal</label><input type="text" id="perihal" class="input-modern" value="Nota Dinas Pencairan Anggaran" required></div>
                             </div>
                         </div>
 
                         <!-- Blok 2 -->
                         <div class="card-modern">
-                            <div class="absolute top-0 left-0 w-1.5 h-full bg-blue-500"></div>
-                            <h3 class="flex items-center gap-2 text-sm font-bold text-slate-200 mb-5 pb-3 border-b border-slate-700">
-                                <i class="ph-fill ph-coins text-blue-500 text-lg"></i> 2. Anggaran & Pilihan BAS
+                            <div class="absolute top-0 left-0 w-1.5 h-full bg-kejaksaan-500"></div>
+                            <h3 class="flex items-center gap-2 text-sm font-bold text-white mb-6 pb-4 border-b border-slate-700/50">
+                                <i class="ph-fill ph-coins text-kejaksaan-500 text-xl"></i> 2. Anggaran & Pilihan BAS
                             </h3>
-                            <div class="space-y-5">
-                                <div>
-                                    <label class="label-modern">Detail Kegiatan (Sehubungan dengan...)</label>
-                                    <textarea id="kegiatan" class="input-modern" rows="2" required>kegiatan operasional sehari-hari</textarea>
-                                </div>
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                                    <div>
-                                        <label class="label-modern">Nominal Anggaran (Rp)</label>
-                                        <input type="number" id="nominal" class="input-modern" value="10000000" required>
-                                    </div>
-                                    <div>
-                                        <label class="label-modern">DIPA Tahun</label>
-                                        <input type="text" id="dipaTahun" class="input-modern" value="2024" required>
-                                    </div>
+                            <div class="space-y-6">
+                                <div><label class="label-modern">Detail Kegiatan (Sehubungan dengan...)</label><textarea id="kegiatan" class="input-modern" rows="2" required>kegiatan operasional sehari-hari</textarea></div>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div><label class="label-modern">Nominal Anggaran (Rp)</label><input type="number" id="nominal" class="input-modern" value="10000000" required></div>
+                                    <div><label class="label-modern">DIPA Tahun</label><input type="text" id="dipaTahun" class="input-modern" value="2024" required></div>
                                 </div>
                                 <div>
                                     <label class="label-modern">Pilih Nomor Mata Anggaran (BAS K/L):</label>
-                                    <div class="max-h-56 overflow-y-auto p-4 bg-slate-800 rounded-lg border border-slate-700 custom-scrollbar" id="basContainer">
+                                    <div class="max-h-56 overflow-y-auto p-5 bg-slate-900/50 rounded-2xl border border-slate-700 custom-scrollbar shadow-inner" id="basContainer">
                                         <!-- Dihasilkan oleh JS -->
                                     </div>
                                 </div>
@@ -197,32 +271,23 @@
                         <!-- Blok 3 -->
                         <div class="card-modern">
                             <div class="absolute top-0 left-0 w-1.5 h-full bg-amber-500"></div>
-                            <h3 class="flex items-center gap-2 text-sm font-bold text-slate-200 mb-5 pb-3 border-b border-slate-700">
-                                <i class="ph-fill ph-signature text-amber-500 text-lg"></i> 3. Pejabat Penandatangan
+                            <h3 class="flex items-center gap-2 text-sm font-bold text-white mb-6 pb-4 border-b border-slate-700/50">
+                                <i class="ph-fill ph-signature text-amber-500 text-xl"></i> 3. Pejabat Penandatangan
                             </h3>
-                            <div class="space-y-5">
+                            <div class="space-y-6">
                                 <div>
                                     <label class="label-modern">Pilih Profil Pejabat</label>
-                                    <select id="pejabatSelect" class="input-modern" onchange="loadProfilPejabat_Nota()">
+                                    <select id="pejabatSelect" class="input-modern cursor-pointer" onchange="loadProfilPejabat_Nota()">
                                         <option value="fadjar">Dr. Fadjar - Kuasa Pengguna Anggaran</option>
                                         <option value="plt_kpa">Plt. Kuasa Pengguna Anggaran</option>
                                         <option value="ppk_pembinaan">Pejabat Pembuat Komitmen (PPK)</option>
                                         <option value="custom">-- Input Manual Pejabat Baru --</option>
                                     </select>
                                 </div>
-                                <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-                                    <div>
-                                        <label class="label-modern">Jabatan Struktur</label>
-                                        <input type="text" id="pjbJabatan" class="input-modern" required>
-                                    </div>
-                                    <div>
-                                        <label class="label-modern">Nama Pejabat</label>
-                                        <input type="text" id="pjbNama" class="input-modern" required>
-                                    </div>
-                                    <div>
-                                        <label class="label-modern">Pangkat / Golongan</label>
-                                        <input type="text" id="pjbPangkat" class="input-modern" required>
-                                    </div>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                    <div><label class="label-modern">Jabatan Struktur</label><input type="text" id="pjbJabatan" class="input-modern" required></div>
+                                    <div><label class="label-modern">Nama Pejabat</label><input type="text" id="pjbNama" class="input-modern" required></div>
+                                    <div><label class="label-modern">Pangkat / Golongan</label><input type="text" id="pjbPangkat" class="input-modern" required></div>
                                 </div>
                             </div>
                         </div>
@@ -230,29 +295,29 @@
                         <!-- Blok 4 -->
                         <div class="card-modern">
                             <div class="absolute top-0 left-0 w-1.5 h-full bg-purple-500"></div>
-                            <h3 class="flex items-center gap-2 text-sm font-bold text-slate-200 mb-5 pb-3 border-b border-slate-700">
-                                <i class="ph-fill ph-users text-purple-500 text-lg"></i> 4. Bagian Tembusan Surat
+                            <h3 class="flex items-center gap-2 text-sm font-bold text-white mb-6 pb-4 border-b border-slate-700/50">
+                                <i class="ph-fill ph-users text-purple-500 text-xl"></i> 4. Bagian Tembusan Surat
                             </h3>
                             <div>
                                 <div id="tembusanContainer" class="space-y-3">
-                                    <div class="flex gap-2 tembusan-item">
+                                    <div class="flex gap-3 tembusan-item">
                                         <input type="text" class="input-modern tembusan-input" value="Pejabat Pembuat Komitmen;" required>
-                                        <button type="button" class="bg-red-500/20 text-red-500 font-bold px-4 rounded-lg border border-red-500/50 hover:bg-red-500 hover:text-white transition-colors" onclick="hapusBarisTembusan_Nota(this)">Hapus</button>
+                                        <button type="button" class="bg-red-500/10 text-red-500 font-bold px-5 rounded-xl border border-red-500/30 hover:bg-red-500 hover:text-white transition-all shadow-sm" onclick="hapusBarisTembusan_Nota(this)"><i class="ph-bold ph-trash"></i></button>
                                     </div>
-                                    <div class="flex gap-2 tembusan-item">
+                                    <div class="flex gap-3 tembusan-item">
                                         <input type="text" class="input-modern tembusan-input" value="Arsip.-" required>
-                                        <button type="button" class="bg-red-500/20 text-red-500 font-bold px-4 rounded-lg border border-red-500/50 hover:bg-red-500 hover:text-white transition-colors" onclick="hapusBarisTembusan_Nota(this)">Hapus</button>
+                                        <button type="button" class="bg-red-500/10 text-red-500 font-bold px-5 rounded-xl border border-red-500/30 hover:bg-red-500 hover:text-white transition-all shadow-sm" onclick="hapusBarisTembusan_Nota(this)"><i class="ph-bold ph-trash"></i></button>
                                     </div>
                                 </div>
-                                <button type="button" class="mt-4 flex items-center gap-2 bg-purple-900/40 text-purple-400 border border-purple-700 hover:bg-purple-800 hover:text-white px-4 py-2.5 rounded-xl text-xs font-bold transition-all shadow-sm" onclick="tambahBarisTembusan_Nota()">
+                                <button type="button" class="mt-5 flex items-center justify-center w-full md:w-auto gap-2 bg-purple-500/10 text-purple-400 border border-purple-500/30 hover:bg-purple-600 hover:text-white hover:border-purple-600 px-6 py-3.5 rounded-xl text-xs font-bold transition-all shadow-sm" onclick="tambahBarisTembusan_Nota()">
                                     <i class="ph-bold ph-plus"></i> Tambah Baris Tembusan
                                 </button>
                             </div>
                         </div>
 
                         <div class="pt-4">
-                            <button type="button" onclick="generateWord_Nota(this)" class="w-full flex justify-center items-center gap-2 bg-gradient-to-r from-kejaksaan-500 to-kejaksaan-700 hover:from-kejaksaan-600 hover:to-kejaksaan-900 text-white px-6 py-4 rounded-xl text-base font-bold shadow-lg shadow-kejaksaan-900/50 transition-all transform hover:-translate-y-1">
-                                <i class="ph-bold ph-download-simple text-xl"></i> Download Nota Dinas (.docx)
+                            <button type="button" onclick="generateWord_Nota(this)" class="w-full flex justify-center items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white px-6 py-4 rounded-2xl text-base font-bold shadow-xl shadow-blue-900/40 transition-all transform hover:-translate-y-1">
+                                <i class="ph-bold ph-file-doc text-xl"></i> Generate Nota Dinas (.docx)
                             </button>
                         </div>
                     </form>
@@ -260,67 +325,67 @@
             </div>
 
             <!-- TAB 2: SPPD -->
-            <div id="tab-sppd" class="p-4 md:p-8 flex flex-col xl:flex-row gap-8 hidden">
+            <div id="tab-sppd" class="p-4 md:p-8 flex flex-col xl:flex-row gap-8 hidden pb-20 animate-fade-in">
                 <section class="w-full xl:w-5/12 flex flex-col">
                     <form id="sppdForm" class="space-y-6">
                         <div class="card-modern">
                             <div class="absolute top-0 left-0 w-1.5 h-full bg-kejaksaan-500"></div>
-                            <h3 class="flex items-center gap-2 text-sm font-bold text-slate-200 mb-5 pb-3 border-b border-slate-700"><i class="ph-fill ph-identification-card text-kejaksaan-500 text-lg"></i> Identitas Surat</h3>
-                            <div class="space-y-5">
-                                <div><label class="label-modern">Satuan Kerja</label><input type="text" id="sppd_in_satuan_kerja" value="Kejaksaan Tinggi Maluku" class="input-modern uppercase font-bold"></div>
-                                <div><label class="label-modern">Nomor SPPD</label><input type="text" id="sppd_in_nomor" value="SPPD-024/PPK/01/2026" class="input-modern font-mono text-green-400 font-bold"></div>
+                            <h3 class="flex items-center gap-2 text-sm font-bold text-white mb-6 pb-4 border-b border-slate-700/50"><i class="ph-fill ph-identification-card text-kejaksaan-500 text-xl"></i> Identitas Surat</h3>
+                            <div class="space-y-6">
+                                <div><label class="label-modern">Satuan Kerja</label><input type="text" id="sppd_in_satuan_kerja" value="Kejaksaan Tinggi Maluku" class="input-modern uppercase font-bold text-white"></div>
+                                <div><label class="label-modern">Nomor SPPD</label><input type="text" id="sppd_in_nomor" value="SPPD-024/PPK/01/2026" class="input-modern font-mono text-green-400 font-bold border-kejaksaan-500/30"></div>
                             </div>
                         </div>
                         <div class="card-modern">
                             <div class="absolute top-0 left-0 w-1.5 h-full bg-blue-500"></div>
-                            <h3 class="flex items-center gap-2 text-sm font-bold text-slate-200 mb-5 pb-3 border-b border-slate-700"><i class="ph-fill ph-user-circle text-blue-500 text-lg"></i> Pelaksana Utama</h3>
-                            <div class="space-y-5">
+                            <h3 class="flex items-center gap-2 text-sm font-bold text-white mb-6 pb-4 border-b border-slate-700/50"><i class="ph-fill ph-user-circle text-blue-500 text-xl"></i> Pelaksana Utama</h3>
+                            <div class="space-y-6">
                                 <div><label class="label-modern">Nama Pegawai</label><input type="text" id="sppd_in_nama_pegawai" class="input-modern uppercase font-bold"></div>
-                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                                    <div><label class="label-modern">NIP (18 Digit)</label><input type="text" id="sppd_in_nip_utama" class="input-modern font-mono" maxlength="18"><p id="sppd_warn_nip_utama" class="text-[10px] text-red-400 font-bold hidden mt-1.5"><i class="ph-bold ph-warning"></i> NIP harus 18 digit!</p></div>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                    <div><label class="label-modern">NIP (18 Digit)</label><input type="text" id="sppd_in_nip_utama" class="input-modern font-mono" maxlength="18"><p id="sppd_warn_nip_utama" class="text-[10px] text-red-400 font-bold hidden mt-2"><i class="ph-bold ph-warning"></i> NIP harus 18 digit!</p></div>
                                     <div><label class="label-modern">Pangkat/Golongan</label><input type="text" id="sppd_in_pangkat_utama" class="input-modern"></div>
                                 </div>
-                                <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                                     <div class="md:col-span-2"><label class="label-modern">Jabatan Pegawai</label><input type="text" id="sppd_in_jabatan_utama" class="input-modern uppercase"></div>
-                                    <div><label class="label-modern">Tgkt. Biaya</label><select id="sppd_in_biaya_utama" class="input-modern font-bold"><option value="A">Tingkat A</option><option value="B">Tingkat B</option><option value="C" selected>Tingkat C</option><option value="D">Tingkat D</option><option value="E">Tingkat E</option><option value="F">Tingkat F</option></select></div>
+                                    <div><label class="label-modern">Tgkt. Biaya</label><select id="sppd_in_biaya_utama" class="input-modern cursor-pointer font-bold"><option value="A">Tingkat A</option><option value="B">Tingkat B</option><option value="C" selected>Tingkat C</option><option value="D">Tingkat D</option><option value="E">Tingkat E</option><option value="F">Tingkat F</option></select></div>
                                 </div>
                             </div>
                         </div>
                         <div class="card-modern shadow-lg shadow-amber-900/10">
                             <div class="absolute top-0 left-0 w-1.5 h-full bg-amber-500"></div>
-                            <h3 class="flex items-center gap-2 text-sm font-bold text-slate-200 mb-5 pb-3 border-b border-slate-700"><i class="ph-fill ph-map-pin text-amber-500 text-lg"></i> Rincian Penugasan</h3>
+                            <h3 class="flex items-center gap-2 text-sm font-bold text-white mb-6 pb-4 border-b border-slate-700/50"><i class="ph-fill ph-map-pin text-amber-500 text-xl"></i> Rincian Penugasan</h3>
                             <div class="space-y-6">
-                                <div><label class="label-modern">Maksud Perjalanan</label><textarea id="sppd_in_maksud" rows="4" class="input-modern resize-y"></textarea></div>
+                                <div><label class="label-modern">Maksud Perjalanan</label><textarea id="sppd_in_maksud" rows="3" class="input-modern resize-y"></textarea></div>
                                 <div><label class="label-modern">Alat Angkutan</label><input type="text" id="sppd_in_angkutan" class="input-modern"></div>
-                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                                     <div><label class="label-modern">Tempat Asal</label><input type="text" id="sppd_in_asal" class="input-modern"></div>
                                     <div><label class="label-modern">Tempat Tujuan</label><input type="text" id="sppd_in_tujuan" class="input-modern font-bold"></div>
                                 </div>
-                                <div class="bg-slate-800 p-5 rounded-xl border border-slate-700 grid grid-cols-1 md:grid-cols-2 gap-5 shadow-inner">
-                                    <div><label class="label-modern text-kejaksaan-500">Tgl Berangkat</label><input type="date" id="sppd_in_tgl_berangkat" class="input-modern font-mono"></div>
-                                    <div><label class="label-modern text-kejaksaan-500">Tgl Kembali</label><input type="date" id="sppd_in_tgl_kembali" class="input-modern font-mono"></div>
-                                    <div class="md:col-span-2"><label class="label-modern text-amber-500">Lama Perjalanan</label><input type="text" id="sppd_in_lama" class="input-modern bg-slate-900/50 text-amber-400 font-bold" readonly></div>
+                                <div class="bg-slate-900/70 p-5 rounded-2xl border border-slate-700/80 grid grid-cols-1 md:grid-cols-2 gap-6 shadow-inner">
+                                    <div><label class="label-modern text-kejaksaan-400">Tgl Berangkat</label><input type="date" id="sppd_in_tgl_berangkat" class="input-modern font-mono"></div>
+                                    <div><label class="label-modern text-kejaksaan-400">Tgl Kembali</label><input type="date" id="sppd_in_tgl_kembali" class="input-modern font-mono"></div>
+                                    <div class="md:col-span-2"><label class="label-modern text-amber-500">Lama Perjalanan</label><input type="text" id="sppd_in_lama" class="input-modern bg-slate-900/30 text-amber-400 font-bold border-amber-900/30" readonly></div>
                                 </div>
-                                <p id="sppd_warn_date" class="text-[11px] text-red-400 font-bold hidden"><i class="ph-bold ph-warning"></i> Tanggal kembali tidak valid!</p>
+                                <p id="sppd_warn_date" class="text-[11px] text-red-400 font-bold hidden bg-red-900/20 p-3 rounded-lg"><i class="ph-bold ph-warning"></i> Tanggal kembali tidak valid!</p>
                             </div>
                         </div>
                         <div class="card-modern">
                             <div class="absolute top-0 left-0 w-1.5 h-full bg-purple-500"></div>
-                            <div class="flex justify-between items-center mb-5 pb-3 border-b border-slate-700">
-                                <h3 class="flex items-center gap-2 text-sm font-bold text-slate-200"><i class="ph-fill ph-users text-purple-500 text-lg"></i> Pengikut</h3>
-                                <button type="button" onclick="addPengikutRow_SPPD()" class="bg-purple-900/40 text-purple-400 border border-purple-700 hover:bg-purple-800 hover:text-white px-4 py-2 rounded-xl text-xs font-bold transition-all"><i class="ph-bold ph-plus"></i> Tambah</button>
+                            <div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-700/50">
+                                <h3 class="flex items-center gap-2 text-sm font-bold text-white"><i class="ph-fill ph-users text-purple-500 text-xl"></i> Pengikut</h3>
+                                <button type="button" onclick="addPengikutRow_SPPD()" class="bg-purple-500/20 text-purple-400 border border-purple-500/30 hover:bg-purple-600 hover:text-white px-4 py-2 rounded-xl text-xs font-bold transition-all"><i class="ph-bold ph-plus"></i> Tambah</button>
                             </div>
                             <div id="sppd_pengikutContainer" class="space-y-4"></div>
                         </div>
                         <div class="card-modern">
-                            <div class="absolute top-0 left-0 w-1.5 h-full bg-slate-500"></div>
-                            <h3 class="flex items-center gap-2 text-sm font-bold text-slate-200 mb-5 pb-3 border-b border-slate-700"><i class="ph-fill ph-signature text-slate-400 text-lg"></i> Anggaran & Otorisasi</h3>
-                            <div class="space-y-5">
-                                <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                            <div class="absolute top-0 left-0 w-1.5 h-full bg-slate-400"></div>
+                            <h3 class="flex items-center gap-2 text-sm font-bold text-white mb-6 pb-4 border-b border-slate-700/50"><i class="ph-fill ph-signature text-slate-400 text-xl"></i> Anggaran & Otorisasi</h3>
+                            <div class="space-y-6">
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                                     <div class="md:col-span-2"><label class="label-modern">Instansi (DIPA)</label><input type="text" id="sppd_in_dipa" class="input-modern"></div>
-                                    <div><label class="label-modern">Akun Belanja</label><select id="sppd_in_akun" class="input-modern text-xs"><option value="524113">524113</option><option value="524114">524114</option></select></div>
+                                    <div><label class="label-modern">Akun Belanja</label><select id="sppd_in_akun" class="input-modern cursor-pointer"><option value="524113">524113</option><option value="524114">524114</option></select></div>
                                 </div>
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div><label class="label-modern">Nama PPK</label><input type="text" id="sppd_in_ppk_nama" class="input-modern uppercase font-bold"></div>
                                     <div><label class="label-modern">NIP PPK</label><input type="text" id="sppd_in_ppk_nip" class="input-modern font-mono" maxlength="18"></div>
                                     <div><label class="label-modern">Lokasi TTD</label><input type="text" id="sppd_in_lokasi_asal" class="input-modern"></div>
@@ -331,47 +396,50 @@
                     </form>
                 </section>
                 <section class="w-full xl:w-7/12 relative">
-                    <div class="lg:sticky lg:top-8 bg-slate-800 rounded-3xl p-5 shadow-2xl border border-slate-700">
-                        <div class="text-sm font-bold text-slate-300 mb-5"><i class="ph-fill ph-eye"></i> Pratinjau Dokumen Cetak (A4)</div>
-                        <div class="overflow-y-auto max-h-[75vh] flex flex-col items-center gap-8 pb-4 custom-scrollbar">
-                            <div id="sppd_previewPage1" class="p-[15mm] w-full max-w-[210mm] min-h-[297mm] shadow-2xl spd-document print-area"></div>
-                            <div id="sppd_previewPage2" class="p-[15mm] w-full max-w-[210mm] min-h-[297mm] shadow-2xl spd-document print-area page-break"></div>
+                    <div class="lg:sticky lg:top-4 bg-slate-800/80 backdrop-blur-md rounded-[2rem] p-6 md:p-8 shadow-2xl border border-slate-700/50">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="text-sm font-bold text-slate-200 flex items-center gap-2"><i class="ph-fill ph-eye text-lg"></i> Pratinjau Dokumen (A4)</div>
+                            <div class="px-3 py-1 bg-slate-900 rounded-lg border border-slate-700 text-[10px] font-mono text-slate-400">Live Preview</div>
+                        </div>
+                        <div class="overflow-y-auto max-h-[70vh] flex flex-col items-center gap-8 pb-4 custom-scrollbar rounded-xl">
+                            <div id="sppd_previewPage1" class="p-[15mm] w-full max-w-[210mm] min-h-[297mm] shadow-2xl spd-document print-area rounded-md"></div>
+                            <div id="sppd_previewPage2" class="p-[15mm] w-full max-w-[210mm] min-h-[297mm] shadow-2xl spd-document print-area page-break rounded-md"></div>
                         </div>
                     </div>
                 </section>
             </div>
 
             <!-- TAB 3: SPTJM -->
-            <div id="tab-sptjm" class="p-4 md:p-8 flex flex-col xl:flex-row gap-8 hidden">
+            <div id="tab-sptjm" class="p-4 md:p-8 flex flex-col xl:flex-row gap-8 hidden pb-20 animate-fade-in">
                 <section class="w-full xl:w-5/12 flex flex-col">
                     <form id="sptjmForm" class="space-y-6">
                         <div class="card-modern">
                             <div class="absolute top-0 left-0 w-1.5 h-full bg-kejaksaan-500"></div>
-                            <h3 class="flex items-center gap-2 text-sm font-bold text-slate-200 mb-5 pb-3 border-b border-slate-700"><i class="ph-fill ph-identification-card text-kejaksaan-500 text-lg"></i> Identitas Surat SPTJM</h3>
-                            <div class="space-y-5">
-                                <div><label class="label-modern">Nomor Surat (SPTJM)</label><input type="text" id="sptjm_in_nomor" value="PRIN- /.../..../..." class="input-modern font-mono text-green-400 font-bold"></div>
-                                <div><label class="label-modern">Uraian / Objek Pertanggungjawaban</label><textarea id="sptjm_in_uraian_sptjm" rows="3" class="input-modern">Perhitungan yang terdapat dalam pelaksanaan kegiatan...</textarea></div>
+                            <h3 class="flex items-center gap-2 text-sm font-bold text-white mb-6 pb-4 border-b border-slate-700/50"><i class="ph-fill ph-identification-card text-kejaksaan-500 text-xl"></i> Identitas Surat SPTJM</h3>
+                            <div class="space-y-6">
+                                <div><label class="label-modern">Nomor Surat (SPTJM)</label><input type="text" id="sptjm_in_nomor" value="PRIN- /.../..../..." class="input-modern font-mono text-green-400 font-bold border-kejaksaan-500/30"></div>
+                                <div><label class="label-modern">Uraian / Objek Pertanggungjawaban</label><textarea id="sptjm_in_uraian_sptjm" rows="4" class="input-modern">Perhitungan yang terdapat dalam pelaksanaan kegiatan...</textarea></div>
                             </div>
                         </div>
                         <div class="card-modern">
                             <div class="absolute top-0 left-0 w-1.5 h-full bg-blue-500"></div>
-                            <h3 class="flex items-center gap-2 text-sm font-bold text-slate-200 mb-5 pb-3 border-b border-slate-700"><i class="ph-fill ph-user-circle text-blue-500 text-lg"></i> Pejabat Penandatangan</h3>
-                            <div class="space-y-5">
+                            <h3 class="flex items-center gap-2 text-sm font-bold text-white mb-6 pb-4 border-b border-slate-700/50"><i class="ph-fill ph-user-circle text-blue-500 text-xl"></i> Pejabat Penandatangan</h3>
+                            <div class="space-y-6">
                                 <div><label class="label-modern">Nama Pejabat & Gelar</label><input type="text" id="sptjm_in_nama_pejabat" class="input-modern uppercase font-bold"></div>
-                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                                    <div><label class="label-modern">NIP (18 Digit)</label><input type="text" id="sptjm_in_nip" class="input-modern font-mono" maxlength="18"><p id="sptjm_warn_nip" class="text-[10px] text-red-400 font-bold hidden mt-1.5">NIP harus 18 digit!</p></div>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                    <div><label class="label-modern">NIP (18 Digit)</label><input type="text" id="sptjm_in_nip" class="input-modern font-mono" maxlength="18"><p id="sptjm_warn_nip" class="text-[10px] text-red-400 font-bold hidden mt-2"><i class="ph-bold ph-warning"></i> NIP harus 18 digit!</p></div>
                                     <div><label class="label-modern">Jabatan</label><input type="text" id="sptjm_in_jabatan" value="Pejabat Pembuat Komitmen" class="input-modern"></div>
                                 </div>
                             </div>
                         </div>
                         <div class="card-modern">
                             <div class="absolute top-0 left-0 w-1.5 h-full bg-amber-500"></div>
-                            <h3 class="flex items-center gap-2 text-sm font-bold text-slate-200 mb-5 pb-3 border-b border-slate-700"><i class="ph-fill ph-map-pin text-amber-500 text-lg"></i> Satuan Kerja & Instansi</h3>
-                            <div class="space-y-5">
+                            <h3 class="flex items-center gap-2 text-sm font-bold text-white mb-6 pb-4 border-b border-slate-700/50"><i class="ph-fill ph-map-pin text-amber-500 text-xl"></i> Satuan Kerja & Instansi</h3>
+                            <div class="space-y-6">
                                 <div><label class="label-modern">Satuan Kerja</label><input type="text" id="sptjm_in_satuan_kerja" value="KEJAKSAAN NEGERI MALUKU TENGGARA" class="input-modern uppercase font-bold"></div>
                                 <div><label class="label-modern">Unit Wilayah</label><input type="text" id="sptjm_in_unit_wilayah" value="KEJAKSAAN TINGGI MALUKU" class="input-modern uppercase"></div>
                                 <div><label class="label-modern">Kementerian / Lembaga</label><input type="text" id="sptjm_in_kementerian" value="KEJAKSAAN REPUBLIK INDONESIA" class="input-modern uppercase"></div>
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div><label class="label-modern">Lokasi Penandatanganan</label><input type="text" id="sptjm_in_lokasi" value="Ohoijang Watdek" class="input-modern"></div>
                                     <div><label class="label-modern">Tanggal Surat</label><input type="date" id="sptjm_in_tanggal_surat" class="input-modern font-mono"></div>
                                 </div>
@@ -380,10 +448,13 @@
                     </form>
                 </section>
                 <section class="w-full xl:w-7/12 relative">
-                    <div class="lg:sticky lg:top-8 bg-slate-800 rounded-3xl p-5 shadow-2xl border border-slate-700">
-                        <div class="text-sm font-bold text-slate-300 mb-5"><i class="ph-fill ph-eye"></i> Pratinjau Dokumen SPTJM (F4)</div>
-                        <div class="overflow-y-auto max-h-[75vh] flex flex-col items-center gap-8 pb-4 custom-scrollbar">
-                            <div id="sptjm_previewPage" class="p-[20mm] w-full max-w-[215mm] min-h-[330mm] shadow-2xl sptjm-document print-area">
+                    <div class="lg:sticky lg:top-4 bg-slate-800/80 backdrop-blur-md rounded-[2rem] p-6 md:p-8 shadow-2xl border border-slate-700/50">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="text-sm font-bold text-slate-200 flex items-center gap-2"><i class="ph-fill ph-eye text-lg"></i> Pratinjau SPTJM (F4)</div>
+                            <div class="px-3 py-1 bg-slate-900 rounded-lg border border-slate-700 text-[10px] font-mono text-slate-400">Live Preview</div>
+                        </div>
+                        <div class="overflow-y-auto max-h-[70vh] flex flex-col items-center gap-8 pb-4 custom-scrollbar rounded-xl">
+                            <div id="sptjm_previewPage" class="p-[20mm] w-full max-w-[215mm] min-h-[330mm] shadow-2xl sptjm-document print-area rounded-md">
                                 <div class="text-center font-bold text-xs uppercase leading-tight mb-1">KEJAKSAAN REPUBLIK INDONESIA</div>
                                 <div class="text-center font-bold text-xs uppercase leading-tight mb-1" id="sptjm_prev_unit_wilayah">KEJAKSAAN TINGGI MALUKU</div>
                                 <div class="text-center font-bold text-sm uppercase leading-tight mb-4" id="sptjm_prev_satuan_kerja">KEJAKSAAN NEGERI MALUKU TENGGARA</div>
@@ -424,22 +495,54 @@
 
 <script>
     // ==========================================
-    // SISTEM DASHBOARD & NAVIGASI
+    // SISTEM DASHBOARD & NAVIGASI MOBILE
     // ==========================================
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('mobile-overlay');
+        
+        if (sidebar.classList.contains('-translate-x-full')) {
+            sidebar.classList.remove('-translate-x-full');
+            overlay.classList.remove('hidden');
+            setTimeout(() => overlay.classList.remove('opacity-0'), 10);
+        } else {
+            sidebar.classList.add('-translate-x-full');
+            overlay.classList.add('opacity-0');
+            setTimeout(() => overlay.classList.add('hidden'), 300);
+        }
+    }
+
     function switchTab(tab) {
+        document.getElementById('tab-home').classList.add('hidden');
         document.getElementById('tab-nota').classList.add('hidden');
         document.getElementById('tab-sppd').classList.add('hidden');
         document.getElementById('tab-sptjm').classList.add('hidden');
 
-        const btns = ['btn-nota', 'btn-sppd', 'btn-sptjm'];
-        btns.forEach(btn => {
-            document.getElementById(btn).className = "w-full text-left flex items-center px-4 py-3.5 rounded-xl text-sm font-bold text-slate-300 hover:bg-slate-800 hover:text-white transition-all duration-200";
+        // Reset Menu Style
+        const menus = [
+            {id: 'btn-home', default: 'bg-transparent text-slate-400 border-transparent', active: 'bg-slate-800 text-white border-slate-700 shadow-md', iconBg: 'bg-slate-800/50 text-slate-400', iconActive: 'bg-slate-700 text-white'},
+            {id: 'btn-nota', default: 'bg-transparent text-slate-400 border-transparent', active: 'bg-slate-800 text-white border-slate-700 shadow-md', iconBg: 'bg-slate-800/50 text-slate-400', iconActive: 'bg-blue-500 text-white'},
+            {id: 'btn-sppd', default: 'bg-transparent text-slate-400 border-transparent', active: 'bg-slate-800 text-white border-slate-700 shadow-md', iconBg: 'bg-slate-800/50 text-slate-400', iconActive: 'bg-kejaksaan-500 text-white'},
+            {id: 'btn-sptjm', default: 'bg-transparent text-slate-400 border-transparent', active: 'bg-slate-800 text-white border-slate-700 shadow-md', iconBg: 'bg-slate-800/50 text-slate-400', iconActive: 'bg-purple-500 text-white'}
+        ];
+
+        menus.forEach(m => {
+            const btn = document.getElementById(m.id);
+            const iconDiv = btn.querySelector('div');
+            btn.className = `w-full text-left flex items-center px-4 py-3.5 rounded-2xl text-sm font-bold transition-all duration-200 border ${m.default} hover:bg-slate-800 hover:text-white`;
+            iconDiv.className = `p-1.5 rounded-lg mr-3 ${m.iconBg} transition-colors`;
         });
 
+        // Set Active Menu Style
         document.getElementById('tab-' + tab).classList.remove('hidden');
-        document.getElementById('btn-' + tab).className = "w-full text-left flex items-center px-4 py-3.5 rounded-xl text-sm font-bold bg-gradient-to-r from-kejaksaan-500 to-kejaksaan-700 text-white shadow-md shadow-kejaksaan-900/20 transition-all duration-200";
+        const activeBtn = document.getElementById('btn-' + tab);
+        const activeMenu = menus.find(m => m.id === 'btn-' + tab);
+        activeBtn.className = `w-full text-left flex items-center px-4 py-3.5 rounded-2xl text-sm font-bold transition-all duration-200 border ${activeMenu.active}`;
+        activeBtn.querySelector('div').className = `p-1.5 rounded-lg mr-3 ${activeMenu.iconActive}`;
         
+        // Header Text & Actions Update
         const titleMap = {
+            'home': { main: 'BERANDA UTAMA', sub: 'Dashboard Ringkasan' },
             'nota': { main: 'NOTA DINAS', sub: 'Sistem Generator Nota Dinas' },
             'sppd': { main: 'SPPD GENERATOR', sub: 'Sistem Penerbitan Surat Otomatis' },
             'sptjm': { main: 'SPTJM', sub: 'Surat Pernyataan Tanggung Jawab Mutlak' }
@@ -448,13 +551,24 @@
         document.getElementById('header-subtitle').innerText = titleMap[tab].sub;
 
         const headerActions = document.getElementById('header-actions');
-        if(tab === 'nota') {
+        if(tab === 'home' || tab === 'nota') {
             headerActions.classList.add('hidden');
         } else {
             headerActions.classList.remove('hidden');
             document.getElementById('btnDownload').setAttribute('onclick', `downloadWord_${tab.toUpperCase()}()`);
             document.getElementById('templateUpload').setAttribute('onchange', `generateFromLocalTemplate_${tab.toUpperCase()}(this)`);
         }
+
+        // Auto close sidebar on mobile after clicking menu
+        if(window.innerWidth < 768) {
+            const sidebar = document.getElementById('sidebar');
+            if(!sidebar.classList.contains('-translate-x-full')) {
+                toggleSidebar();
+            }
+        }
+        
+        // Scroll top content
+        document.querySelector('.overflow-y-auto.custom-scrollbar').scrollTo(0,0);
     }
 
     // ==========================================
@@ -513,10 +627,10 @@
     function tambahBarisTembusan_Nota() {
         const container = document.getElementById("tembusanContainer");
         const div = document.createElement("div");
-        div.className = "flex gap-2 tembusan-item";
+        div.className = "flex gap-3 tembusan-item";
         div.innerHTML = `
             <input type="text" class="input-modern tembusan-input" placeholder="Tembusan baru..." required>
-            <button type="button" class="bg-red-500/20 text-red-500 font-bold px-4 rounded-lg border border-red-500/50 hover:bg-red-500 hover:text-white transition-colors" onclick="hapusBarisTembusan_Nota(this)">Hapus</button>
+            <button type="button" class="bg-red-500/10 text-red-500 font-bold px-5 rounded-xl border border-red-500/30 hover:bg-red-500 hover:text-white transition-all shadow-sm" onclick="hapusBarisTembusan_Nota(this)"><i class="ph-bold ph-trash"></i></button>
         `;
         container.appendChild(div);
     }
@@ -775,14 +889,14 @@
         container.innerHTML = '';
         daftarPengikut_SPPD.forEach((p, i) => {
             container.innerHTML += `
-                <div class="bg-slate-700/30 border border-slate-600 p-5 rounded-xl shadow-sm relative group hover:border-purple-500/50 transition-colors">
-                    <button type="button" onclick="removePengikutRow_SPPD(${i})" class="absolute -top-3 -right-3 bg-slate-800 text-red-500 hover:bg-red-500 hover:text-white transition-colors border border-slate-600 rounded-full p-2 shadow-md z-10"><i class="ph-bold ph-trash"></i></button>
-                    <p class="text-[10px] font-bold text-purple-400 mb-4 uppercase tracking-wider">Pengikut ${i+1}</p>
-                    <div class="space-y-4">
-                        <div><label class="label-modern text-slate-300">Nama Lengkap & Gelar</label><input type="text" value="${p.nama}" oninput="updatePengikutField_SPPD(${i}, 'nama', this.value)" class="input-modern font-bold uppercase"></div>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div><label class="label-modern text-slate-300">Jabatan</label><input type="text" value="${p.jabatan}" oninput="updatePengikutField_SPPD(${i}, 'jabatan', this.value)" class="input-modern uppercase"></div>
-                            <div><label class="label-modern text-slate-300">Keterangan</label><input type="text" value="${p.ket}" oninput="updatePengikutField_SPPD(${i}, 'ket', this.value)" class="input-modern"></div>
+                <div class="bg-slate-900/50 border border-slate-700 p-6 rounded-2xl shadow-sm relative group hover:border-purple-500/50 transition-colors">
+                    <button type="button" onclick="removePengikutRow_SPPD(${i})" class="absolute -top-3 -right-3 bg-slate-800 text-red-500 hover:bg-red-500 hover:text-white transition-colors border border-slate-600 rounded-full p-2.5 shadow-xl z-10"><i class="ph-bold ph-trash"></i></button>
+                    <p class="text-[11px] font-bold text-purple-400 mb-4 uppercase tracking-widest border-b border-purple-500/20 inline-block pb-1">Pengikut ${i+1}</p>
+                    <div class="space-y-5">
+                        <div><label class="label-modern text-slate-400">Nama Lengkap & Gelar</label><input type="text" value="${p.nama}" oninput="updatePengikutField_SPPD(${i}, 'nama', this.value)" class="input-modern font-bold uppercase"></div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                            <div><label class="label-modern text-slate-400">Jabatan</label><input type="text" value="${p.jabatan}" oninput="updatePengikutField_SPPD(${i}, 'jabatan', this.value)" class="input-modern uppercase"></div>
+                            <div><label class="label-modern text-slate-400">Keterangan</label><input type="text" value="${p.ket}" oninput="updatePengikutField_SPPD(${i}, 'ket', this.value)" class="input-modern"></div>
                         </div>
                     </div>
                 </div>
@@ -909,7 +1023,7 @@
             const response = await fetch("template.docx");
             if (!response.ok) throw new Error("HTTP Error");
             eksekusiDocxTemplater_SPPD(await response.arrayBuffer(), btn, originalText);
-        } catch (error) { btn.innerHTML = originalText; btn.disabled = false; alert("Gagal membaca template otomatis. Gunakan tombol 'Manual Upload'."); }
+        } catch (error) { btn.innerHTML = originalText; btn.disabled = false; alert("Gagal membaca template otomatis. Gunakan tombol 'Upload Template' / 'Manual Upload'."); }
     }
 
     function generateFromLocalTemplate_SPPD(inputElement) {
@@ -997,7 +1111,7 @@
             const response = await fetch("template_konsep_sptjm.docx");
             if (!response.ok) throw new Error("Template tidak ditemukan.");
             eksekusiDocxTemplater_SPTJM(await response.arrayBuffer(), btn, originalText);
-        } catch (error) { btn.innerHTML = originalText; btn.disabled = false; alert("Gagal memuat template dari server. Silakan gunakan tombol 'Manual Upload'."); }
+        } catch (error) { btn.innerHTML = originalText; btn.disabled = false; alert("Gagal memuat template otomatis. Gunakan tombol 'Upload Template' / 'Manual Upload'."); }
     }
 
     function generateFromLocalTemplate_SPTJM(inputElement) {
@@ -1013,8 +1127,8 @@
     // INITIALIZATION LISTENER (ALL MODULES)
     // ==========================================
     document.addEventListener('DOMContentLoaded', () => {
-        // Tentukan tab awal
-        switchTab('nota');
+        // Init Halaman Awal
+        switchTab('home');
 
         // Init Nota Dinas
         const hariIni = new Date();
@@ -1023,9 +1137,9 @@
 
         const containerBAS = document.getElementById("basContainer");
         dataAkunBAS_Nota.forEach(akun => {
-            const div = document.createElement("div"); div.className = "flex items-center gap-3 mb-2";
+            const div = document.createElement("div"); div.className = "flex items-center gap-3 mb-3 p-3 rounded-xl bg-slate-800/80 border border-slate-700/50 hover:border-kejaksaan-500/50 transition-colors";
             const checkedStr = (akun.kode === "521211" || akun.kode === "524113") ? "checked" : "";
-            div.innerHTML = `<input class="bas-checkbox w-4 h-4 text-kejaksaan-500 bg-slate-800 border-slate-600 rounded focus:ring-kejaksaan-500" type="checkbox" value="${akun.kode}" id="bas_${akun.kode}" ${checkedStr}><label class="text-sm text-slate-300 cursor-pointer" for="bas_${akun.kode}"><strong>${akun.kode}</strong> - ${akun.nama}</label>`;
+            div.innerHTML = `<input class="bas-checkbox w-5 h-5 text-kejaksaan-500 bg-slate-900 border-slate-600 rounded focus:ring-kejaksaan-500/50 cursor-pointer" type="checkbox" value="${akun.kode}" id="bas_${akun.kode}" ${checkedStr}><label class="text-sm text-slate-300 cursor-pointer w-full" for="bas_${akun.kode}"><strong class="text-white">${akun.kode}</strong> - ${akun.nama}</label>`;
             containerBAS.appendChild(div);
         });
         loadProfilPejabat_Nota();
@@ -1041,7 +1155,7 @@
         updatePreview_SPTJM();
     });
 
-    // Event Listeners Input
+    // Event Listeners Input Realtime
     document.getElementById('sppdForm').addEventListener('input', (e) => {
         if (e.target.id === 'sppd_in_nip_utama') enforceNIP_SPPD(e.target, 'sppd_warn_nip_utama');
         if (e.target.id === 'sppd_in_ppk_nip') enforceNIP_SPPD(e.target, 'sppd_warn_ppk_nip');
