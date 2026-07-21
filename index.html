@@ -236,8 +236,14 @@
 
     </div>
 
-    <!-- Skrip Interaksi Menu & Responsif Mobile -->
+    <!-- PUSTAKA PEMROSE DOKUMEN WORD (Via CDN) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/docxtemplater/3.37.11/docxtemplater.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pizzip/3.1.4/pizzip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
+    <!-- SKRIP UTAMA APLIKASI -->
     <script>
+        // 1. FUNGSI NAVIGASI SIDEBAR & MOBILE
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('sidebar-overlay');
@@ -271,7 +277,6 @@
                 document.getElementById('btn-notadinas').className = "w-full text-left flex items-center px-4 py-3 rounded-xl text-sm font-medium bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-md shadow-blue-600/20 transition-all duration-200";
             }
 
-            // Jika diakses via mobile, otomatis tutup sidebar setelah menu diklik
             if (window.innerWidth < 768) {
                 const sidebar = document.getElementById('sidebar');
                 const overlay = document.getElementById('sidebar-overlay');
@@ -281,8 +286,62 @@
                 }
             }
 
-            // Scroll kembali ke atas halaman saat pindah modul
             window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // 2. FUNGSI LOGIKA PEMBUATAN DOKUMEN SPPD (.DOCX)
+        async function generateSPPD() {
+            // Ambil nilai dari input form
+            const nama = document.getElementById('sppd-nama').value;
+            const nip = document.getElementById('sppd-nip').value;
+            const jabatan = document.getElementById('sppd-jabatan').value;
+            const tujuan = document.getElementById('sppd-tujuan').value;
+            const keperluan = document.getElementById('sppd-keperluan').value;
+
+            // Validasi input sederhana
+            if (!nama || !nip) {
+                alert('Mohon isi minimal Nama dan NIP Pegawai terlebih dahulu!');
+                return;
+            }
+
+            try {
+                // Ambil file template dari direktori repositori
+                const response = await fetch('template_sppd.docx');
+                if (!response.ok) {
+                    throw new Error('File template_sppd.docx tidak ditemukan di repositori!');
+                }
+                const content = await response.arrayBuffer();
+
+                // Muat isi file .docx menggunakan PizZip
+                const zip = new PizZip(content);
+                const doc = new window.docxtemplater(zip, {
+                    paragraphLoop: true,
+                    linebreaks: true,
+                });
+
+                // Masukkan data variabel dari form ke dalam tag template Word
+                doc.render({
+                    nama: nama,
+                    nip: nip,
+                    jabatan: jabatan,
+                    tujuan: tujuan,
+                    keperluan: keperluan,
+                    tanggal_cetak: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })
+                });
+
+                // Hasilkan dokumen baru
+                const out = doc.getZip().generate({
+                    type: "blob",
+                    mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                });
+
+                // Unduh berkas dengan nama dinamis
+                saveAs(out, `SPPD_${nama.replace(/\s+/g, '_')}.docx`);
+
+            </div> catch (error) {
+                console.error(error);
+                alert('Gagal memproses dokumen: ' + error.message);
+            }
         }
     </script>
 </body>
