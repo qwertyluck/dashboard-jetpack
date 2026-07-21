@@ -1,5 +1,4 @@
-
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
@@ -108,7 +107,7 @@
 
             <!-- Area Isi Konten -->
             <main class="flex-1 overflow-x-hidden overflow-y-auto p-4 sm:p-10">
-                <div class="max-w-6xl mx-auto">
+                <div class="max-w-4xl mx-auto">
                     
                     <!-- Tampilan Beranda -->
                     <div id="konten-beranda" class="modul-content space-y-6">
@@ -116,7 +115,7 @@
                             <div class="absolute -right-10 -bottom-10 w-48 h-48 bg-white/10 rounded-full blur-2xl"></div>
                             <h2 class="text-2xl sm:text-3xl font-bold tracking-tight mb-2 sm:mb-3">Selamat Datang, Jalo! 🚀</h2>
                             <p class="text-blue-100 max-w-2xl text-xs sm:text-sm leading-relaxed">
-                                Dashboard Jetpack siap mendukung fleksibilitas Anda. Kelola pembuatan SPPD, SPTJM, dan Nota Dinas menggunakan templat resmi Anda secara cepat dan presisi.
+                                Dashboard Jetpack siap mendukung fleksibilitas Anda. Kelola pembuatan SPPD menggunakan template resmi Anda secara cepat dan presisi.
                             </p>
                         </div>
 
@@ -142,50 +141,149 @@
                         </div>
                     </div>
 
-                    <!-- Tampilan Modul SPPD (Menggunakan Template Lama Anda) -->
+                    <!-- Tampilan Modul SPPD (Lengkap Sesuai Template Lama) -->
                     <div id="konten-sppd" class="modul-content hidden space-y-6">
                         <button onclick="ubahModul('beranda')" class="inline-flex items-center space-x-2 text-xs font-semibold text-blue-600 bg-blue-50 hover:bg-blue-100 px-3.5 py-2 rounded-xl transition-colors border border-blue-200">
                             <span>←</span>
                             <span>Kembali ke Beranda</span>
                         </button>
 
-                        <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-xs border border-slate-200">
-                            <h2 class="text-lg sm:text-xl font-bold text-slate-800 mb-1">Generator Surat Perintah Perjalanan Dinas (SPPD)</h2>
-                            <p class="text-xs text-slate-500 mb-6">Menggunakan file template asli yang mendukung tag tunggal `{}` dan tabel pengikut `{#pengikut}`.</p>
-                            
-                            <div class="space-y-4">
+                        <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-xs border border-slate-200 space-y-6">
+                            <div>
+                                <h2 class="text-lg sm:text-xl font-bold text-slate-800 mb-1">Generator Surat Perintah Perjalanan Dinas (SPPD)</h2>
+                                <p class="text-xs text-slate-500">Lengkapi formulir di bawah ini sesuai dengan variabel pada template asli Anda.</p>
+                            </div>
+
+                            <!-- Form Bagian 1: Instansi & Nomor -->
+                            <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-4">
+                                <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500">1. Keterangan Instansi & Surat</h3>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-xs font-semibold text-slate-700 mb-1">Satuan Kerja / Kementerian</label>
+                                        <input type="text" id="satuan_kerja" value="Kejaksaan Negeri Ambon" class="w-full px-3 py-2 text-sm rounded-lg border border-slate-200 bg-white">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-semibold text-slate-700 mb-1">Nomor SPD</label>
+                                        <input type="text" id="nomor" placeholder="Contoh: SPD/--/--/2026" class="w-full px-3 py-2 text-sm rounded-lg border border-slate-200 bg-white">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Form Bagian 2: Pejabat Pembuat Komitmen (PPK) -->
+                            <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-4">
+                                <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500">2. Pejabat Pembuat Komitmen (PPK)</h3>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-xs font-semibold text-slate-700 mb-1">Nama PPK</label>
+                                        <input type="text" id="ppk_nama" placeholder="Nama lengkap PPK" class="w-full px-3 py-2 text-sm rounded-lg border border-slate-200 bg-white">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-semibold text-slate-700 mb-1">NIP PPK</label>
+                                        <input type="text" id="ppk_nip" placeholder="NIP PPK" class="w-full px-3 py-2 text-sm rounded-lg border border-slate-200 bg-white">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Form Bagian 3: Pegawai yang Melakukan Perjalanan Dinas -->
+                            <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-4">
+                                <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500">3. Pegawai yang Melaksanakan Perjalanan Dinas</h3>
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div>
                                         <label class="block text-xs font-semibold text-slate-700 mb-1">Nama Pegawai</label>
-                                        <input type="text" id="sppd-nama" placeholder="Contoh: Jalo Touharea, S.H." class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 bg-slate-50/50">
+                                        <input type="text" id="nama_pegawai" placeholder="Nama lengkap pegawai" class="w-full px-3 py-2 text-sm rounded-lg border border-slate-200 bg-white">
                                     </div>
                                     <div>
-                                        <label class="block text-xs font-semibold text-slate-700 mb-1">NIP Pegawai</label>
-                                        <input type="text" id="sppd-nip" placeholder="Contoh: 19800101 200501 1 001" class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 bg-slate-50/50">
+                                        <label class="block text-xs font-semibold text-slate-700 mb-1">NIP Utama</label>
+                                        <input type="text" id="nip_utama" placeholder="NIP pegawai" class="w-full px-3 py-2 text-sm rounded-lg border border-slate-200 bg-white">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-semibold text-slate-700 mb-1">Pangkat dan Golongan</label>
+                                        <input type="text" id="pangkat_utama" placeholder="Contoh: Penata Muda / (III/a)" class="w-full px-3 py-2 text-sm rounded-lg border border-slate-200 bg-white">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-semibold text-slate-700 mb-1">Jabatan / Instansi</label>
+                                        <input type="text" id="jabatan_utama" placeholder="Jabatan pegawai" class="w-full px-3 py-2 text-sm rounded-lg border border-slate-200 bg-white">
+                                    </div>
+                                    <div class="md:col-span-2">
+                                        <label class="block text-xs font-semibold text-slate-700 mb-1">Tingkat Biaya Perjalanan Dinas</label>
+                                        <input type="text" id="biaya_utama" placeholder="Contoh: Tingkat C" class="w-full px-3 py-2 text-sm rounded-lg border border-slate-200 bg-white">
                                     </div>
                                 </div>
+                            </div>
 
+                            <!-- Form Bagian 4: Detail Perjalanan -->
+                            <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-4">
+                                <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500">4. Detail Perjalanan Dinas</h3>
+                                <div class="space-y-4">
+                                    <div>
+                                        <label class="block text-xs font-semibold text-slate-700 mb-1">Maksud Perjalanan Dinas</label>
+                                        <textarea id="maksud" rows="2" placeholder="Tujuan atau maksud perjalanan..." class="w-full px-3 py-2 text-sm rounded-lg border border-slate-200 bg-white"></textarea>
+                                    </div>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div>
+                                            <label class="block text-xs font-semibold text-slate-700 mb-1">Alat Angkutan yang Dipergunakan</label>
+                                            <input type="text" id="angkutan" placeholder="Contoh: Kendaraan Dinas / Umum" class="w-full px-3 py-2 text-sm rounded-lg border border-slate-200 bg-white">
+                                        </div>
+                                        <div>
+                                            <label class="block text-xs font-semibold text-slate-700 mb-1">Lamanya Perjalanan Dinas</label>
+                                            <input type="text" id="lama" placeholder="Contoh: 3 (tiga) hari" class="w-full px-3 py-2 text-sm rounded-lg border border-slate-200 bg-white">
+                                        </div>
+                                        <div>
+                                            <label class="block text-xs font-semibold text-slate-700 mb-1">Tempat Berangkat (Asal)</label>
+                                            <input type="text" id="asal" value="Ambon" class="w-full px-3 py-2 text-sm rounded-lg border border-slate-200 bg-white">
+                                        </div>
+                                        <div>
+                                            <label class="block text-xs font-semibold text-slate-700 mb-1">Tempat Tujuan</label>
+                                            <input type="text" id="tujuan" placeholder="Contoh: Surabaya" class="w-full px-3 py-2 text-sm rounded-lg border border-slate-200 bg-white">
+                                        </div>
+                                        <div>
+                                            <label class="block text-xs font-semibold text-slate-700 mb-1">Tanggal Berangkat</label>
+                                            <input type="text" id="tgl_berangkat" placeholder="Contoh: 25 Juli 2026" class="w-full px-3 py-2 text-sm rounded-lg border border-slate-200 bg-white">
+                                        </div>
+                                        <div>
+                                            <label class="block text-xs font-semibold text-slate-700 mb-1">Tanggal Harus Kembali</label>
+                                            <input type="text" id="tgl_kembali" placeholder="Contoh: 28 Juli 2026" class="w-full px-3 py-2 text-sm rounded-lg border border-slate-200 bg-white">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                           <!-- Form Bagian 5: Pembebanan Anggaran -->
+                            <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-4">
+                                <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500">5. Pembebanan Anggaran</h3>
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div>
-                                        <label class="block text-xs font-semibold text-slate-700 mb-1">Jabatan / Pangkat</label>
-                                        <input type="text" id="sppd-jabatan" placeholder="Contoh: Analis Pengelola Keuangan" class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 bg-slate-50/50">
+                                        <label class="block text-xs font-semibold text-slate-700 mb-1">Instansi / DIPA</label>
+                                        <input type="text" id="dipa" placeholder="Sumber dana / DIPA" class="w-full px-3 py-2 text-sm rounded-lg border border-slate-200 bg-white">
                                     </div>
                                     <div>
-                                        <label class="block text-xs font-semibold text-slate-700 mb-1">Tujuan Perjalanan Dinas</label>
-                                        <input type="text" id="sppd-tujuan" placeholder="Contoh: Kota Surabaya" class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 bg-slate-50/50">
+                                        <label class="block text-xs font-semibold text-slate-700 mb-1">Akun</label>
+                                        <input type="text" id="akun" placeholder="Nomor akun kegiatan" class="w-full px-3 py-2 text-sm rounded-lg border border-slate-200 bg-white">
                                     </div>
                                 </div>
+                            </div>
 
-                                <div>
-                                    <label class="block text-xs font-semibold text-slate-700 mb-1">Maksud / Keperluan Perjalanan</label>
-                                    <textarea id="sppd-keperluan" rows="3" placeholder="Contoh: Melakukan koordinasi pengelolaan aset dan dokumen SIMAN..." class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 bg-slate-50/50"></textarea>
+                            <!-- Form Bagian 6: Lokasi dan Tanggal TTD -->
+                            <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-4">
+                                <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500">6. Waktu & Tempat Penandatanganan</h3>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-xs font-semibold text-slate-700 mb-1">Lokasi Satker Asal</label>
+                                        <input type="text" id="lokasi_satker_asal" value="Ambon" class="w-full px-3 py-2 text-sm rounded-lg border border-slate-200 bg-white">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-semibold text-slate-700 mb-1">Tanggal Tanda Tangan</label>
+                                        <input type="text" id="tgl_ttd" placeholder="Contoh: 24 Juli 2026" class="w-full px-3 py-2 text-sm rounded-lg border border-slate-200 bg-white">
+                                    </div>
                                 </div>
+                            </div>
 
-                                <div class="pt-4 flex items-center justify-end space-x-3">
-                                    <button onclick="generateSPPD()" class="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold shadow-md shadow-blue-600/20 transition-all">
-                                        📥 Unduh Dokumen SPPD (Template Lama)
-                                    </button>
-                                </div>
+                            <!-- Tombol Eksekusi Unduh -->
+                            <div class="pt-2 flex items-center justify-end">
+                                <button onclick="generateSPPD()" class="px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold shadow-md shadow-blue-600/20 transition-all flex items-center space-x-2">
+                                    <span>📥</span>
+                                    <span>Unduh Dokumen SPPD (Template Asli)</span>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -196,13 +294,11 @@
                             <span>←</span>
                             <span>Kembali ke Beranda</span>
                         </button>
-
                         <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-xs border border-slate-200">
                             <h2 class="text-lg sm:text-xl font-bold text-slate-800 mb-1">Generator SPTJM</h2>
                             <p class="text-xs text-slate-500 mb-6">Formulir pengisian data untuk Surat Pernyataan Tanggung Jawab Mutlak.</p>
-                            <div class="p-6 bg-indigo-50/50 border border-indigo-100 rounded-xl text-indigo-700 text-sm flex items-center space-x-3">
-                                <span class="text-xl">💡</span>
-                                <span>Area formulir SPTJM siap dihubungkan ke template aslinya.</span>
+                            <div class="p-6 bg-indigo-50/50 border border-indigo-100 rounded-xl text-indigo-700 text-sm">
+                                Area formulir SPTJM siap dihubungkan ke template aslinya.
                             </div>
                         </div>
                     </div>
@@ -213,13 +309,11 @@
                             <span>←</span>
                             <span>Kembali ke Beranda</span>
                         </button>
-
                         <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-xs border border-slate-200">
                             <h2 class="text-lg sm:text-xl font-bold text-slate-800 mb-1">Generator Nota Dinas</h2>
                             <p class="text-xs text-slate-500 mb-6">Formulir pengisian data untuk pembuatan Nota Dinas internal.</p>
-                            <div class="p-6 bg-violet-50/50 border border-violet-100 rounded-xl text-violet-700 text-sm flex items-center space-x-3">
-                                <span class="text-xl">💡</span>
-                                <span>Area formulir Nota Dinas siap diintegrasikan.</span>
+                            <div class="p-6 bg-violet-50/50 border border-violet-100 rounded-xl text-violet-700 text-sm">
+                                Area formulir Nota Dinas siap diintegrasikan.
                             </div>
                         </div>
                     </div>
@@ -282,56 +376,67 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // FUNGSI PEMPROSESAN DOKUMEN MENGGUNAKAN FORMAT TAG TUNGGAL {} MILIK TEMPLATE LAMA ANDA
+        // FUNGSI PEMPROSESAN DOKUMEN SPPD BERDASARKAN TEMPLATE LAMA ANDA
         async function generateSPPD() {
-            const nama = document.getElementById('sppd-nama').value;
-            const nip = document.getElementById('sppd-nip').value;
-            const jabatan = document.getElementById('sppd-jabatan').value;
-            const tujuan = document.getElementById('sppd-tujuan').value;
-            const keperluan = document.getElementById('sppd-keperluan').value;
-
-            if (!nama || !nip) {
-                alert('Mohon isi minimal Nama dan NIP Pegawai terlebih dahulu!');
-                return;
-            }
-
             try {
-                // Pastikan nama file template di repositori sesuai dengan file lama Anda
+                // Ambil nilai dari seluruh input form
+                const dataForm = {
+                    satuan_kerja: document.getElementById('satuan_kerja').value,
+                    nomor: document.getElementById('nomor').value,
+                    ppk_nama: document.getElementById('ppk_nama').value,
+                    ppk_nip: document.getElementById('ppk_nip').value,
+                    nama_pegawai: document.getElementById('nama_pegawai').value,
+                    nip_utama: document.getElementById('nip_utama').value,
+                    pangkat_utama: document.getElementById('pangkat_utama').value,
+                    jabatan_utama: document.getElementById('jabatan_utama').value,
+                    biaya_utama: document.getElementById('biaya_utama').value,
+                    maksud: document.getElementById('maksud').value,
+                    angkutan: document.getElementById('angkutan').value,
+                    asal: document.getElementById('asal').value,
+                    tujuan: document.getElementById('tujuan').value,
+                    lama: document.getElementById('lama').value,
+                    tgl_berangkat: document.getElementById('tgl_berangkat').value,
+                    tgl_kembali: document.getElementById('tgl_kembali').value,
+                    dipa: document.getElementById('dipa').value,
+                    akun: document.getElementById('akun').value,
+                    lokasi_satker_asal: document.getElementById('lokasi_satker_asal').value,
+                    tgl_ttd: document.getElementById('tgl_ttd').value,
+                    // Data tabel pengikut otomatis sesuai tag {#pengikut} di template lama
+                    pengikut: [
+                        { no: "1", nama: "-", jabatan: "-", ket: "-" }
+                    ]
+                };
+
+                if (!dataForm.nama_pegawai || !dataForm.nip_utama) {
+                    alert('Mohon isi minimal Nama dan NIP Pegawai yang melaksanakan perjalanan dinas!');
+                    return;
+                }
+
+                // Ambil file template asli dari repositori
                 const response = await fetch('template_sppd.docx');
                 if (!response.ok) {
-                    throw new Error('File template_sppd.docx tidak ditemukan di repositori! Silakan unggah file template lama Anda.');
+                    throw new Error('File template_sppd.docx tidak ditemukan di repositori! Pastikan Anda sudah mengunggah file template aslinya.');
                 }
                 const content = await response.arrayBuffer();
 
                 const zip = new PizZip(content);
                 
-                // Konfigurasi khusus agar Docxtemplater membaca tag tunggal {variabel} dan tabel pengikut {#pengikut}
+                // Konfigurasi Docxtemplater dengan format tag tunggal {variabel} sesuai template lama
                 const doc = new window.docxtemplater(zip, {
                     paragraphLoop: true,
                     linebreaks: true,
                     delimiters: { start: '{', end: '}' } 
                 });
 
-                // Masukkan data variabel sesuai dengan format template lama Anda
-                doc.render({
-                    nama: nama,
-                    nip: nip,
-                    jabatan: jabatan,
-                    tujuan: tujuan,
-                    keperluan: keperluan,
-                    // Contoh data dummy untuk tabel pengikut otomatis (jika ada)
-                    pengikut: [
-                        { no: 1, nama_pengikut: "Pengikut Pertama", nip_pengikut: "-" }
-                    ],
-                    tanggal_cetak: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })
-                });
+                // Masukkan data form ke dalam template
+                doc.render(dataForm);
 
                 const out = doc.getZip().generate({
                     type: "blob",
                     mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
                 });
 
-                saveAs(out, `SPPD_${nama.replace(/\s+/g, '_')}.docx`);
+                saveAs(out, `SPPD_${dataForm.nama_pegawai.replace(/\s+/g, '_')}.docx`);
 
             } catch (error) {
                 console.error(error);
