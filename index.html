@@ -215,7 +215,7 @@
                             <i class="ph-fill ph-file-text text-2xl text-purple-500 group-hover:text-white"></i>
                         </div>
                         <h3 class="text-xl font-bold text-white mb-3">Generator SPTJM</h3>
-                        <p class="text-slate-400 text-sm leading-relaxed mb-6">Hasilkan Surat Pernyataan Tanggung Jawab Mutlak dalam format F4 terstandarisasi langsung dari peramban.</p>
+                        <p class="text-slate-400 text-sm leading-relaxed mb-6">Hasilkan Surat Pernyataan Tanggung Jawab Mutlak dalam sesuai dengan format yang berlaku langsung dari peramban.</p>
                         <div class="flex items-center text-purple-400 text-sm font-bold group-hover:text-purple-300">
                             Akses Modul <i class="ph-bold ph-arrow-right ml-2 transform group-hover:translate-x-1 transition-transform"></i>
                         </div>
@@ -384,13 +384,13 @@
                                 </div>
                                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                                     <div class="md:col-span-2"><label class="label-modern">Jabatan Pegawai</label><input type="text" id="sppd_in_jabatan_utama" class="input-modern uppercase"></div>
-                                    <div><label class="label-modern">Tgkt. Biaya</label><select id="sppd_in_biaya_utama" class="input-modern cursor-pointer font-bold"><option value="A">Tingkat A</option><option value="B">Tingkat B</option><option value="C" selected>Tingkat C</option><option value="D">Tingkat D</option><option value="E">Tingkat E</option><option value="F">Tingkat F</option></select></div>
+                                    <div><label class="label-modern">Tgkt. Biaya</label><select id="sppd_in_biaya_utama" class="input-modern cursor-pointer font-bold"><option value="A">Tingkat A:Pejabat Negara (Ketua/Wakil Ketua/Anggota Lembaga Tinggi Negara, Menteri dan setingkat Menteri).</option><option value="B">Tingkat B:Pejabat Negara Lainnya dan Pejabat Eselon I.</option><option value="C" selected>Tingkat C:Pejabat Eselon II</option><option value="D">Tingkat D: Pejabat Eselon III dan Pegawai Negeri Sipil (PNS) Golongan IV.</option><option value="E">Tingkat E:Pejabat Eselon IV dan PNS Golongan III.</option><option value="F">Tingkat F:PNS Golongan II dan Golongan I.</option></select></div>
                                 </div>
                             </div>
                         </div>
                         <div class="card-modern shadow-lg shadow-amber-900/10">
                             <div class="absolute top-0 left-0 w-1.5 h-full bg-amber-500"></div>
-                            <h3 class="flex items-center gap-2 text-sm font-bold text-white mb-6 pb-4 border-b border-slate-700/50"><i class="ph-fill ph-map-pin text-amber-500 text-xl"></i> Rincian Penugasan</h3>
+                            <h3 class="flex items-center gap-2 text-sm font-bold text-white mb-6 pb-4 border-b border-slate-700/50"><i class="ph-fill ph-map-pin text-amber-500 text-xl"></i> Maksud Perjalanan Dinas</h3>
                             <div class="space-y-6">
                                 <div><label class="label-modern">Maksud Perjalanan</label><textarea id="sppd_in_maksud" rows="3" class="input-modern resize-y"></textarea></div>
                                 <div><label class="label-modern">Alat Angkutan</label><input type="text" id="sppd_in_angkutan" class="input-modern"></div>
@@ -420,7 +420,7 @@
                             <div class="space-y-6">
                                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                                     <div class="md:col-span-2"><label class="label-modern">Instansi (DIPA)</label><input type="text" id="sppd_in_dipa" class="input-modern"></div>
-                                    <div><label class="label-modern">Akun Belanja</label><select id="sppd_in_akun" class="input-modern cursor-pointer"><option value="524113">524113</option><option value="524114">524114</option></select></div>
+                                    <div><label class="label-modern">Akun Belanja</label><select id="sppd_in_akun" class="input-modern cursor-pointer"><option value="524111">524111(Belanja Perjalanan Dinas Biasa)</option><option value="524112">524112(Belanja Perjalanan Dinas Tetap)</option><option value="524113">524113(Belanja Perjalanan Dinas Dalam Kota)</option><option value="524114">524114(Belanja Perjalanan Dinas Paket Meeting)</option><option value="524119">524119(Belanja Perjalanan Dinas Lainnya)</option></select></div>
                                 </div>
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div><label class="label-modern">Nama PPK</label><input type="text" id="sppd_in_ppk_nama" class="input-modern uppercase font-bold"></div>
