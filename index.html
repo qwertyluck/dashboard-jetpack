@@ -127,6 +127,10 @@
                 <div class="p-1.5 rounded-lg bg-slate-800/50 text-slate-400 mr-3"><i class="ph-bold ph-file-text text-lg"></i></div>
                 Generator SPTJM
             </button>
+            <button id="btn-builder" onclick="switchTab('builder')" class="w-full text-left flex items-center px-4 py-3 rounded-2xl text-sm font-bold text-slate-400 hover:bg-slate-800 hover:text-white transition-all duration-200 border border-transparent">
+                <div class="p-1.5 rounded-lg bg-slate-800/50 text-slate-400 mr-3"><i class="ph-bold ph-sliders text-lg"></i></div>
+                Template Builder
+            </button>
         </nav>
         
         <div class="p-5 m-4 rounded-2xl border border-slate-800 bg-slate-800/30 text-center relative overflow-hidden">
@@ -579,9 +583,9 @@
                                 <div class="text-xs mb-2">Menyatakan dengan sesungguhnya bahwa[cite: 2] :</div>
                                 <ol class="list-decimal list-inside text-xs space-y-2 mb-6 pl-2 leading-relaxed">
                                     <li>Perhitungan yang terdapat dalam <span id="sptjm_prev_uraian" class="font-medium">...</span> telah dihitung dengan benar[cite: 2];</li>
-                                    <li>Apabila dikemudian hari terbukti pernyataan ini tidak benar, menimbulkan kerugian negara, dan/atau menimbulkan permasalahan hukum, maka saya bersedia bertanggung jawab secara mutlak untuk menyetor kerugian negara tersebut ke Kas Negara sesuai dengan ketentuan peraturan perundang-undangan[cite: 2].</li>
+                                    <li id="sptjm_prev_poin2">Apabila dikemudian hari terbukti pernyataan ini tidak benar, menimbulkan kerugian negara, dan/atau menimbulkan permasalahan hukum, maka saya bersedia bertanggung jawab secara mutlak untuk menyetor kerugian negara tersebut ke Kas Negara sesuai dengan ketentuan peraturan perundang-undangan[cite: 2].</li>
                                 </ol>
-                                <div class="text-xs mb-8 leading-relaxed">Demikian surat pernyataan ini dibuat dengan sebenarnya, untuk dapat dipergunakan sebagaimana mestinya[cite: 2].</div>
+                                <div class="text-xs mb-8 leading-relaxed" id="sptjm_prev_penutup">Demikian surat pernyataan ini dibuat dengan sebenarnya, untuk dapat dipergunakan sebagaimana mestinya[cite: 2].</div>
                                 <div class="flex justify-end text-xs">
                                     <div class="w-64 text-left">
                                         <p><span id="sptjm_prev_lokasi">-</span>, <span id="sptjm_prev_tanggal_surat">-</span></p>
@@ -594,6 +598,52 @@
                         </div>
                     </div>
                 </section>
+            </div>
+
+            <!-- TAB 4: TEMPLATE BUILDER -->
+            <div id="tab-builder" class="p-4 md:p-8 max-w-4xl mx-auto space-y-6 hidden pb-20 animate-fade-in">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-xl font-bold text-white tracking-tight">Template Builder (Kustomisasi Redaksi)</h3>
+                        <p class="text-xs text-slate-400 mt-1">Ubah dan sesuaikan kalimat klausul standar atau narasi dokumen secara instan.</p>
+                    </div>
+                    <button onclick="resetTemplateBuilder()" class="flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-2.5 rounded-xl text-xs font-bold border border-slate-700 transition-colors">
+                        <i class="ph-bold ph-arrow-counter-clockwise text-sm"></i> Reset Standar
+                    </button>
+                </div>
+
+                <div class="space-y-6">
+                    <div class="card-modern">
+                        <div class="absolute top-0 left-0 w-1.5 h-full bg-purple-500"></div>
+                        <h3 class="flex items-center gap-2 text-sm font-bold text-white mb-6 pb-4 border-b border-slate-700/50">
+                            <i class="ph-fill ph-file-text text-purple-500 text-xl"></i> Redaksi Klausul SPTJM
+                        </h3>
+                        <div class="space-y-5">
+                            <div>
+                                <label class="label-modern">Poin Pernyataan Kedua (Pertanggungjawaban Hukum / Kerugian Negara)</label>
+                                <textarea id="builder_sptjm_poin2" rows="4" class="input-modern" oninput="saveTemplateBuilder()"></textarea>
+                            </div>
+                            <div>
+                                <label class="label-modern">Kalimat Penutup Dokumen SPTJM</label>
+                                <textarea id="builder_sptjm_penutup" rows="3" class="input-modern" oninput="saveTemplateBuilder()"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-modern">
+                        <div class="absolute top-0 left-0 w-1.5 h-full bg-blue-500"></div>
+                        <h3 class="flex items-center gap-2 text-sm font-bold text-white mb-6 pb-4 border-b border-slate-700/50">
+                            <i class="ph-fill ph-envelope-open text-blue-500 text-xl"></i> Format Standar Nota Dinas
+                        </h3>
+                        <div class="space-y-5">
+                            <div>
+                                <label class="label-modern">Kalimat Pengantar Nota Dinas (Sehubungan dengan...)</label>
+                                <textarea id="builder_nota_pengantar" rows="3" class="input-modern" oninput="saveTemplateBuilder()">Sehubungan dengan {kegiatan} pada Kejaksaan Negeri Maluku Tenggara. menimbang adanya biaya yang timbul dengan kegiatan tersebut, maka Bersama ini dengan hormat kami sampaikan Nota Dinas Pencairan Anggaran dalam rangka mendukung kegiatan operasional sebagaimana dimaksud dengan nilai sebesar {nominal} ({terbilang}).</textarea>
+                                <p class="text-[10px] text-slate-500 mt-1">Variabel dinamis: {kegiatan}, {nominal}, {terbilang}, {dipa}, {bas}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             
         </div>
@@ -635,6 +685,58 @@
         setTimeout(() => {
             modal.classList.add('hidden');
         }, 300);
+    }
+
+    // ==========================================
+    // SISTEM TEMPLATE BUILDER (KUSTOMISASI REDAKSI)
+    // ==========================================
+    const defaultTemplateConfig = {
+        sptjm_poin2: "Apabila dikemudian hari terbukti pernyataan ini tidak benar, menimbulkan kerugian negara, dan/atau menimbulkan permasalahan hukum, maka saya bersedia bertanggung jawab secara mutlak untuk menyetor kerugian negara tersebut ke Kas Negara sesuai dengan ketentuan peraturan perundang-undangan[cite: 2].",
+        sptjm_penutup: "Demikian surat pernyataan ini dibuat dengan sebenarnya, untuk dapat dipergunakan sebagaimana mestinya[cite: 2].",
+        nota_pengantar: "Sehubungan dengan {kegiatan} pada Kejaksaan Negeri Maluku Tenggara. menimbang adanya biaya yang timbul dengan kegiatan tersebut, maka Bersama ini dengan hormat kami sampaikan Nota Dinas Pencairan Anggaran dalam rangka mendukung kegiatan operasional sebagaimana dimaksud dengan nilai sebesar {nominal} ({terbilang})."
+    };
+
+    function loadTemplateBuilder() {
+        let config = defaultTemplateConfig;
+        try {
+            const saved = localStorage.getItem('manise_template_builder_config');
+            if (saved) config = JSON.parse(saved);
+        } catch(e) {}
+
+        const elPoin2 = document.getElementById('builder_sptjm_poin2');
+        const elPenutup = document.getElementById('builder_sptjm_penutup');
+        const elPengantar = document.getElementById('builder_nota_pengantar');
+
+        if(elPoin2) elPoin2.value = config.sptjm_poin2;
+        if(elPenutup) elPenutup.value = config.sptjm_penutup;
+        if(elPengantar) elPengantar.value = config.nota_pengantar;
+    }
+
+    function saveTemplateBuilder() {
+        const config = {
+            sptjm_poin2: document.getElementById('builder_sptjm_poin2')?.value || defaultTemplateConfig.sptjm_poin2,
+            sptjm_penutup: document.getElementById('builder_sptjm_penutup')?.value || defaultTemplateConfig.sptjm_penutup,
+            nota_pengantar: document.getElementById('builder_nota_pengantar')?.value || defaultTemplateConfig.nota_pengantar
+        };
+        localStorage.setItem('manise_template_builder_config', JSON.stringify(config));
+        updatePreview_SPTJM();
+        updatePreview_Nota();
+    }
+
+    function resetTemplateBuilder() {
+        localStorage.setItem('manise_template_builder_config', JSON.stringify(defaultTemplateConfig));
+        loadTemplateBuilder();
+        updatePreview_SPTJM();
+        updatePreview_Nota();
+        showModal("Berhasil Reset", "Redaksi templat berhasil dikembalikan ke pengaturan standar instansi.", false);
+    }
+
+    function getTemplateConfig() {
+        try {
+            const saved = localStorage.getItem('manise_template_builder_config');
+            if (saved) return JSON.parse(saved);
+        } catch(e) {}
+        return defaultTemplateConfig;
     }
 
     // ==========================================
@@ -757,6 +859,7 @@
         document.getElementById('tab-nota').classList.add('hidden');
         document.getElementById('tab-sppd').classList.add('hidden');
         document.getElementById('tab-sptjm').classList.add('hidden');
+        document.getElementById('tab-builder').classList.add('hidden');
 
         // Reset Menu Style
         const menus = [
@@ -764,7 +867,8 @@
             {id: 'btn-riwayat', default: 'bg-transparent text-slate-400 border-transparent', active: 'bg-slate-800 text-white border-slate-700 shadow-md', iconBg: 'bg-slate-800/50 text-slate-400', iconActive: 'bg-slate-700 text-white'},
             {id: 'btn-nota', default: 'bg-transparent text-slate-400 border-transparent', active: 'bg-slate-800 text-white border-slate-700 shadow-md', iconBg: 'bg-slate-800/50 text-slate-400', iconActive: 'bg-blue-500 text-white'},
             {id: 'btn-sppd', default: 'bg-transparent text-slate-400 border-transparent', active: 'bg-slate-800 text-white border-slate-700 shadow-md', iconBg: 'bg-slate-800/50 text-slate-400', iconActive: 'bg-kejaksaan-500 text-white'},
-            {id: 'btn-sptjm', default: 'bg-transparent text-slate-400 border-transparent', active: 'bg-slate-800 text-white border-slate-700 shadow-md', iconBg: 'bg-slate-800/50 text-slate-400', iconActive: 'bg-purple-500 text-white'}
+            {id: 'btn-sptjm', default: 'bg-transparent text-slate-400 border-transparent', active: 'bg-slate-800 text-white border-slate-700 shadow-md', iconBg: 'bg-slate-800/50 text-slate-400', iconActive: 'bg-purple-500 text-white'},
+            {id: 'btn-builder', default: 'bg-transparent text-slate-400 border-transparent', active: 'bg-slate-800 text-white border-slate-700 shadow-md', iconBg: 'bg-slate-800/50 text-slate-400', iconActive: 'bg-amber-500 text-white'}
         ];
 
         menus.forEach(m => {
@@ -790,14 +894,15 @@
             'riwayat': { main: 'RIWAYAT SURAT', sub: 'Arsip Dokumen Terbit' },
             'nota': { main: 'NOTA DINAS', sub: 'Sistem Generator Nota Dinas' },
             'sppd': { main: 'SPPD GENERATOR', sub: 'Sistem Penerbitan Surat Otomatis' },
-            'sptjm': { main: 'SPTJM', sub: 'Surat Pernyataan Tanggung Jawab Mutlak' }
+            'sptjm': { main: 'SPTJM', sub: 'Surat Pernyataan Tanggung Jawab Mutlak' },
+            'builder': { main: 'TEMPLATE BUILDER', sub: 'Pengaturan Redaksi Dokumen' }
         };
         document.getElementById('header-title').innerText = titleMap[tab].main;
         document.getElementById('header-subtitle').innerText = titleMap[tab].sub;
 
         const headerActions = document.getElementById('header-actions');
         const labelUpload = document.getElementById('labelUploadTemplate');
-        if(tab === 'home' || tab === 'riwayat') {
+        if(tab === 'home' || tab === 'riwayat' || tab === 'builder') {
             headerActions.classList.add('hidden');
         } else {
             headerActions.classList.remove('hidden');
@@ -962,6 +1067,14 @@
                 }
             });
 
+            const builderConfig = getTemplateConfig();
+            let narasiPengantar = builderConfig.nota_pengantar
+                .replace(/{kegiatan}/g, kegiatan)
+                .replace(/{nominal}/g, nominalFormat)
+                .replace(/{terbilang}/g, teksTerbilang)
+                .replace(/{dipa}/g, dipaTahun)
+                .replace(/{bas}/g, teksMataAnggaran);
+
             preview.innerHTML = `
                 <div class="flex items-center border-b-2 border-black pb-3 mb-4">
                     <div class="w-16 h-16 flex items-center justify-center font-bold text-xs text-center border border-gray-400 mr-4 bg-gray-50">[LOGO]</div>
@@ -983,7 +1096,7 @@
                     <tr><td class="py-1 font-bold">Perihal</td><td>:</td><td class="py-1 font-bold">${perihal}</td></tr>
                 </table>
                 <div class="text-xs space-y-3 text-justify leading-relaxed mb-4">
-                    <p style="text-indent: 40px;">Sehubungan dengan ${kegiatan} pada Kejaksaan Negeri Maluku Tenggara. menimbang adanya biaya yang timbul dengan kegiatan tersebut, maka Bersama ini dengan hormat kami sampaikan Nota Dinas Pencairan Anggaran dalam rangka mendukung kegiatan operasional sebagaimana dimaksud dengan nilai sebesar <strong>${nominalFormat}</strong> <em>(${teksTerbilang}).</em></p>
+                    <p style="text-indent: 40px;">${narasiPengantar}</p>
                     <p style="text-indent: 40px;">Kiranya dijadikan dasar untuk penyerapan anggaran berdasarkan DIPA Tahun ${dipaTahun} / Nomor Mata Anggaran ${teksMataAnggaran}.</p>
                     <p style="text-indent: 40px;">Demikian untuk menjadi maklum.</p>
                 </div>
@@ -1054,6 +1167,14 @@
             const nominalFormat = new Intl.NumberFormat('id-ID').format(nominal);
             const teksTerbilang = terbilang_Nota(nominal) + " Rupiah";
 
+            const builderConfig = getTemplateConfig();
+            let narasiPengantar = builderConfig.nota_pengantar
+                .replace(/{kegiatan}/g, kegiatan)
+                .replace(/{nominal}/g, nominalFormat)
+                .replace(/{terbilang}/g, teksTerbilang)
+                .replace(/{dipa}/g, dipaTahun)
+                .replace(/{bas}/g, teksMataAnggaran);
+
             const { Document, Packer, Paragraph, TextRun, AlignmentType, Table, TableRow, TableCell, WidthType, BorderStyle, ImageRun } = docxLib;
 
             const noBorder = { style: BorderStyle.NONE, size: 0, color: "auto" };
@@ -1115,9 +1236,7 @@
                         new Paragraph({
                             alignment: AlignmentType.JUSTIFY, indent: { firstLine: 720 }, spacing: { before: 0, after: 0, line: 360 },
                             children: [
-                                new TextRun({ text: `Sehubungan dengan ${kegiatan} pada Kejaksaan Negeri Maluku Tenggara. menimbang adanya biaya yang timbul dengan kegiatan tersebut, maka Bersama ini dengan hormat kami sampaikan Nota Dinas Pencairan Anggaran dalam rangka mendukung kegiatan operasional sebagaimana dimaksud dengan nilai sebesar ` }),
-                                new TextRun({ text: `${nominalFormat} `, bold: true }),
-                                new TextRun({ text: `(${teksTerbilang}).`, italic: true })
+                                new TextRun({ text: narasiPengantar })
                             ]
                         }),
                         new Paragraph({ alignment: AlignmentType.JUSTIFY, indent: { firstLine: 720 }, spacing: { before: 0, after: 0, line: 360 }, children: [new TextRun({ text: `Kiranya dijadikan dasar untuk penyerapan anggaran berdasarkan DIPA Tahun ${dipaTahun} / Nomor Mata Anggaran ${teksMataAnggaran}.` })] }),
@@ -1484,6 +1603,12 @@
         document.getElementById('sptjm_prev_pejabat_ttd').innerText = getVal_SPTJM('sptjm_in_jabatan') || 'Pejabat Pembuat Komitmen';
         document.getElementById('sptjm_prev_nama_ttd').innerText = getVal_SPTJM('sptjm_in_nama_pejabat') || '-';
         document.getElementById('sptjm_prev_nip_ttd').innerText = getVal_SPTJM('sptjm_in_nip') || '-';
+
+        const builderConfig = getTemplateConfig();
+        const elPoin2 = document.getElementById('sptjm_prev_poin2');
+        const elPenutup = document.getElementById('sptjm_prev_penutup');
+        if(elPoin2) elPoin2.innerHTML = builderConfig.sptjm_poin2;
+        if(elPenutup) elPenutup.innerHTML = builderConfig.sptjm_penutup;
     }
 
     function eksekusiDocxTemplater_SPTJM(arrayBufferContent, btnEl, originalBtnText) {
@@ -1491,6 +1616,8 @@
             const PizZipConstructor = window.PizZip || window.pizzip;
             const zip = new PizZipConstructor(arrayBufferContent);
             const doc = new window.docxtemplater(zip, { paragraphLoop: true, linebreaks: true, nullGetter: function() { return ""; } });
+            
+            const builderConfig = getTemplateConfig();
             doc.render({
                 nomor: getVal_SPTJM('sptjm_in_nomor'), nama_pejabat: getVal_SPTJM('sptjm_in_nama_pejabat').toUpperCase(),
                 nama: getVal_SPTJM('sptjm_in_nama_pejabat').toUpperCase(), nip: getVal_SPTJM('sptjm_in_nip'),
@@ -1498,7 +1625,9 @@
                 unit_wilayah: getVal_SPTJM('sptjm_in_unit_wilayah').toUpperCase(), kementerian: getVal_SPTJM('sptjm_in_kementerian').toUpperCase(),
                 kementerian_lembaga: getVal_SPTJM('sptjm_in_kementerian').toUpperCase(), uraian_sptjm: getVal_SPTJM('sptjm_in_uraian_sptjm'),
                 lokasi: getVal_SPTJM('sptjm_in_lokasi'), tanggal_surat: formatTanggalIndo_SPTJM(getVal_SPTJM('sptjm_in_tanggal_surat')),
-                pejabat_penandatangan_sptjm: getVal_SPTJM('sptjm_in_jabatan')
+                pejabat_penandatangan_sptjm: getVal_SPTJM('sptjm_in_jabatan'),
+                sptjm_poin2: builderConfig.sptjm_poin2,
+                sptjm_penutup: builderConfig.sptjm_penutup
             });
             const blob = doc.getZip().generate({ type: "blob", mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document" });
             const url = window.URL.createObjectURL(blob);
@@ -1564,6 +1693,9 @@
     // INITIALIZATION LISTENER (ALL MODULES)
     // ==========================================
     document.addEventListener('DOMContentLoaded', () => {
+        // Init Template Builder
+        loadTemplateBuilder();
+
         // Init Halaman Awal
         switchTab('home');
         muatUlangTabelRiwayat();
