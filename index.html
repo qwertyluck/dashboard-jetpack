@@ -166,12 +166,6 @@
             </div>
             
             <div class="flex items-center gap-3">
-                <!-- Tombol Toggle Tema (Terang / Gelap) -->
-                <button onclick="toggleTheme()" class="flex items-center gap-2 bg-slate-800 dark:bg-slate-800 light:bg-slate-200 hover:bg-slate-700 light:hover:bg-slate-300 text-slate-300 dark:text-slate-300 light:text-slate-700 px-4 py-2.5 rounded-xl text-xs md:text-sm font-semibold transition-colors border border-slate-700 dark:border-slate-700 light:border-slate-300 shadow-sm" title="Ubah Tema Tampilan">
-                    <i id="themeIcon" class="ph-bold ph-moon text-lg text-amber-400 dark:text-amber-400 light:text-slate-700"></i>
-                    <span class="hidden md:inline" id="themeText">Tema Gelap</span>
-                </button>
-
                 <div id="header-actions" class="flex items-center gap-2 md:gap-3 hidden">
                     <label for="templateUpload" id="labelUploadTemplate" class="cursor-pointer hidden sm:flex items-center gap-2 bg-slate-800 dark:bg-slate-800 light:bg-slate-200 hover:bg-slate-700 light:hover:bg-slate-300 text-slate-300 dark:text-slate-300 light:text-slate-700 px-4 py-2.5 rounded-xl text-xs md:text-sm font-semibold transition-colors border border-slate-700 dark:border-slate-700 light:border-slate-300 shadow-sm">
                         <i class="ph-bold ph-upload-simple text-lg"></i> <span class="hidden md:inline">Upload Template</span>
@@ -617,13 +611,13 @@
                         </div>
                         <div class="overflow-y-auto max-h-[70vh] flex flex-col items-center gap-8 pb-4 custom-scrollbar rounded-xl">
                             <div id="sptjm_previewPage" class="p-[20mm] w-full max-w-[215mm] min-h-[330mm] shadow-2xl sptjm-document print-area rounded-md relative">
-                                <div class="text-center font-bold text-xs uppercase leading-tight mb-1">KEJAKSAAN REPUBLIK INDONESIA[cite: 2]</div>
-                                <div class="text-center font-bold text-xs uppercase leading-tight mb-1" id="sptjm_prev_unit_wilayah">KEJAKSAAN TINGGI MALUKU[cite: 2]</div>
-                                <div class="text-center font-bold text-sm uppercase leading-tight mb-4" id="sptjm_prev_satuan_kerja">KEJAKSAAN NEGERI MALUKU TENGGARA[cite: 2]</div>
-                                <div class="text-[9pt] text-center border-b border-black pb-3 mb-6">Jl. Cempaka Perumahan Pemda, Kel. Ohoijang Watdek, Kec. Kei Kecil, Kabupaten Maluku Tenggara[cite: 2]</div>
+                                <div class="text-center font-bold text-xs uppercase leading-tight mb-1">KEJAKSAAN REPUBLIK INDONESIA</div>
+                                <div class="text-center font-bold text-xs uppercase leading-tight mb-1" id="sptjm_prev_unit_wilayah">KEJAKSAAN TINGGI MALUKU</div>
+                                <div class="text-center font-bold text-sm uppercase leading-tight mb-4" id="sptjm_prev_satuan_kerja">KEJAKSAAN NEGERI MALUKU TENGGARA</div>
+                                <div class="text-[9pt] text-center border-b border-black pb-3 mb-6">Jl. Cempaka Perumahan Pemda, Kel. Ohoijang Watdek, Kec. Kei Kecil, Kabupaten Maluku Tenggara</div>
                                 <div class="text-center font-bold text-sm mb-6 underline tracking-wide">SURAT PERNYATAAN TANGGUNG JAWAB MUTLAK</div>
                                 <div class="text-center text-xs font-bold mb-6">Nomor : <span id="sptjm_prev_nomor">{nomor}</span></div>
-                                <div class="text-xs mb-3">Yang bertanda tangan di bawah ini[cite: 2] :</div>
+                                <div class="text-xs mb-3">Yang bertanda tangan di bawah ini :</div>
                                 <table class="w-full text-xs mb-4 align-top">
                                     <tr><td class="w-36 py-1">Nama</td><td class="w-4 py-1">:</td><td class="py-1 font-bold uppercase" id="sptjm_prev_nama_pejabat">-</td></tr>
                                     <tr><td class="py-1">NIP</td><td class="py-1">:</td><td class="py-1 font-mono" id="sptjm_prev_nip">-</td></tr>
@@ -632,12 +626,12 @@
                                     <tr><td class="py-1">Unit Wilayah</td><td class="py-1">:</td><td class="py-1 uppercase" id="sptjm_prev_unit_wilayah_baris">-</td></tr>
                                     <tr><td class="py-1">Kementerian/Lembaga</td><td class="py-1">:</td><td class="py-1 uppercase" id="sptjm_prev_kementerian">-</td></tr>
                                 </table>
-                                <div class="text-xs mb-2">Menyatakan dengan sesungguhnya bahwa[cite: 2] :</div>
+                                <div class="text-xs mb-2">Menyatakan dengan sesungguhnya bahwa :</div>
                                 <ol class="list-decimal list-inside text-xs space-y-2 mb-6 pl-2 leading-relaxed">
-                                    <li>Perhitungan yang terdapat dalam <span id="sptjm_prev_uraian" class="font-medium">...</span> telah dihitung dengan benar[cite: 2];</li>
-                                    <li id="sptjm_prev_poin2">Apabila dikemudian hari terbukti pernyataan ini tidak benar, menimbulkan kerugian negara, dan/atau menimbulkan permasalahan hukum, maka saya bersedia bertanggung jawab secara mutlak untuk menyetor kerugian negara tersebut ke Kas Negara sesuai dengan ketentuan peraturan perundang-undangan[cite: 2].</li>
+                                    <li>Perhitungan yang terdapat dalam <span id="sptjm_prev_uraian" class="font-medium">...</span> telah dihitung dengan benar;</li>
+                                    <li id="sptjm_prev_poin2">Apabila dikemudian hari terbukti pernyataan ini tidak benar, menimbulkan kerugian negara, dan/atau menimbulkan permasalahan hukum, maka saya bersedia bertanggung jawab secara mutlak untuk menyetor kerugian negara tersebut ke Kas Negara sesuai dengan ketentuan peraturan perundang-undangan.</li>
                                 </ol>
-                                <div class="text-xs mb-8 leading-relaxed" id="sptjm_prev_penutup">Demikian surat pernyataan ini dibuat dengan sebenarnya, untuk dapat dipergunakan sebagaimana mestinya[cite: 2].</div>
+                                <div class="text-xs mb-8 leading-relaxed" id="sptjm_prev_penutup">Demikian surat pernyataan ini dibuat dengan sebenarnya, untuk dapat dipergunakan sebagaimana mestinya.</div>
                                 <div class="flex justify-end text-xs">
                                     <div class="w-64 text-left">
                                         <p><span id="sptjm_prev_lokasi">-</span>, <span id="sptjm_prev_tanggal_surat">-</span></p>
@@ -702,44 +696,6 @@
     </main>
 
 <script>
-    // ==========================================
-    // SISTEM TEMA TERANG / GELAP (DARK / LIGHT MODE)
-    // ==========================================
-    function toggleTheme() {
-        const body = document.body;
-        const themeIcon = document.getElementById('themeIcon');
-        const themeText = document.getElementById('themeText');
-
-        if (body.classList.contains('light')) {
-            body.classList.remove('light');
-            localStorage.setItem('manise_theme', 'dark');
-            if (themeIcon) themeIcon.className = "ph-bold ph-moon text-lg text-amber-400";
-            if (themeText) themeText.innerText = "Tema Gelap";
-        } else {
-            body.classList.add('light');
-            localStorage.setItem('manise_theme', 'light');
-            if (themeIcon) themeIcon.className = "ph-bold ph-sun text-lg text-amber-500";
-            if (themeText) themeText.innerText = "Tema Terang";
-        }
-    }
-
-    function initTheme() {
-        const savedTheme = localStorage.getItem('manise_theme') || 'dark';
-        const body = document.body;
-        const themeIcon = document.getElementById('themeIcon');
-        const themeText = document.getElementById('themeText');
-
-        if (savedTheme === 'light') {
-            body.classList.add('light');
-            if (themeIcon) themeIcon.className = "ph-bold ph-sun text-lg text-amber-500";
-            if (themeText) themeText.innerText = "Tema Terang";
-        } else {
-            body.classList.remove('light');
-            if (themeIcon) themeIcon.className = "ph-bold ph-moon text-lg text-amber-400";
-            if (themeText) themeText.innerText = "Tema Gelap";
-        }
-    }
-
     // ==========================================
     // SISTEM CETAK LANGSUNG KE PRINTER FISIK
     // ==========================================
@@ -838,8 +794,8 @@
     // SISTEM TEMPLATE BUILDER (KUSTOMISASI REDAKSI)
     // ==========================================
     const defaultTemplateConfig = {
-        sptjm_poin2: "Apabila dikemudian hari terbukti pernyataan ini tidak benar, menimbulkan kerugian negara, dan/atau menimbulkan permasalahan hukum, maka saya bersedia bertanggung jawab secara mutlak untuk menyetor kerugian negara tersebut ke Kas Negara sesuai dengan ketentuan peraturan perundang-undangan[cite: 2].",
-        sptjm_penutup: "Demikian surat pernyataan ini dibuat dengan sebenarnya, untuk dapat dipergunakan sebagaimana mestinya[cite: 2].",
+        sptjm_poin2: "Apabila dikemudian hari terbukti pernyataan ini tidak benar, menimbulkan kerugian negara, dan/atau menimbulkan permasalahan hukum, maka saya bersedia bertanggung jawab secara mutlak untuk menyetor kerugian negara tersebut ke Kas Negara sesuai dengan ketentuan peraturan perundang-undangan.",
+        sptjm_penutup: "Demikian surat pernyataan ini dibuat dengan sebenarnya, untuk dapat dipergunakan sebagaimana mestinya.",
         nota_pengantar: "Sehubungan dengan {kegiatan} pada Kejaksaan Negeri Maluku Tenggara. menimbang adanya biaya yang timbul dengan kegiatan tersebut, maka Bersama ini dengan hormat kami sampaikan Nota Dinas Pencairan Anggaran dalam rangka mendukung kegiatan operasional sebagaimana dimaksud dengan nilai sebesar {nominal} ({terbilang})."
     };
 
@@ -1077,7 +1033,7 @@
             headerActions.classList.remove('hidden');
             if (tab === 'nota') {
                 if (labelUpload) labelUpload.classList.add('hidden');
-                document.getElementById('btnDownload').setAttribute('onclick', `generateWord_Nota(document.getElementById('notaForm'))`);
+                document.getElementById('btnDownload').setAttribute('onclick', `generateWord_Nota(this)`);
             } else {
                 if (labelUpload) labelUpload.classList.remove('hidden');
                 document.getElementById('btnDownload').setAttribute('onclick', `downloadWord_${tab.toUpperCase()}()`);
@@ -1862,9 +1818,6 @@
     // INITIALIZATION LISTENER (ALL MODULES)
     // ==========================================
     document.addEventListener('DOMContentLoaded', () => {
-        // Init Tema
-        initTheme();
-
         // Init Template Builder
         loadTemplateBuilder();
 
