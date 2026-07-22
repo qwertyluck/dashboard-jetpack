@@ -22,6 +22,7 @@
 
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
@@ -43,7 +44,12 @@
     <style type="text/tailwindcss">
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
         
-        body { font-family: 'Inter', sans-serif; background-color: #0f172a; color: #e2e8f0; color-scheme: dark; overflow: hidden; }
+        body { font-family: 'Inter', sans-serif; overflow: hidden; }
+        
+        /* Tema Gelap Default */
+        body:not(.light) { background-color: #0f172a; color: #e2e8f0; color-scheme: dark; }
+        /* Tema Terang */
+        body.light { background-color: #f8fafc; color: #1e293b; color-scheme: light; }
         
         .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
@@ -53,7 +59,7 @@
         @media print { 
             @page { size: 215mm 330mm; margin: 0; }
             .no-print { display: none !important; } 
-            body { background: #ffffff; color: #000; overflow: auto; color-scheme: light; }
+            body { background: #ffffff !important; color: #000 !important; overflow: auto; color-scheme: light; }
             .print-area { box-shadow: none !important; border: none !important; margin-bottom: 0 !important; width: 215mm !important; min-height: 330mm !important; }
             .page-break { page-break-before: always; }
         }
@@ -63,10 +69,14 @@
         .sptjm-document { font-family: 'Arial', sans-serif; color: #000; background-color: #ffffff; line-height: 1.5; font-size: 11pt; color-scheme: light; width: 215mm; min-height: 330mm; }
         .nota-document { font-family: 'Arial', sans-serif; color: #000; background-color: #ffffff; line-height: 1.4; font-size: 10pt; color-scheme: light; width: 210mm; min-height: 297mm; }
         
-        /* UI Komponen */
-        .input-modern { @apply w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-3.5 text-sm focus:bg-[#0f172a] focus:border-kejaksaan-500 focus:ring-2 focus:ring-kejaksaan-500/30 transition-all outline-none text-white placeholder-slate-500 shadow-inner; }
+        /* UI Komponen Dinamis */
+        body:not(.light) .input-modern { @apply w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-3.5 text-sm focus:bg-[#0f172a] focus:border-kejaksaan-500 focus:ring-2 focus:ring-kejaksaan-500/30 transition-all outline-none text-white placeholder-slate-500 shadow-inner; }
+        body.light .input-modern { @apply w-full bg-white border border-slate-300 rounded-xl px-4 py-3.5 text-sm focus:bg-slate-50 focus:border-kejaksaan-500 focus:ring-2 focus:ring-kejaksaan-500/30 transition-all outline-none text-slate-800 placeholder-slate-400 shadow-inner; }
+
         .label-modern { @apply block text-[11px] font-bold text-slate-400 mb-2 uppercase tracking-widest; }
-        .card-modern { @apply bg-slate-800/80 backdrop-blur-md p-6 md:p-8 rounded-3xl border border-slate-700/50 shadow-2xl mb-6 relative overflow-hidden; }
+        
+        body:not(.light) .card-modern { @apply bg-slate-800/80 backdrop-blur-md p-6 md:p-8 rounded-3xl border border-slate-700/50 shadow-2xl mb-6 relative overflow-hidden; }
+        body.light .card-modern { @apply bg-white backdrop-blur-md p-6 md:p-8 rounded-3xl border border-slate-200 shadow-xl mb-6 relative overflow-hidden; }
     </style>
 </head>
 <body class="antialiased selection:bg-kejaksaan-500 selection:text-white flex h-screen">
@@ -76,7 +86,7 @@
 
     <!-- MODAL ERROR / NOTIFIKASI INFORMATIF -->
     <div id="appModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300">
-        <div class="bg-slate-800 border border-slate-700 rounded-3xl p-6 md:p-8 max-w-md w-full shadow-2xl transform scale-95 transition-transform duration-300" id="modalContainerContent">
+        <div id="modalBoxContainer" class="bg-slate-800 border border-slate-700 rounded-3xl p-6 md:p-8 max-w-md w-full shadow-2xl transform scale-95 transition-transform duration-300">
             <div id="modalIconContainer" class="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl mb-6 bg-red-500/10 text-red-500">
                 <i class="ph-bold ph-warning-circle" id="modalIcon"></i>
             </div>
@@ -89,7 +99,7 @@
     </div>
 
     <!-- SIDEBAR NAVIGASI -->
-    <aside id="sidebar" class="fixed md:static inset-y-0 left-0 w-72 bg-slate-900/95 backdrop-blur-xl border-r border-slate-800 flex flex-col z-50 shadow-2xl transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out">
+    <aside id="sidebar" class="fixed md:static inset-y-0 left-0 w-72 bg-slate-900/95 dark:bg-slate-900/95 light:bg-slate-900 backdrop-blur-xl border-r border-slate-800 flex flex-col z-50 shadow-2xl transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out">
         <div class="h-20 flex items-center px-6 border-b border-slate-800/80">
             <div class="bg-gradient-to-br from-kejaksaan-500 to-kejaksaan-700 p-2.5 rounded-xl text-white mr-3 shadow-lg shadow-kejaksaan-900/50">
                 <i class="ph-bold ph-scales text-xl"></i>
@@ -141,29 +151,37 @@
     </aside>
 
     <!-- KONTEN UTAMA -->
-    <main class="flex-1 flex flex-col h-screen overflow-hidden relative bg-[#0f172a]">
+    <main class="flex-1 flex flex-col h-screen overflow-hidden relative bg-[#0f172a] dark:bg-[#0f172a] light:bg-[#f8fafc]">
         
         <!-- HEADER ATAS -->
-        <header class="bg-slate-900/60 backdrop-blur-xl border-b border-slate-800 h-20 flex items-center justify-between px-4 md:px-8 z-30 no-print sticky top-0">
+        <header class="bg-slate-900/60 dark:bg-slate-900/60 light:bg-white/80 backdrop-blur-xl border-b border-slate-800 dark:border-slate-800 light:border-slate-200 h-20 flex items-center justify-between px-4 md:px-8 z-30 no-print sticky top-0">
             <div class="flex items-center gap-4">
-                <button onclick="toggleSidebar()" class="md:hidden text-slate-300 p-2 rounded-xl bg-slate-800 border border-slate-700 hover:text-white">
+                <button onclick="toggleSidebar()" class="md:hidden text-slate-300 dark:text-slate-300 light:text-slate-600 p-2 rounded-xl bg-slate-800 dark:bg-slate-800 light:bg-slate-100 border border-slate-700 dark:border-slate-700 light:border-slate-300 hover:text-white">
                     <i class="ph-bold ph-list text-xl"></i>
                 </button>
                 <div>
-                    <h2 id="header-title" class="text-base md:text-xl font-bold text-white tracking-tight">BERANDA (DEGU-DEGU)</h2>
+                    <h2 id="header-title" class="text-base md:text-xl font-bold text-white dark:text-white light:text-slate-800 tracking-tight">BERANDA (DEGU-DEGU)</h2>
                     <p id="header-subtitle" class="text-[9px] md:text-[11px] font-bold text-kejaksaan-500 uppercase tracking-widest">SISTEM GENERATOR SURAT OTOMATIS</p>
                 </div>
             </div>
             
-            <div id="header-actions" class="flex items-center gap-2 md:gap-3 hidden">
-                <label for="templateUpload" id="labelUploadTemplate" class="cursor-pointer hidden sm:flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-2.5 rounded-xl text-xs md:text-sm font-semibold transition-colors border border-slate-700 shadow-sm">
-                    <i class="ph-bold ph-upload-simple text-lg"></i> <span class="hidden md:inline">Upload Template</span>
-                </label>
-                <input type="file" id="templateUpload" accept=".docx" class="hidden" onchange="generateFromLocalTemplate_SPPD(this)" />
-
-                <button id="btnDownload" onclick="downloadWord_SPPD()" class="flex items-center gap-2 bg-kejaksaan-600 hover:bg-kejaksaan-500 text-white px-5 py-2.5 rounded-xl text-xs md:text-sm font-bold shadow-lg shadow-kejaksaan-900/50 transition-all transform hover:-translate-y-0.5">
-                    <i class="ph-bold ph-download-simple text-lg"></i> <span class="hidden sm:inline">Unduh Dokumen</span>
+            <div class="flex items-center gap-3">
+                <!-- Tombol Toggle Tema (Terang / Gelap) -->
+                <button onclick="toggleTheme()" class="flex items-center gap-2 bg-slate-800 dark:bg-slate-800 light:bg-slate-200 hover:bg-slate-700 light:hover:bg-slate-300 text-slate-300 dark:text-slate-300 light:text-slate-700 px-4 py-2.5 rounded-xl text-xs md:text-sm font-semibold transition-colors border border-slate-700 dark:border-slate-700 light:border-slate-300 shadow-sm" title="Ubah Tema Tampilan">
+                    <i id="themeIcon" class="ph-bold ph-moon text-lg text-amber-400 dark:text-amber-400 light:text-slate-700"></i>
+                    <span class="hidden md:inline" id="themeText">Tema Gelap</span>
                 </button>
+
+                <div id="header-actions" class="flex items-center gap-2 md:gap-3 hidden">
+                    <label for="templateUpload" id="labelUploadTemplate" class="cursor-pointer hidden sm:flex items-center gap-2 bg-slate-800 dark:bg-slate-800 light:bg-slate-200 hover:bg-slate-700 light:hover:bg-slate-300 text-slate-300 dark:text-slate-300 light:text-slate-700 px-4 py-2.5 rounded-xl text-xs md:text-sm font-semibold transition-colors border border-slate-700 dark:border-slate-700 light:border-slate-300 shadow-sm">
+                        <i class="ph-bold ph-upload-simple text-lg"></i> <span class="hidden md:inline">Upload Template</span>
+                    </label>
+                    <input type="file" id="templateUpload" accept=".docx" class="hidden" onchange="generateFromLocalTemplate_SPPD(this)" />
+
+                    <button id="btnDownload" onclick="downloadWord_SPPD()" class="flex items-center gap-2 bg-kejaksaan-600 hover:bg-kejaksaan-500 text-white px-5 py-2.5 rounded-xl text-xs md:text-sm font-bold shadow-lg shadow-kejaksaan-900/50 transition-all transform hover:-translate-y-0.5">
+                        <i class="ph-bold ph-download-simple text-lg"></i> <span class="hidden sm:inline">Unduh Dokumen</span>
+                    </button>
+                </div>
             </div>
         </header>
 
@@ -173,25 +191,25 @@
             <!-- TAB 0: BERANDA (HOME) -->
             <div id="tab-home" class="p-4 md:p-8 max-w-7xl mx-auto space-y-6 md:space-y-8 animate-fade-in block pb-20">
                 <!-- Hero Section -->
-                <div class="bg-gradient-to-r from-slate-800 to-slate-900 rounded-[2rem] p-8 md:p-12 border border-slate-700/50 shadow-2xl relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-8">
+                <div class="bg-gradient-to-r from-slate-800 to-slate-900 dark:from-slate-800 dark:to-slate-900 light:from-slate-100 light:to-slate-200 rounded-[2rem] p-8 md:p-12 border border-slate-700/50 dark:border-slate-700/50 light:border-slate-300 shadow-2xl relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-8">
                     <div class="absolute -top-24 -right-24 w-96 h-96 bg-kejaksaan-500/20 rounded-full blur-3xl pointer-events-none"></div>
                     <div class="absolute -bottom-24 -left-24 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
                     
                     <div class="relative z-10 w-full md:w-2/3 space-y-4">
-                        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-800/50 border border-slate-700 text-[10px] font-bold text-kejaksaan-400 uppercase tracking-widest backdrop-blur-sm">
+                        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-800/50 dark:bg-slate-800/50 light:bg-white border border-slate-700 dark:border-slate-700 light:border-slate-300 text-[10px] font-bold text-kejaksaan-400 uppercase tracking-widest backdrop-blur-sm shadow-sm">
                             <span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-kejaksaan-400 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-kejaksaan-500"></span></span>
                             Sistem Aktif & Terintegrasi
                         </div>
-                        <h2 class="text-3xl md:text-5xl font-extrabold text-white tracking-tight leading-tight">
-                            SELAMAT DATANG <br><span class="text-3xl md:text-5xl font-extrabold text-white tracking-tight leading-tight">ADE DENG KAKA</span>
+                        <h2 class="text-3xl md:text-5xl font-extrabold text-white dark:text-white light:text-slate-900 tracking-tight leading-tight">
+                            SELAMAT DATANG <br><span class="text-3xl md:text-5xl font-extrabold text-white dark:text-white light:text-slate-900 tracking-tight leading-tight">ADE DENG KAKA</span>
                         </h2>
-                        <p class="text-slate-400 text-sm md:text-base max-w-xl leading-relaxed">
+                        <p class="text-slate-400 dark:text-slate-400 light:text-slate-600 text-sm md:text-base max-w-xl leading-relaxed">
                             Platform terpadu instansi untuk mempercepat penyusunan Surat Perintah Perjalanan Dinas (SPPD), Surat Pernyataan Tanggung Jawab Mutlak (SPTJM), dan Nota Dinas secara instan, aman, dan presisi tinggi.
                         </p>
                     </div>
                     
                     <div class="relative z-10 hidden md:block">
-                        <div class="w-32 h-32 bg-slate-800/80 rounded-3xl border border-slate-700 flex items-center justify-center backdrop-blur-md shadow-2xl transform rotate-6 hover:rotate-0 transition-transform duration-500">
+                        <div class="w-32 h-32 bg-slate-800/80 dark:bg-slate-800/80 light:bg-white rounded-3xl border border-slate-700 dark:border-slate-700 light:border-slate-300 flex items-center justify-center backdrop-blur-md shadow-2xl transform rotate-6 hover:rotate-0 transition-transform duration-500">
                             <i class="ph-fill ph-files text-6xl text-kejaksaan-500"></i>
                         </div>
                     </div>
@@ -200,45 +218,45 @@
                 <!-- Modul Cards -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 animate-slide-up" style="animation-delay: 0.1s;">
                     <!-- Nota Dinas Card -->
-                    <div onclick="switchTab('nota')" class="group cursor-pointer bg-slate-800/50 hover:bg-slate-800 border border-slate-700/50 hover:border-blue-500/50 rounded-[2rem] p-8 transition-all duration-300 hover:-translate-y-2 shadow-lg hover:shadow-blue-900/20 relative overflow-hidden">
+                    <div onclick="switchTab('nota')" class="group cursor-pointer bg-slate-800/50 dark:bg-slate-800/50 light:bg-white hover:bg-slate-800 dark:hover:bg-slate-800 light:hover:bg-slate-50 border border-slate-700/50 dark:border-slate-700/50 light:border-slate-200 hover:border-blue-500/50 rounded-[2rem] p-8 transition-all duration-300 hover:-translate-y-2 shadow-lg hover:shadow-blue-900/20 relative overflow-hidden">
                         <div class="absolute top-0 right-0 p-8 opacity-5 transform group-hover:scale-125 transition-transform duration-500">
                             <i class="ph-fill ph-envelope-open text-9xl"></i>
                         </div>
                         <div class="w-14 h-14 rounded-2xl bg-blue-500/10 flex items-center justify-center mb-6 group-hover:bg-blue-500 transition-colors duration-300">
                             <i class="ph-fill ph-envelope-open text-2xl text-blue-500 group-hover:text-white"></i>
                         </div>
-                        <h3 class="text-xl font-bold text-white mb-3">Generator Nota Dinas</h3>
-                        <p class="text-slate-400 text-sm leading-relaxed mb-6">Susun Nota Dinas pencairan anggaran lengkap dengan rincian DIPA, pilihan BAS K/L, dan Tembusan secara instan.</p>
+                        <h3 class="text-xl font-bold text-white dark:text-white light:text-slate-900 mb-3">Generator Nota Dinas</h3>
+                        <p class="text-slate-400 dark:text-slate-400 light:text-slate-600 text-sm leading-relaxed mb-6">Susun Nota Dinas pencairan anggaran lengkap dengan rincian DIPA, pilihan BAS K/L, dan Tembusan secara instan.</p>
                         <div class="flex items-center text-blue-400 text-sm font-bold group-hover:text-blue-300">
                             Akses Modul <i class="ph-bold ph-arrow-right ml-2 transform group-hover:translate-x-1 transition-transform"></i>
                         </div>
                     </div>
 
                     <!-- SPPD Card -->
-                    <div onclick="switchTab('sppd')" class="group cursor-pointer bg-slate-800/50 hover:bg-slate-800 border border-slate-700/50 hover:border-kejaksaan-500/50 rounded-[2rem] p-8 transition-all duration-300 hover:-translate-y-2 shadow-lg hover:shadow-kejaksaan-900/20 relative overflow-hidden">
+                    <div onclick="switchTab('sppd')" class="group cursor-pointer bg-slate-800/50 dark:bg-slate-800/50 light:bg-white hover:bg-slate-800 dark:hover:bg-slate-800 light:hover:bg-slate-50 border border-slate-700/50 dark:border-slate-700/50 light:border-slate-200 hover:border-kejaksaan-500/50 rounded-[2rem] p-8 transition-all duration-300 hover:-translate-y-2 shadow-lg hover:shadow-kejaksaan-900/20 relative overflow-hidden">
                         <div class="absolute top-0 right-0 p-8 opacity-5 transform group-hover:scale-125 transition-transform duration-500">
                             <i class="ph-fill ph-car-profile text-9xl"></i>
                         </div>
                         <div class="w-14 h-14 rounded-2xl bg-kejaksaan-500/10 flex items-center justify-center mb-6 group-hover:bg-kejaksaan-500 transition-colors duration-300">
                             <i class="ph-fill ph-car-profile text-2xl text-kejaksaan-500 group-hover:text-white"></i>
                         </div>
-                        <h3 class="text-xl font-bold text-white mb-3">Generator SPPD</h3>
-                        <p class="text-slate-400 text-sm leading-relaxed mb-6">Buat lembar SPPD resmi, lengkap dengan perhitungan hari otomatis, tabel pengikut, serta pratinjau dokumen A4.</p>
+                        <h3 class="text-xl font-bold text-white dark:text-white light:text-slate-900 mb-3">Generator SPPD</h3>
+                        <p class="text-slate-400 dark:text-slate-400 light:text-slate-600 text-sm leading-relaxed mb-6">Buat lembar SPPD resmi, lengkap dengan perhitungan hari otomatis, tabel pengikut, serta pratinjau dokumen A4.</p>
                         <div class="flex items-center text-kejaksaan-400 text-sm font-bold group-hover:text-kejaksaan-300">
                             Akses Modul <i class="ph-bold ph-arrow-right ml-2 transform group-hover:translate-x-1 transition-transform"></i>
                         </div>
                     </div>
 
                     <!-- SPTJM Card -->
-                    <div onclick="switchTab('sptjm')" class="group cursor-pointer bg-slate-800/50 hover:bg-slate-800 border border-slate-700/50 hover:border-purple-500/50 rounded-[2rem] p-8 transition-all duration-300 hover:-translate-y-2 shadow-lg hover:shadow-purple-900/20 relative overflow-hidden">
+                    <div onclick="switchTab('sptjm')" class="group cursor-pointer bg-slate-800/50 dark:bg-slate-800/50 light:bg-white hover:bg-slate-800 dark:hover:bg-slate-800 light:hover:bg-slate-50 border border-slate-700/50 dark:border-slate-700/50 light:border-slate-200 hover:border-purple-500/50 rounded-[2rem] p-8 transition-all duration-300 hover:-translate-y-2 shadow-lg hover:shadow-purple-900/20 relative overflow-hidden">
                         <div class="absolute top-0 right-0 p-8 opacity-5 transform group-hover:scale-125 transition-transform duration-500">
                             <i class="ph-fill ph-file-text text-9xl"></i>
                         </div>
                         <div class="w-14 h-14 rounded-2xl bg-purple-500/10 flex items-center justify-center mb-6 group-hover:bg-purple-500 transition-colors duration-300">
                             <i class="ph-fill ph-file-text text-2xl text-purple-500 group-hover:text-white"></i>
                         </div>
-                        <h3 class="text-xl font-bold text-white mb-3">Generator SPTJM</h3>
-                        <p class="text-slate-400 text-sm leading-relaxed mb-6">Hasilkan Surat Pernyataan Tanggung Jawab Mutlak dalam sesuai dengan format yang berlaku langsung dari peramban.</p>
+                        <h3 class="text-xl font-bold text-white dark:text-white light:text-slate-900 mb-3">Generator SPTJM</h3>
+                        <p class="text-slate-400 dark:text-slate-400 light:text-slate-600 text-sm leading-relaxed mb-6">Hasilkan Surat Pernyataan Tanggung Jawab Mutlak dalam sesuai dengan format yang berlaku langsung dari peramban.</p>
                         <div class="flex items-center text-purple-400 text-sm font-bold group-hover:text-purple-300">
                             Akses Modul <i class="ph-bold ph-arrow-right ml-2 transform group-hover:translate-x-1 transition-transform"></i>
                         </div>
@@ -246,21 +264,21 @@
                 </div>
 
                 <!-- Informasi Sistem & Fitur Unggulan -->
-                <div class="bg-slate-800/40 border border-slate-700/50 rounded-3xl p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-6">
+                <div class="bg-slate-800/40 dark:bg-slate-800/40 light:bg-white border border-slate-700/50 dark:border-slate-700/50 light:border-slate-200 rounded-3xl p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-md">
                     <div class="flex items-center gap-4">
                         <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-2xl">
                             <i class="ph-bold ph-shield-check"></i>
                         </div>
                         <div>
-                            <h4 class="font-bold text-white text-base">Penyimpanan Otomatis (Autosave)</h4>
-                            <p class="text-slate-400 text-xs mt-0.5">Data yang Anda masukkan tersimpan aman di memori lokal browser sehingga tidak akan hilang saat berpindah menu.</p>
+                            <h4 class="font-bold text-white dark:text-white light:text-slate-800 text-base">Penyimpanan Otomatis (Autosave)</h4>
+                            <p class="text-slate-400 dark:text-slate-400 light:text-slate-600 text-xs mt-0.5">Data yang Anda masukkan tersimpan aman di memori lokal browser sehingga tidak akan hilang saat berpindah menu.</p>
                         </div>
                     </div>
                     <div class="flex items-center gap-3 w-full md:w-auto">
-                        <button onclick="switchTab('nota')" class="flex-1 md:flex-none px-5 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-bold text-white transition-colors text-center">
+                        <button onclick="switchTab('nota')" class="flex-1 md:flex-none px-5 py-3 rounded-xl bg-slate-800 dark:bg-slate-800 light:bg-slate-100 hover:bg-slate-700 dark:hover:bg-slate-700 light:hover:bg-slate-200 border border-slate-700 dark:border-slate-700 light:border-slate-300 text-xs font-bold text-white dark:text-white light:text-slate-800 transition-colors text-center">
                             Buka Nota Dinas
                         </button>
-                        <button onclick="switchTab('sppd')" class="flex-1 md:flex-none px-5 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-bold text-white transition-colors text-center">
+                        <button onclick="switchTab('sppd')" class="flex-1 md:flex-none px-5 py-3 rounded-xl bg-slate-800 dark:bg-slate-800 light:bg-slate-100 hover:bg-slate-700 dark:hover:bg-slate-700 light:hover:bg-slate-200 border border-slate-700 dark:border-slate-700 light:border-slate-300 text-xs font-bold text-white dark:text-white light:text-slate-800 transition-colors text-center">
                             Buka SPPD
                         </button>
                     </div>
@@ -271,14 +289,14 @@
             <div id="tab-riwayat" class="p-4 md:p-8 max-w-7xl mx-auto space-y-6 hidden pb-20 animate-fade-in">
                 <div class="flex items-center justify-between">
                     <div>
-                        <h3 class="text-xl font-bold text-white tracking-tight">Arsip Riwayat Surat</h3>
-                        <p class="text-xs text-slate-400 mt-1">Daftar dokumen surat yang pernah di-generate sebelumnya.</p>
+                        <h3 class="text-xl font-bold text-white dark:text-white light:text-slate-900 tracking-tight">Arsip Riwayat Surat</h3>
+                        <p class="text-xs text-slate-400 dark:text-slate-400 light:text-slate-600 mt-1">Daftar dokumen surat yang pernah di-generate sebelumnya.</p>
                     </div>
                     <div class="flex items-center gap-3">
                         <button onclick="bersihkanRiwayat()" class="flex items-center gap-2 bg-red-500/10 hover:bg-red-500 text-red-400 hover:text-white px-4 py-2 rounded-xl text-xs font-bold border border-red-500/30 transition-colors">
                             <i class="ph-bold ph-trash text-sm"></i> Bersihkan Riwayat
                         </button>
-                        <button onclick="muatUlangTabelRiwayat()" class="flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-2 rounded-xl text-xs font-bold border border-slate-700 transition-colors">
+                        <button onclick="muatUlangTabelRiwayat()" class="flex items-center gap-2 bg-slate-800 dark:bg-slate-800 light:bg-slate-200 hover:bg-slate-700 dark:hover:bg-slate-700 light:hover:bg-slate-300 text-slate-300 dark:text-slate-300 light:text-slate-700 px-4 py-2 rounded-xl text-xs font-bold border border-slate-700 dark:border-slate-700 light:border-slate-300 transition-colors">
                             <i class="ph-bold ph-arrows-clockwise text-sm"></i> Segarkan
                         </button>
                     </div>
@@ -288,7 +306,7 @@
                     <div class="overflow-x-auto custom-scrollbar">
                         <table class="w-full text-left border-collapse text-xs">
                             <thead>
-                                <tr class="bg-slate-900/80 text-slate-400 border-b border-slate-700/50 uppercase tracking-wider">
+                                <tr class="bg-slate-900/80 dark:bg-slate-900/80 light:bg-slate-100 text-slate-400 dark:text-slate-400 light:text-slate-600 border-b border-slate-700/50 dark:border-slate-700/50 light:border-slate-200 uppercase tracking-wider">
                                     <th class="p-4">Waktu</th>
                                     <th class="p-4">Jenis Surat</th>
                                     <th class="p-4">Nomor Surat</th>
@@ -296,7 +314,7 @@
                                     <th class="p-4 text-center">Aksi</th>
                                 </tr>
                             </thead>
-                            <tbody id="tabelRiwayatBody" class="divide-y divide-slate-700/50 text-slate-300">
+                            <tbody id="tabelRiwayatBody" class="divide-y divide-slate-700/50 dark:divide-slate-700/50 light:divide-slate-200 text-slate-300 dark:text-slate-300 light:text-slate-700">
                                 <!-- Data riwayat dirender oleh JavaScript -->
                             </tbody>
                         </table>
@@ -309,7 +327,7 @@
                 <section class="w-full xl:w-5/12 flex flex-col space-y-6">
                     <!-- Tombol Kembali Responsif -->
                     <div class="flex items-center justify-between">
-                        <button onclick="switchTab('home')" class="inline-flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white px-4 py-2.5 rounded-xl text-xs font-bold transition-all border border-slate-700 shadow-sm">
+                        <button onclick="switchTab('home')" class="inline-flex items-center gap-2 bg-slate-800 dark:bg-slate-800 light:bg-slate-200 hover:bg-slate-700 dark:hover:bg-slate-700 light:hover:bg-slate-300 text-slate-300 dark:text-slate-300 light:text-slate-700 hover:text-white px-4 py-2.5 rounded-xl text-xs font-bold transition-all border border-slate-700 dark:border-slate-700 light:border-slate-300 shadow-sm">
                             <i class="ph-bold ph-arrow-left text-base"></i> Kembali ke Beranda
                         </button>
                         <span class="text-xs text-slate-500 font-medium">Modul Nota Dinas</span>
@@ -319,12 +337,12 @@
                         <!-- Blok 1 -->
                         <div class="card-modern">
                             <div class="absolute top-0 left-0 w-1.5 h-full bg-blue-500"></div>
-                            <h3 class="flex items-center gap-2 text-sm font-bold text-white mb-6 pb-4 border-b border-slate-700/50">
+                            <h3 class="flex items-center gap-2 text-sm font-bold text-white dark:text-white light:text-slate-900 mb-6 pb-4 border-b border-slate-700/50 dark:border-slate-700/50 light:border-slate-200">
                                 <i class="ph-fill ph-file-text text-blue-500 text-xl"></i> 1. Administrasi Nota Dinas
                             </h3>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div><label class="label-modern">Nomor ND (Angka saja)</label><input type="text" id="nomorNd" class="input-modern" placeholder="Contoh: 99" required></div>
-                                <div><label class="label-modern">Bulan ND (Otomatis)</label><input type="text" id="bulanNd" class="input-modern bg-slate-900/30 text-slate-500 border-slate-800" readonly></div>
+                                <div><label class="label-modern">Bulan ND (Otomatis)</label><input type="text" id="bulanNd" class="input-modern bg-slate-900/30 dark:bg-slate-900/30 light:bg-slate-100 text-slate-500 border-slate-800 dark:border-slate-800 light:border-slate-300" readonly></div>
                                 <div><label class="label-modern">Kepada</label><input type="text" id="kepada" class="input-modern" value="Pejabat Pembuat Komitmen" required></div>
                                 <div><label class="label-modern">Dari</label><input type="text" id="dari" class="input-modern" value="Kuasa Pengguna Anggaran" required></div>
                                 <div><label class="label-modern">Pilih Tanggal</label><input type="date" id="tanggalKalender" class="input-modern" onchange="updateFormatTanggal_Nota()" required><input type="hidden" id="tanggalTeks"></div>
@@ -339,7 +357,7 @@
                         <!-- Blok 2 -->
                         <div class="card-modern">
                             <div class="absolute top-0 left-0 w-1.5 h-full bg-kejaksaan-500"></div>
-                            <h3 class="flex items-center gap-2 text-sm font-bold text-white mb-6 pb-4 border-b border-slate-700/50">
+                            <h3 class="flex items-center gap-2 text-sm font-bold text-white dark:text-white light:text-slate-900 mb-6 pb-4 border-b border-slate-700/50 dark:border-slate-700/50 light:border-slate-200">
                                 <i class="ph-fill ph-coins text-kejaksaan-500 text-xl"></i> 2. Anggaran & Pilihan BAS
                             </h3>
                             <div class="space-y-6">
@@ -350,7 +368,7 @@
                                 </div>
                                 <div>
                                     <label class="label-modern">Pilih Nomor Mata Anggaran (BAS K/L):</label>
-                                    <div class="max-h-56 overflow-y-auto p-5 bg-slate-900/50 rounded-2xl border border-slate-700 custom-scrollbar shadow-inner" id="basContainer">
+                                    <div class="max-h-56 overflow-y-auto p-5 bg-slate-900/50 dark:bg-slate-900/50 light:bg-slate-100 rounded-2xl border border-slate-700 dark:border-slate-700 light:border-slate-300 custom-scrollbar shadow-inner" id="basContainer">
                                         <!-- Dihasilkan oleh JS -->
                                     </div>
                                 </div>
@@ -360,7 +378,7 @@
                         <!-- Blok 3 -->
                         <div class="card-modern">
                             <div class="absolute top-0 left-0 w-1.5 h-full bg-amber-500"></div>
-                            <h3 class="flex items-center gap-2 text-sm font-bold text-white mb-6 pb-4 border-b border-slate-700/50">
+                            <h3 class="flex items-center gap-2 text-sm font-bold text-white dark:text-white light:text-slate-900 mb-6 pb-4 border-b border-slate-700/50 dark:border-slate-700/50 light:border-slate-200">
                                 <i class="ph-fill ph-signature text-amber-500 text-xl"></i> 3. Pejabat Penandatangan
                             </h3>
                             <div class="space-y-6">
@@ -384,7 +402,7 @@
                         <!-- Blok 4 -->
                         <div class="card-modern">
                             <div class="absolute top-0 left-0 w-1.5 h-full bg-purple-500"></div>
-                            <h3 class="flex items-center gap-2 text-sm font-bold text-white mb-6 pb-4 border-b border-slate-700/50">
+                            <h3 class="flex items-center gap-2 text-sm font-bold text-white dark:text-white light:text-slate-900 mb-6 pb-4 border-b border-slate-700/50 dark:border-slate-700/50 light:border-slate-200">
                                 <i class="ph-fill ph-users text-purple-500 text-xl"></i> 4. Bagian Tembusan Surat
                             </h3>
                             <div>
@@ -406,13 +424,16 @@
                     </form>
                 </section>
                 <section class="w-full xl:w-7/12 relative">
-                    <div class="lg:sticky lg:top-4 bg-slate-800/80 backdrop-blur-md rounded-[2rem] p-6 md:p-8 shadow-2xl border border-slate-700/50">
+                    <div class="lg:sticky lg:top-4 bg-slate-800/80 dark:bg-slate-800/80 light:bg-white backdrop-blur-md rounded-[2rem] p-6 md:p-8 shadow-2xl border border-slate-700/50 dark:border-slate-700/50 light:border-slate-200">
                         <div class="flex items-center justify-between mb-6">
-                            <div class="text-sm font-bold text-slate-200 flex items-center gap-2"><i class="ph-fill ph-eye text-lg"></i> Pratinjau Nota Dinas (A4)</div>
-                            <div class="px-3 py-1 bg-slate-900 rounded-lg border border-slate-700 text-[10px] font-mono text-slate-400">Live Preview</div>
+                            <div class="text-sm font-bold text-slate-200 dark:text-slate-200 light:text-slate-800 flex items-center gap-2"><i class="ph-fill ph-eye text-lg"></i> Pratinjau Nota Dinas (A4)</div>
+                            <div class="flex items-center gap-3">
+                                <button onclick="cetakDokumenPreview('nota_previewPage')" class="px-3 py-1.5 bg-kejaksaan-600 hover:bg-kejaksaan-500 text-white rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all shadow-sm"><i class="ph-bold ph-printer"></i> Cetak Dokumen</button>
+                                <div class="px-3 py-1 bg-slate-900 dark:bg-slate-900 light:bg-slate-200 rounded-lg border border-slate-700 dark:border-slate-700 light:border-slate-300 text-[10px] font-mono text-slate-400 dark:text-slate-400 light:text-slate-600">Live Preview</div>
+                            </div>
                         </div>
                         <div class="overflow-y-auto max-h-[70vh] flex flex-col items-center gap-8 pb-4 custom-scrollbar rounded-xl">
-                            <div id="nota_previewPage" class="p-[15mm] w-full max-w-[210mm] min-h-[297mm] shadow-2xl nota-document print-area rounded-md"></div>
+                            <div id="nota_previewPage" class="p-[15mm] w-full max-w-[210mm] min-h-[297mm] shadow-2xl nota-document print-area rounded-md relative"></div>
                         </div>
                     </div>
                 </section>
@@ -423,7 +444,7 @@
                 <section class="w-full xl:w-5/12 flex flex-col space-y-6">
                     <!-- Tombol Kembali Responsif -->
                     <div class="flex items-center justify-between">
-                        <button onclick="switchTab('home')" class="inline-flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white px-4 py-2.5 rounded-xl text-xs font-bold transition-all border border-slate-700 shadow-sm">
+                        <button onclick="switchTab('home')" class="inline-flex items-center gap-2 bg-slate-800 dark:bg-slate-800 light:bg-slate-200 hover:bg-slate-700 dark:hover:bg-slate-700 light:hover:bg-slate-300 text-slate-300 dark:text-slate-300 light:text-slate-700 hover:text-white px-4 py-2.5 rounded-xl text-xs font-bold transition-all border border-slate-700 dark:border-slate-700 light:border-slate-300 shadow-sm">
                             <i class="ph-bold ph-arrow-left text-base"></i> Kembali ke Beranda
                         </button>
                         <span class="text-xs text-slate-500 font-medium">Modul SPPD</span>
@@ -432,15 +453,15 @@
                     <form id="sppdForm" class="space-y-6">
                         <div class="card-modern">
                             <div class="absolute top-0 left-0 w-1.5 h-full bg-kejaksaan-500"></div>
-                            <h3 class="flex items-center gap-2 text-sm font-bold text-white mb-6 pb-4 border-b border-slate-700/50"><i class="ph-fill ph-identification-card text-kejaksaan-500 text-xl"></i> Identitas Surat</h3>
+                            <h3 class="flex items-center gap-2 text-sm font-bold text-white dark:text-white light:text-slate-900 mb-6 pb-4 border-b border-slate-700/50 dark:border-slate-700/50 light:border-slate-200"><i class="ph-fill ph-identification-card text-kejaksaan-500 text-xl"></i> Identitas Surat</h3>
                             <div class="space-y-6">
-                                <div><label class="label-modern">Satuan Kerja</label><input type="text" id="sppd_in_satuan_kerja" value="Kejaksaan Tinggi Maluku" class="input-modern uppercase font-bold text-white" required></div>
+                                <div><label class="label-modern">Satuan Kerja</label><input type="text" id="sppd_in_satuan_kerja" value="Kejaksaan Tinggi Maluku" class="input-modern uppercase font-bold text-white dark:text-white light:text-slate-900" required></div>
                                 <div><label class="label-modern">Nomor SPPD</label><input type="text" id="sppd_in_nomor" value="SPPD-024/PPK/01/2026" class="input-modern font-mono text-green-400 font-bold border-kejaksaan-500/30" required></div>
                             </div>
                         </div>
                         <div class="card-modern">
                             <div class="absolute top-0 left-0 w-1.5 h-full bg-blue-500"></div>
-                            <h3 class="flex items-center gap-2 text-sm font-bold text-white mb-6 pb-4 border-b border-slate-700/50"><i class="ph-fill ph-user-circle text-blue-500 text-xl"></i> Pelaksana Utama</h3>
+                            <h3 class="flex items-center gap-2 text-sm font-bold text-white dark:text-white light:text-slate-900 mb-6 pb-4 border-b border-slate-700/50 dark:border-slate-700/50 light:border-slate-200"><i class="ph-fill ph-user-circle text-blue-500 text-xl"></i> Pelaksana Utama</h3>
                             <div class="space-y-6">
                                 <div><label class="label-modern">Nama Pegawai</label><input type="text" id="sppd_in_nama_pegawai" class="input-modern uppercase font-bold" required></div>
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -453,9 +474,9 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="card-modern shadow-lg shadow-amber-900/10">
+                        <div class="card-modern shadow-lg shadow-amber-900/15">
                             <div class="absolute top-0 left-0 w-1.5 h-full bg-amber-500"></div>
-                            <h3 class="flex items-center gap-2 text-sm font-bold text-white mb-6 pb-4 border-b border-slate-700/50"><i class="ph-fill ph-map-pin text-amber-500 text-xl"></i> Maksud Perjalanan Dinas</h3>
+                            <h3 class="flex items-center gap-2 text-sm font-bold text-white dark:text-white light:text-slate-900 mb-6 pb-4 border-b border-slate-700/50 dark:border-slate-700/50 light:border-slate-200"><i class="ph-fill ph-map-pin text-amber-500 text-xl"></i> Maksud Perjalanan Dinas</h3>
                             <div class="space-y-6">
                                 <div><label class="label-modern">Maksud Perjalanan</label><textarea id="sppd_in_maksud" rows="3" class="input-modern resize-y" required></textarea></div>
                                 <div><label class="label-modern">Alat Angkutan</label><input type="text" id="sppd_in_angkutan" class="input-modern" required></div>
@@ -463,25 +484,25 @@
                                     <div><label class="label-modern">Tempat Asal</label><input type="text" id="sppd_in_asal" class="input-modern" required></div>
                                     <div><label class="label-modern">Tempat Tujuan</label><input type="text" id="sppd_in_tujuan" class="input-modern font-bold" required></div>
                                 </div>
-                                <div class="bg-slate-900/70 p-5 rounded-2xl border border-slate-700/80 grid grid-cols-1 md:grid-cols-2 gap-6 shadow-inner">
+                                <div class="bg-slate-900/70 dark:bg-slate-900/70 light:bg-slate-100 p-5 rounded-2xl border border-slate-700/80 dark:border-slate-700/80 light:border-slate-300 grid grid-cols-1 md:grid-cols-2 gap-6 shadow-inner">
                                     <div><label class="label-modern text-kejaksaan-400">Tgl Berangkat</label><input type="date" id="sppd_in_tgl_berangkat" class="input-modern font-mono" required></div>
                                     <div><label class="label-modern text-kejaksaan-400">Tgl Kembali</label><input type="date" id="sppd_in_tgl_kembali" class="input-modern font-mono" required></div>
-                                    <div class="md:col-span-2"><label class="label-modern text-amber-500">Lama Perjalanan</label><input type="text" id="sppd_in_lama" class="input-modern bg-slate-900/30 text-amber-400 font-bold border-amber-900/30" readonly></div>
+                                    <div class="md:col-span-2"><label class="label-modern text-amber-500">Lama Perjalanan</label><input type="text" id="sppd_in_lama" class="input-modern bg-slate-900/30 dark:bg-slate-900/30 light:bg-slate-200 text-amber-400 dark:text-amber-400 light:text-amber-600 font-bold border-amber-900/30" readonly></div>
                                 </div>
                                 <p id="sppd_warn_date" class="text-[11px] text-red-400 font-bold hidden bg-red-900/20 p-3 rounded-lg"><i class="ph-bold ph-warning"></i> Tanggal kembali tidak valid!</p>
                             </div>
                         </div>
                         <div class="card-modern">
                             <div class="absolute top-0 left-0 w-1.5 h-full bg-purple-500"></div>
-                            <div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-700/50">
-                                <h3 class="flex items-center gap-2 text-sm font-bold text-white"><i class="ph-fill ph-users text-purple-500 text-xl"></i> Pengikut</h3>
+                            <div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-700/50 dark:border-slate-700/50 light:border-slate-200">
+                                <h3 class="flex items-center gap-2 text-sm font-bold text-white dark:text-white light:text-slate-900"><i class="ph-fill ph-users text-purple-500 text-xl"></i> Pengikut</h3>
                                 <button type="button" onclick="addPengikutRow_SPPD()" class="bg-purple-500/20 text-purple-400 border border-purple-500/30 hover:bg-purple-600 hover:text-white px-4 py-2 rounded-xl text-xs font-bold transition-all"><i class="ph-bold ph-plus"></i> Tambah</button>
                             </div>
                             <div id="sppd_pengikutContainer" class="space-y-4"></div>
                         </div>
                         <div class="card-modern">
                             <div class="absolute top-0 left-0 w-1.5 h-full bg-slate-400"></div>
-                            <h3 class="flex items-center gap-2 text-sm font-bold text-white mb-6 pb-4 border-b border-slate-700/50"><i class="ph-fill ph-signature text-slate-400 text-xl"></i> Anggaran & Otorisasi</h3>
+                            <h3 class="flex items-center gap-2 text-sm font-bold text-white dark:text-white light:text-slate-900 mb-6 pb-4 border-b border-slate-700/50 dark:border-slate-700/50 light:border-slate-200"><i class="ph-fill ph-signature text-slate-400 text-xl"></i> Anggaran & Otorisasi</h3>
                             <div class="space-y-6">
                                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                                     <div class="md:col-span-2"><label class="label-modern">Instansi (DIPA)</label><input type="text" id="sppd_in_dipa" class="input-modern" required></div>
@@ -498,14 +519,17 @@
                     </form>
                 </section>
                 <section class="w-full xl:w-7/12 relative">
-                    <div class="lg:sticky lg:top-4 bg-slate-800/80 backdrop-blur-md rounded-[2rem] p-6 md:p-8 shadow-2xl border border-slate-700/50">
+                    <div class="lg:sticky lg:top-4 bg-slate-800/80 dark:bg-slate-800/80 light:bg-white backdrop-blur-md rounded-[2rem] p-6 md:p-8 shadow-2xl border border-slate-700/50 dark:border-slate-700/50 light:border-slate-200">
                         <div class="flex items-center justify-between mb-6">
-                            <div class="text-sm font-bold text-slate-200 flex items-center gap-2"><i class="ph-fill ph-eye text-lg"></i> Pratinjau Dokumen (A4)</div>
-                            <div class="px-3 py-1 bg-slate-900 rounded-lg border border-slate-700 text-[10px] font-mono text-slate-400">Live Preview</div>
+                            <div class="text-sm font-bold text-slate-200 dark:text-slate-200 light:text-slate-800 flex items-center gap-2"><i class="ph-fill ph-eye text-lg"></i> Pratinjau Dokumen (A4)</div>
+                            <div class="flex items-center gap-3">
+                                <button onclick="cetakDokumenPreview('sppd_previewPage1')" class="px-3 py-1.5 bg-kejaksaan-600 hover:bg-kejaksaan-500 text-white rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all shadow-sm"><i class="ph-bold ph-printer"></i> Cetak Halaman</button>
+                                <div class="px-3 py-1 bg-slate-900 dark:bg-slate-900 light:bg-slate-200 rounded-lg border border-slate-700 dark:border-slate-700 light:border-slate-300 text-[10px] font-mono text-slate-400 dark:text-slate-400 light:text-slate-600">Live Preview</div>
+                            </div>
                         </div>
                         <div class="overflow-y-auto max-h-[70vh] flex flex-col items-center gap-8 pb-4 custom-scrollbar rounded-xl">
-                            <div id="sppd_previewPage1" class="p-[15mm] w-full max-w-[210mm] min-h-[297mm] shadow-2xl spd-document print-area rounded-md"></div>
-                            <div id="sppd_previewPage2" class="p-[15mm] w-full max-w-[210mm] min-h-[297mm] shadow-2xl spd-document print-area page-break rounded-md"></div>
+                            <div id="sppd_previewPage1" class="p-[15mm] w-full max-w-[210mm] min-h-[297mm] shadow-2xl spd-document print-area rounded-md relative"></div>
+                            <div id="sppd_previewPage2" class="p-[15mm] w-full max-w-[210mm] min-h-[297mm] shadow-2xl spd-document print-area page-break rounded-md relative"></div>
                         </div>
                     </div>
                 </section>
@@ -516,7 +540,7 @@
                 <section class="w-full xl:w-5/12 flex flex-col space-y-6">
                     <!-- Tombol Kembali Responsif -->
                     <div class="flex items-center justify-between">
-                        <button onclick="switchTab('home')" class="inline-flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white px-4 py-2.5 rounded-xl text-xs font-bold transition-all border border-slate-700 shadow-sm">
+                        <button onclick="switchTab('home')" class="inline-flex items-center gap-2 bg-slate-800 dark:bg-slate-800 light:bg-slate-200 hover:bg-slate-700 dark:hover:bg-slate-700 light:hover:bg-slate-300 text-slate-300 dark:text-slate-300 light:text-slate-700 hover:text-white px-4 py-2.5 rounded-xl text-xs font-bold transition-all border border-slate-700 dark:border-slate-700 light:border-slate-300 shadow-sm">
                             <i class="ph-bold ph-arrow-left text-base"></i> Kembali ke Beranda
                         </button>
                         <span class="text-xs text-slate-500 font-medium">Modul SPTJM</span>
@@ -525,7 +549,7 @@
                     <form id="sptjmForm" class="space-y-6">
                         <div class="card-modern">
                             <div class="absolute top-0 left-0 w-1.5 h-full bg-kejaksaan-500"></div>
-                            <h3 class="flex items-center gap-2 text-sm font-bold text-white mb-6 pb-4 border-b border-slate-700/50"><i class="ph-fill ph-identification-card text-kejaksaan-500 text-xl"></i> Identitas Surat SPTJM</h3>
+                            <h3 class="flex items-center gap-2 text-sm font-bold text-white dark:text-white light:text-slate-900 mb-6 pb-4 border-b border-slate-700/50 dark:border-slate-700/50 light:border-slate-200"><i class="ph-fill ph-identification-card text-kejaksaan-500 text-xl"></i> Identitas Surat SPTJM</h3>
                             <div class="space-y-6">
                                 <div><label class="label-modern">Nomor Surat (SPTJM)</label><input type="text" id="sptjm_in_nomor" value="PRIN- /.../..../..." class="input-modern font-mono text-green-400 font-bold border-kejaksaan-500/30" required></div>
                                 <div><label class="label-modern">Uraian / Objek Pertanggungjawaban</label><textarea id="sptjm_in_uraian_sptjm" rows="4" class="input-modern" required>Perhitungan yang terdapat dalam pelaksanaan kegiatan...</textarea></div>
@@ -533,7 +557,7 @@
                         </div>
                         <div class="card-modern">
                             <div class="absolute top-0 left-0 w-1.5 h-full bg-blue-500"></div>
-                            <h3 class="flex items-center gap-2 text-sm font-bold text-white mb-6 pb-4 border-b border-slate-700/50"><i class="ph-fill ph-user-circle text-blue-500 text-xl"></i> Pejabat Penandatangan</h3>
+                            <h3 class="flex items-center gap-2 text-sm font-bold text-white dark:text-white light:text-slate-900 mb-6 pb-4 border-b border-slate-700/50 dark:border-slate-700/50 light:border-slate-200"><i class="ph-fill ph-user-circle text-blue-500 text-xl"></i> Pejabat Penandatangan</h3>
                             <div class="space-y-6">
                                 <div><label class="label-modern">Nama Pejabat & Gelar</label><input type="text" id="sptjm_in_nama_pejabat" class="input-modern uppercase font-bold" required></div>
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -544,7 +568,7 @@
                         </div>
                         <div class="card-modern">
                             <div class="absolute top-0 left-0 w-1.5 h-full bg-amber-500"></div>
-                            <h3 class="flex items-center gap-2 text-sm font-bold text-white mb-6 pb-4 border-b border-slate-700/50"><i class="ph-fill ph-map-pin text-amber-500 text-xl"></i> Satuan Kerja & Instansi</h3>
+                            <h3 class="flex items-center gap-2 text-sm font-bold text-white dark:text-white light:text-slate-900 mb-6 pb-4 border-b border-slate-700/50 dark:border-slate-700/50 light:border-slate-200"><i class="ph-fill ph-map-pin text-amber-500 text-xl"></i> Satuan Kerja & Instansi</h3>
                             <div class="space-y-6">
                                 <div><label class="label-modern">Satuan Kerja</label><input type="text" id="sptjm_in_satuan_kerja" value="KEJAKSAAN NEGERI MALUKU TENGGARA" class="input-modern uppercase font-bold" required></div>
                                 <div><label class="label-modern">Unit Wilayah</label><input type="text" id="sptjm_in_unit_wilayah" value="KEJAKSAAN TINGGI MALUKU" class="input-modern uppercase" required></div>
@@ -558,13 +582,16 @@
                     </form>
                 </section>
                 <section class="w-full xl:w-7/12 relative">
-                    <div class="lg:sticky lg:top-4 bg-slate-800/80 backdrop-blur-md rounded-[2rem] p-6 md:p-8 shadow-2xl border border-slate-700/50">
+                    <div class="lg:sticky lg:top-4 bg-slate-800/80 dark:bg-slate-800/80 light:bg-white backdrop-blur-md rounded-[2rem] p-6 md:p-8 shadow-2xl border border-slate-700/50 dark:border-slate-700/50 light:border-slate-200">
                         <div class="flex items-center justify-between mb-6">
-                            <div class="text-sm font-bold text-slate-200 flex items-center gap-2"><i class="ph-fill ph-eye text-lg"></i> Pratinjau SPTJM (F4)</div>
-                            <div class="px-3 py-1 bg-slate-900 rounded-lg border border-slate-700 text-[10px] font-mono text-slate-400">Live Preview</div>
+                            <div class="text-sm font-bold text-slate-200 dark:text-slate-200 light:text-slate-800 flex items-center gap-2"><i class="ph-fill ph-eye text-lg"></i> Pratinjau SPTJM (F4)</div>
+                            <div class="flex items-center gap-3">
+                                <button onclick="cetakDokumenPreview('sptjm_previewPage')" class="px-3 py-1.5 bg-kejaksaan-600 hover:bg-kejaksaan-500 text-white rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all shadow-sm"><i class="ph-bold ph-printer"></i> Cetak Dokumen</button>
+                                <div class="px-3 py-1 bg-slate-900 dark:bg-slate-900 light:bg-slate-200 rounded-lg border border-slate-700 dark:border-slate-700 light:border-slate-300 text-[10px] font-mono text-slate-400 dark:text-slate-400 light:text-slate-600">Live Preview</div>
+                            </div>
                         </div>
                         <div class="overflow-y-auto max-h-[70vh] flex flex-col items-center gap-8 pb-4 custom-scrollbar rounded-xl">
-                            <div id="sptjm_previewPage" class="p-[20mm] w-full max-w-[215mm] min-h-[330mm] shadow-2xl sptjm-document print-area rounded-md">
+                            <div id="sptjm_previewPage" class="p-[20mm] w-full max-w-[215mm] min-h-[330mm] shadow-2xl sptjm-document print-area rounded-md relative">
                                 <div class="text-center font-bold text-xs uppercase leading-tight mb-1">KEJAKSAAN REPUBLIK INDONESIA[cite: 2]</div>
                                 <div class="text-center font-bold text-xs uppercase leading-tight mb-1" id="sptjm_prev_unit_wilayah">KEJAKSAAN TINGGI MALUKU[cite: 2]</div>
                                 <div class="text-center font-bold text-sm uppercase leading-tight mb-4" id="sptjm_prev_satuan_kerja">KEJAKSAAN NEGERI MALUKU TENGGARA[cite: 2]</div>
@@ -604,10 +631,10 @@
             <div id="tab-builder" class="p-4 md:p-8 max-w-4xl mx-auto space-y-6 hidden pb-20 animate-fade-in">
                 <div class="flex items-center justify-between">
                     <div>
-                        <h3 class="text-xl font-bold text-white tracking-tight">Template Builder (Kustomisasi Redaksi)</h3>
-                        <p class="text-xs text-slate-400 mt-1">Ubah dan sesuaikan kalimat klausul standar atau narasi dokumen secara instan.</p>
+                        <h3 class="text-xl font-bold text-white dark:text-white light:text-slate-900 tracking-tight">Template Builder (Kustomisasi Redaksi)</h3>
+                        <p class="text-xs text-slate-400 dark:text-slate-400 light:text-slate-600 mt-1">Ubah dan sesuaikan kalimat klausul standar atau narasi dokumen secara instan.</p>
                     </div>
-                    <button onclick="resetTemplateBuilder()" class="flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-2.5 rounded-xl text-xs font-bold border border-slate-700 transition-colors">
+                    <button onclick="resetTemplateBuilder()" class="flex items-center gap-2 bg-slate-800 dark:bg-slate-800 light:bg-slate-200 hover:bg-slate-700 dark:hover:bg-slate-700 light:hover:bg-slate-300 text-slate-300 dark:text-slate-300 light:text-slate-700 px-4 py-2.5 rounded-xl text-xs font-bold border border-slate-700 dark:border-slate-700 light:border-slate-300 transition-colors">
                         <i class="ph-bold ph-arrow-counter-clockwise text-sm"></i> Reset Standar
                     </button>
                 </div>
@@ -615,7 +642,7 @@
                 <div class="space-y-6">
                     <div class="card-modern">
                         <div class="absolute top-0 left-0 w-1.5 h-full bg-purple-500"></div>
-                        <h3 class="flex items-center gap-2 text-sm font-bold text-white mb-6 pb-4 border-b border-slate-700/50">
+                        <h3 class="flex items-center gap-2 text-sm font-bold text-white dark:text-white light:text-slate-900 mb-6 pb-4 border-b border-slate-700/50 dark:border-slate-700/50 light:border-slate-200">
                             <i class="ph-fill ph-file-text text-purple-500 text-xl"></i> Redaksi Klausul SPTJM
                         </h3>
                         <div class="space-y-5">
@@ -632,7 +659,7 @@
 
                     <div class="card-modern">
                         <div class="absolute top-0 left-0 w-1.5 h-full bg-blue-500"></div>
-                        <h3 class="flex items-center gap-2 text-sm font-bold text-white mb-6 pb-4 border-b border-slate-700/50">
+                        <h3 class="flex items-center gap-2 text-sm font-bold text-white dark:text-white light:text-slate-900 mb-6 pb-4 border-b border-slate-700/50 dark:border-slate-700/50 light:border-slate-200">
                             <i class="ph-fill ph-envelope-open text-blue-500 text-xl"></i> Format Standar Nota Dinas
                         </h3>
                         <div class="space-y-5">
@@ -650,6 +677,101 @@
     </main>
 
 <script>
+    // ==========================================
+    // SISTEM TEMA TERANG / GELAP (DARK / LIGHT MODE)
+    // ==========================================
+    function toggleTheme() {
+        const body = document.body;
+        const themeIcon = document.getElementById('themeIcon');
+        const themeText = document.getElementById('themeText');
+
+        if (body.classList.contains('light')) {
+            body.classList.remove('light');
+            localStorage.setItem('manise_theme', 'dark');
+            if (themeIcon) themeIcon.className = "ph-bold ph-moon text-lg text-amber-400";
+            if (themeText) themeText.innerText = "Tema Gelap";
+        } else {
+            body.classList.add('light');
+            localStorage.setItem('manise_theme', 'light');
+            if (themeIcon) themeIcon.className = "ph-bold ph-sun text-lg text-amber-500";
+            if (themeText) themeText.innerText = "Tema Terang";
+        }
+    }
+
+    function initTheme() {
+        const savedTheme = localStorage.getItem('manise_theme') || 'dark';
+        const body = document.body;
+        const themeIcon = document.getElementById('themeIcon');
+        const themeText = document.getElementById('themeText');
+
+        if (savedTheme === 'light') {
+            body.classList.add('light');
+            if (themeIcon) themeIcon.className = "ph-bold ph-sun text-lg text-amber-500";
+            if (themeText) themeText.innerText = "Tema Terang";
+        } else {
+            body.classList.remove('light');
+            if (themeIcon) themeIcon.className = "ph-bold ph-moon text-lg text-amber-400";
+            if (themeText) themeText.innerText = "Tema Gelap";
+        }
+    }
+
+    // ==========================================
+    // SISTEM CETAK LANGSUNG KE PRINTER FISIK
+    // ==========================================
+    function cetakDokumenPreview(elementId) {
+        const targetElement = document.getElementById(elementId);
+        if (!targetElement) {
+            showModal("Gagal Cetak", "Elemen pratinjau dokumen tidak ditemukan.");
+            return;
+        }
+
+        // Buat jendela cetak terisolasi untuk hasil print yang presisi
+        const printWindow = window.open('', '_blank', 'width=900,height=1100');
+        if (!printWindow) {
+            showModal("Pop-up Diblokir", "Peramban Anda memblokir jendela pop-up. Izinkan pop-up untuk mencetak dokumen.");
+            return;
+        }
+
+        printWindow.document.write(`
+            <!DOCTYPE html>
+            <html lang="id">
+            <head>
+                <meta charset="UTF-8">
+                <title>Cetak Dokumen - PAPACEDA</title>
+                <style>
+                    @page { size: A4; margin: 15mm; }
+                    body { font-family: Arial, sans-serif; color: #000; background: #fff; margin: 0; padding: 0; line-height: 1.4; font-size: 10pt; }
+                    .print-container { width: 100%; box-sizing: border-box; }
+                    table { width: 100%; border-collapse: collapse; }
+                    th, td { padding: 4px; vertical-align: top; }
+                    .border-black { border-color: #000 !important; }
+                    .border-b-2 { border-bottom-width: 2px; border-bottom-style: solid; }
+                    .border-b { border-bottom-width: 1px; border-bottom-style: solid; }
+                    .border { border-width: 1px; border-style: solid; }
+                    .text-center { text-align: center; }
+                    .text-right { text-align: right; }
+                    .font-bold { font-weight: bold; }
+                    .uppercase { text-transform: uppercase; }
+                    .underline { text-decoration: underline; }
+                    .italic { font-style: italic; }
+                </style>
+            </head>
+            <body>
+                <div class="print-container">
+                    ${targetElement.innerHTML}
+                </div>
+                <script>
+                    window.onload = function() {
+                        window.print();
+                        window.close();
+                    };
+                <\/script>
+            </body>
+            </html>
+        `);
+        printWindow.document.close();
+    }
+
     // ==========================================
     // SISTEM MODAL & ERROR HANDLING INFORMATIF
     // ==========================================
@@ -805,13 +927,13 @@
             if (item.jenis.includes('SPTJM')) badgeColor = 'bg-purple-500/10 text-purple-400 border-purple-500/20';
 
             tbody.innerHTML += `
-                <tr class="hover:bg-slate-900/40 transition-colors">
-                    <td class="p-4 font-mono text-slate-400">${item.waktu}</td>
+                <tr class="hover:bg-slate-900/40 dark:hover:bg-slate-900/40 light:hover:bg-slate-100 transition-colors">
+                    <td class="p-4 font-mono text-slate-400 dark:text-slate-400 light:text-slate-600">${item.waktu}</td>
                     <td class="p-4"><span class="px-2.5 py-1 rounded-lg text-[10px] font-bold border ${badgeColor}">${item.jenis}</span></td>
-                    <td class="p-4 font-mono font-bold text-white">${item.nomor}</td>
-                    <td class="p-4 text-slate-300">${item.keterangan}</td>
+                    <td class="p-4 font-mono font-bold text-white dark:text-white light:text-slate-900">${item.nomor}</td>
+                    <td class="p-4 text-slate-300 dark:text-slate-300 light:text-slate-700">${item.keterangan}</td>
                     <td class="p-4 text-center">
-                        <button onclick="hapusItemRiwayat(${index})" class="p-2 rounded-lg bg-slate-800 text-slate-400 hover:text-red-400 hover:bg-slate-700 transition-colors" title="Hapus Riwayat">
+                        <button onclick="hapusItemRiwayat(${index})" class="p-2 rounded-lg bg-slate-800 dark:bg-slate-800 light:bg-slate-200 text-slate-400 dark:text-slate-400 light:text-slate-600 hover:text-red-400 hover:bg-slate-700 transition-colors" title="Hapus Riwayat">
                             <i class="ph-bold ph-trash"></i>
                         </button>
                     </td>
@@ -1372,8 +1494,8 @@
         container.innerHTML = '';
         daftarPengikut_SPPD.forEach((p, i) => {
             container.innerHTML += `
-                <div class="bg-slate-900/50 border border-slate-700 p-6 rounded-2xl shadow-sm relative group hover:border-purple-500/50 transition-colors">
-                    <button type="button" onclick="removePengikutRow_SPPD(${i})" class="absolute -top-3 -right-3 bg-slate-800 text-red-500 hover:bg-red-500 hover:text-white transition-colors border border-slate-600 rounded-full p-2.5 shadow-xl z-10"><i class="ph-bold ph-trash"></i></button>
+                <div class="bg-slate-900/50 dark:bg-slate-900/50 light:bg-slate-50 border border-slate-700 dark:border-slate-700 light:border-slate-300 p-6 rounded-2xl shadow-sm relative group hover:border-purple-500/50 transition-colors">
+                    <button type="button" onclick="removePengikutRow_SPPD(${i})" class="absolute -top-3 -right-3 bg-slate-800 dark:bg-slate-800 light:bg-white text-red-500 hover:bg-red-500 hover:text-white transition-colors border border-slate-600 dark:border-slate-600 light:border-slate-300 rounded-full p-2.5 shadow-xl z-10"><i class="ph-bold ph-trash"></i></button>
                     <p class="text-[11px] font-bold text-purple-400 mb-4 uppercase tracking-widest border-b border-purple-500/20 inline-block pb-1">Pengikut ${i+1}</p>
                     <div class="space-y-5">
                         <div><label class="label-modern text-slate-400">Nama Lengkap & Gelar</label><input type="text" value="${p.nama}" oninput="updatePengikutField_SPPD(${i}, 'nama', this.value)" class="input-modern font-bold uppercase"></div>
@@ -1693,6 +1815,9 @@
     // INITIALIZATION LISTENER (ALL MODULES)
     // ==========================================
     document.addEventListener('DOMContentLoaded', () => {
+        // Init Tema
+        initTheme();
+
         // Init Template Builder
         loadTemplateBuilder();
 
@@ -1708,9 +1833,9 @@
 
         const containerBAS = document.getElementById("basContainer");
         dataAkunBAS_Nota.forEach(akun => {
-            const div = document.createElement("div"); div.className = "flex items-center gap-3 mb-3 p-3 rounded-xl bg-slate-800/80 border border-slate-700/50 hover:border-kejaksaan-500/50 transition-colors";
+            const div = document.createElement("div"); div.className = "flex items-center gap-3 mb-3 p-3 rounded-xl bg-slate-800/80 dark:bg-slate-800/80 light:bg-white border border-slate-700/50 dark:border-slate-700/50 light:border-slate-200 hover:border-kejaksaan-500/50 transition-colors";
             const checkedStr = (akun.kode === "521211" || akun.kode === "524113") ? "checked" : "";
-            div.innerHTML = `<input class="bas-checkbox w-5 h-5 text-kejaksaan-500 bg-slate-900 border-slate-600 rounded focus:ring-kejaksaan-500/50 cursor-pointer" type="checkbox" value="${akun.kode}" id="bas_${akun.kode}" ${checkedStr}><label class="text-sm text-slate-300 cursor-pointer w-full" for="bas_${akun.kode}"><strong class="text-white">${akun.kode}</strong> - ${akun.nama}</label>`;
+            div.innerHTML = `<input class="bas-checkbox w-5 h-5 text-kejaksaan-500 bg-slate-900 border-slate-600 rounded focus:ring-kejaksaan-500/50 cursor-pointer" type="checkbox" value="${akun.kode}" id="bas_${akun.kode}" ${checkedStr}><label class="text-sm text-slate-300 dark:text-slate-300 light:text-slate-700 cursor-pointer w-full" for="bas_${akun.kode}"><strong class="text-white dark:text-white light:text-slate-900">${akun.kode}</strong> - ${akun.nama}</label>`;
             containerBAS.appendChild(div);
         });
         loadProfilPejabat_Nota();
