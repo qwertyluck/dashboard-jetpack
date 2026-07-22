@@ -61,6 +61,7 @@
         /* Dokumen Preview */
         .spd-document { font-family: 'Arial', sans-serif; color: #000; background-color: #ffffff; line-height: 1.4; font-size: 9.5pt; color-scheme: light; }
         .sptjm-document { font-family: 'Arial', sans-serif; color: #000; background-color: #ffffff; line-height: 1.5; font-size: 11pt; color-scheme: light; width: 215mm; min-height: 330mm; }
+        .nota-document { font-family: 'Arial', sans-serif; color: #000; background-color: #ffffff; line-height: 1.4; font-size: 10pt; color-scheme: light; width: 210mm; min-height: 297mm; }
         
         /* UI Komponen */
         .input-modern { @apply w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-3.5 text-sm focus:bg-[#0f172a] focus:border-kejaksaan-500 focus:ring-2 focus:ring-kejaksaan-500/30 transition-all outline-none text-white placeholder-slate-500 shadow-inner; }
@@ -151,7 +152,7 @@
             </div>
             
             <div id="header-actions" class="flex items-center gap-2 md:gap-3 hidden">
-                <label for="templateUpload" class="cursor-pointer hidden sm:flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-2.5 rounded-xl text-xs md:text-sm font-semibold transition-colors border border-slate-700 shadow-sm">
+                <label for="templateUpload" id="labelUploadTemplate" class="cursor-pointer hidden sm:flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-2.5 rounded-xl text-xs md:text-sm font-semibold transition-colors border border-slate-700 shadow-sm">
                     <i class="ph-bold ph-upload-simple text-lg"></i> <span class="hidden md:inline">Upload Template</span>
                 </label>
                 <input type="file" id="templateUpload" accept=".docx" class="hidden" onchange="generateFromLocalTemplate_SPPD(this)" />
@@ -300,8 +301,8 @@
             </div>
             
             <!-- TAB 1: NOTA DINAS -->
-            <div id="tab-nota" class="p-4 md:p-8 hidden pb-20 animate-fade-in">
-                <div class="max-w-4xl mx-auto space-y-6">
+            <div id="tab-nota" class="p-4 md:p-8 flex flex-col xl:flex-row gap-8 hidden pb-20 animate-fade-in">
+                <section class="w-full xl:w-5/12 flex flex-col space-y-6">
                     <!-- Tombol Kembali Responsif -->
                     <div class="flex items-center justify-between">
                         <button onclick="switchTab('home')" class="inline-flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white px-4 py-2.5 rounded-xl text-xs font-bold transition-all border border-slate-700 shadow-sm">
@@ -398,14 +399,19 @@
                                 </button>
                             </div>
                         </div>
-
-                        <div class="pt-4">
-                            <button type="button" onclick="generateWord_Nota(this)" class="w-full flex justify-center items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white px-6 py-4 rounded-2xl text-base font-bold shadow-xl shadow-blue-900/40 transition-all transform hover:-translate-y-1">
-                                <i class="ph-bold ph-file-doc text-xl"></i> Generate Nota Dinas (.docx)
-                            </button>
-                        </div>
                     </form>
-                </div>
+                </section>
+                <section class="w-full xl:w-7/12 relative">
+                    <div class="lg:sticky lg:top-4 bg-slate-800/80 backdrop-blur-md rounded-[2rem] p-6 md:p-8 shadow-2xl border border-slate-700/50">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="text-sm font-bold text-slate-200 flex items-center gap-2"><i class="ph-fill ph-eye text-lg"></i> Pratinjau Nota Dinas (A4)</div>
+                            <div class="px-3 py-1 bg-slate-900 rounded-lg border border-slate-700 text-[10px] font-mono text-slate-400">Live Preview</div>
+                        </div>
+                        <div class="overflow-y-auto max-h-[70vh] flex flex-col items-center gap-8 pb-4 custom-scrollbar rounded-xl">
+                            <div id="nota_previewPage" class="p-[15mm] w-full max-w-[210mm] min-h-[297mm] shadow-2xl nota-document print-area rounded-md"></div>
+                        </div>
+                    </div>
+                </section>
             </div>
 
             <!-- TAB 2: SPPD -->
@@ -632,6 +638,21 @@
     }
 
     // ==========================================
+    // SISTEM MANAJEMEN NOMOR URUT OTOMATIS (AUTO-INCREMENT)
+    // ==========================================
+    function getNextNomorSurat(jenis, tahun) {
+        const key = `manise_last_num_${jenis}_${tahun}`;
+        let lastNum = parseInt(localStorage.getItem(key)) || 0;
+        let nextNum = lastNum + 1;
+        return { nextNum, formatted: String(nextNum).padStart(3, '0') };
+    }
+
+    function saveNextNomorSurat(jenis, tahun, num) {
+        const key = `manise_last_num_${jenis}_${tahun}`;
+        localStorage.setItem(key, num);
+    }
+
+    // ==========================================
     // SISTEM RIWAYAT SURAT (LOG HISTORY)
     // ==========================================
     function catatRiwayatSurat(jenisSurat, nomorSurat, keteranganPemohon) {
@@ -775,12 +796,19 @@
         document.getElementById('header-subtitle').innerText = titleMap[tab].sub;
 
         const headerActions = document.getElementById('header-actions');
-        if(tab === 'home' || tab === 'nota' || tab === 'riwayat') {
+        const labelUpload = document.getElementById('labelUploadTemplate');
+        if(tab === 'home' || tab === 'riwayat') {
             headerActions.classList.add('hidden');
         } else {
             headerActions.classList.remove('hidden');
-            document.getElementById('btnDownload').setAttribute('onclick', `downloadWord_${tab.toUpperCase()}()`);
-            document.getElementById('templateUpload').setAttribute('onchange', `generateFromLocalTemplate_${tab.toUpperCase()}(this)`);
+            if (tab === 'nota') {
+                if (labelUpload) labelUpload.classList.add('hidden');
+                document.getElementById('btnDownload').setAttribute('onclick', `generateWord_Nota(document.getElementById('notaForm'))`);
+            } else {
+                if (labelUpload) labelUpload.classList.remove('hidden');
+                document.getElementById('btnDownload').setAttribute('onclick', `downloadWord_${tab.toUpperCase()}()`);
+                document.getElementById('templateUpload').setAttribute('onchange', `generateFromLocalTemplate_${tab.toUpperCase()}(this)`);
+            }
         }
 
         // Auto close sidebar on mobile after clicking menu
@@ -837,6 +865,7 @@
         document.getElementById("pjbJabatan").readOnly = !isCustom;
         document.getElementById("pjbNama").readOnly = !isCustom;
         document.getElementById("pjbPangkat").readOnly = !isCustom;
+        updatePreview_Nota();
     }
 
     function updateFormatTanggal_Nota() {
@@ -844,8 +873,15 @@
         if (!nilaiKalender) return;
         const bulanIndo = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
         const parts = nilaiKalender.split("-");
-        document.getElementById("tanggalTeks").value = `${parseInt(parts[2])} ${bulanIndo[parseInt(parts[1]) - 1]} ${parts[0]}`;
-        document.getElementById("bulanNd").value = parts[1];
+        const tahun = parts[0];
+        const bulan = parts[1];
+        document.getElementById("tanggalTeks").value = `${parseInt(parts[2])} ${bulanIndo[parseInt(bulan) - 1]} ${tahun}`;
+        document.getElementById("bulanNd").value = bulan;
+        
+        // Auto-increment nomor nota dinas berdasarkan tahun aktif
+        const auto = getNextNomorSurat('NOTA', tahun);
+        document.getElementById("nomorNd").value = auto.formatted;
+        updatePreview_Nota();
     }
 
     function tambahBarisTembusan_Nota() {
@@ -853,13 +889,17 @@
         const div = document.createElement("div");
         div.className = "flex gap-3 tembusan-item";
         div.innerHTML = `
-            <input type="text" class="input-modern tembusan-input" placeholder="Tembusan baru..." required>
+            <input type="text" class="input-modern tembusan-input" placeholder="Tembusan baru..." oninput="updatePreview_Nota()" required>
             <button type="button" class="bg-red-500/10 text-red-500 font-bold px-5 rounded-xl border border-red-500/30 hover:bg-red-500 hover:text-white transition-all shadow-sm" onclick="hapusBarisTembusan_Nota(this)"><i class="ph-bold ph-trash"></i></button>
         `;
         container.appendChild(div);
+        updatePreview_Nota();
     }
 
-    function hapusBarisTembusan_Nota(btn) { btn.parentElement.remove(); }
+    function hapusBarisTembusan_Nota(btn) { 
+        btn.parentElement.remove(); 
+        updatePreview_Nota();
+    }
 
     function terbilang_Nota(n) {
         const bilangan = ["", "Satu", "Dua", "Tiga", "Empat", "Lima", "Enam", "Tujuh", "Delapan", "Sembilan", "Sepuluh", "Sebelas"];
@@ -881,6 +921,85 @@
             const blob = await respon.blob();
             return await blob.arrayBuffer();
         } catch { return null; }
+    }
+
+    function updatePreview_Nota() {
+        try {
+            const preview = document.getElementById('nota_previewPage');
+            if(!preview) return;
+
+            const kepada = document.getElementById('kepada').value || '-';
+            const dari = document.getElementById('dari').value || '-';
+            const tanggal = document.getElementById('tanggalTeks').value || '-';
+            const sifat = document.getElementById('sifat').value || '-';
+            const lampiran = document.getElementById('lampiran').value || '-';
+            const perihal = document.getElementById('perihal').value || '-';
+            const nomorNd = document.getElementById('nomorNd').value || '...';
+            const bulanNd = document.getElementById('bulanNd').value || '...';
+            const kegiatan = document.getElementById('kegiatan').value || '...';
+            const nominal = parseInt(document.getElementById('nominal').value) || 0;
+            const dipaTahun = document.getElementById('dipaTahun').value || '...';
+            
+            const nilaiKalender = document.getElementById("tanggalKalender").value;
+            const tahunNd = nilaiKalender ? nilaiKalender.split("-")[0] : "2026";
+            
+            const pjbJabatan = document.getElementById('pjbJabatan').value || '-';
+            const pjbNama = document.getElementById('pjbNama').value || '-';
+            const pjbPangkat = document.getElementById('pjbPangkat').value || '-';
+
+            const nominalFormat = new Intl.NumberFormat('id-ID').format(nominal);
+            const teksTerbilang = terbilang_Nota(nominal) + " Rupiah";
+
+            const checkboxes = document.querySelectorAll('.bas-checkbox:checked');
+            const arrayKodeBAS = Array.from(checkboxes).map(cb => cb.value);
+            const teksMataAnggaran = arrayKodeBAS.length > 0 ? arrayKodeBAS.join(" dan ") : "...";
+
+            const inputsTembusan = document.querySelectorAll('.tembusan-input');
+            let tembusanHtml = '';
+            inputsTembusan.forEach((inp, idx) => {
+                if(inp.value) {
+                    tembusanHtml += `<div>${idx + 1}. ${inp.value}</div>`;
+                }
+            });
+
+            preview.innerHTML = `
+                <div class="flex items-center border-b-2 border-black pb-3 mb-4">
+                    <div class="w-16 h-16 flex items-center justify-center font-bold text-xs text-center border border-gray-400 mr-4 bg-gray-50">[LOGO]</div>
+                    <div class="text-center flex-1">
+                        <div class="font-bold text-xs uppercase">KEJAKSAAN REPUBLIK INDONESIA</div>
+                        <div class="font-bold text-xs uppercase">KEJAKSAAN TINGGI MALUKU</div>
+                        <div class="font-bold text-sm uppercase">KEJAKSAAN NEGERI MALUKU TENGGARA</div>
+                        <div class="text-[8pt] italic mt-0.5">Jl. Cempaka Perumahan Pemda, Kel. Ohoijang Watdek, Kec. Kei Kecil, Kabupaten Maluku Tenggara</div>
+                    </div>
+                </div>
+                <div class="text-center font-bold text-sm underline mb-1 tracking-wide">NOTA DINAS</div>
+                <div class="text-center text-xs font-bold mb-4">Nomor: ND - ${nomorNd}/Q.1.19/Cu.3/${bulanNd}/${tahunNd}</div>
+                <table class="w-full text-xs mb-4 border-b border-black pb-3">
+                    <tr><td class="w-20 py-1 font-bold">Kepada</td><td class="w-4">:</td><td class="py-1">${kepada}</td></tr>
+                    <tr><td class="py-1 font-bold">Dari</td><td>:</td><td class="py-1">${dari}</td></tr>
+                    <tr><td class="py-1 font-bold">Tanggal</td><td>:</td><td class="py-1">${tanggal}</td></tr>
+                    <tr><td class="py-1 font-bold">Sifat</td><td>:</td><td class="py-1">${sifat}</td></tr>
+                    <tr><td class="py-1 font-bold">Lampiran</td><td>:</td><td class="py-1">${lampiran}</td></tr>
+                    <tr><td class="py-1 font-bold">Perihal</td><td>:</td><td class="py-1 font-bold">${perihal}</td></tr>
+                </table>
+                <div class="text-xs space-y-3 text-justify leading-relaxed mb-4">
+                    <p style="text-indent: 40px;">Sehubungan dengan ${kegiatan} pada Kejaksaan Negeri Maluku Tenggara. menimbang adanya biaya yang timbul dengan kegiatan tersebut, maka Bersama ini dengan hormat kami sampaikan Nota Dinas Pencairan Anggaran dalam rangka mendukung kegiatan operasional sebagaimana dimaksud dengan nilai sebesar <strong>${nominalFormat}</strong> <em>(${teksTerbilang}).</em></p>
+                    <p style="text-indent: 40px;">Kiranya dijadikan dasar untuk penyerapan anggaran berdasarkan DIPA Tahun ${dipaTahun} / Nomor Mata Anggaran ${teksMataAnggaran}.</p>
+                    <p style="text-indent: 40px;">Demikian untuk menjadi maklum.</p>
+                </div>
+                <div class="flex justify-end text-xs mt-8">
+                    <div class="w-60 text-left">
+                        <p class="uppercase font-bold mb-12">${pjbJabatan}</p>
+                        <p class="font-bold underline uppercase tracking-wide">${pjbNama}</p>
+                        <p>${pjbPangkat}</p>
+                    </div>
+                </div>
+                <div class="text-xs mt-6">
+                    <p class="mb-1">Tembusan Yth.:</p>
+                    ${tembusanHtml}
+                </div>
+            `;
+        } catch(e) {}
     }
 
     async function generateWord_Nota(btn) {
@@ -1040,6 +1159,7 @@
             Packer.toBlob(doc).then(blob => {
                 saveAs(blob, `Nota_Dinas_ND_${nomorNd}.docx`);
                 catatRiwayatSurat('Nota Dinas', `ND-${nomorNd}/Q.1.19/Cu.3/${bulanNd}/${tahunNd}`, dari);
+                saveNextNomorSurat('NOTA', tahunNd, parseInt(nomorNd));
                 btn.disabled = false; btn.innerHTML = originalText;
             });
 
@@ -1074,6 +1194,15 @@
         if (start && end) {
             const startDate = new Date(start);
             const endDate = new Date(end);
+            
+            // Auto-increment SPPD number generation based on departure year
+            const tahun = start.split("-")[0];
+            const auto = getNextNomorSurat('SPPD', tahun);
+            const nomorInput = document.getElementById('sppd_in_nomor');
+            if (nomorInput && !nomorInput.dataset.manual) {
+                nomorInput.value = `SPPD-${auto.formatted}/PPK/${start.split("-")[1]}/${tahun}`;
+            }
+
             if (endDate < startDate) {
                 warn.classList.remove('hidden'); inputLama.value = "Pilihan tanggal salah!";
             } else {
@@ -1249,7 +1378,22 @@
             const a = document.createElement('a');
             a.href = url; a.download = `SPPD_${(getVal_SPPD('sppd_in_nama_pegawai')||"Pegawai").replace(/[^a-zA-Z0-9]/g, '_')}.docx`;
             document.body.appendChild(a); a.click();
-            catatRiwayatSurat('SPPD', getVal_SPPD('sppd_in_nomor'), getVal_SPPD('sppd_in_nama_pegawai'));
+            
+            const nomorVal = getVal_SPPD('sppd_in_nomor');
+            catatRiwayatSurat('SPPD', nomorVal, getVal_SPPD('sppd_in_nama_pegawai'));
+            
+            const tglBerangkatVal = getVal_SPPD('sppd_in_tgl_berangkat');
+            if (tglBerangkatVal) {
+                const tahunVal = tglBerangkatVal.split("-")[0];
+                const partsNomor = nomorVal.split("-");
+                if (partsNomor.length > 1) {
+                    const angkaSeq = parseInt(partsNomor[1].split("/")[0]);
+                    if (!isNaN(angkaSeq)) {
+                        saveNextNomorSurat('SPPD', tahunVal, angkaSeq);
+                    }
+                }
+            }
+
             setTimeout(() => { document.body.removeChild(a); window.URL.revokeObjectURL(url); }, 100);
         } catch (error) { 
             showModal("Gagal Menyusun Dokumen Word", `Terjadi kesalahan rendering berkas Word:\n\n${error.message}\n\nPastikan struktur tag template Anda sesuai.`); 
@@ -1360,7 +1504,22 @@
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a'); a.href = url; a.download = `SPTJM_${getVal_SPTJM('sptjm_in_nomor').replace(/[^a-zA-Z0-9]/g, '_')}.docx`;
             document.body.appendChild(a); a.click(); 
-            catatRiwayatSurat('SPTJM', getVal_SPTJM('sptjm_in_nomor'), getVal_SPTJM('sptjm_in_nama_pejabat'));
+            
+            const nomorVal = getVal_SPTJM('sptjm_in_nomor');
+            catatRiwayatSurat('SPTJM', nomorVal, getVal_SPTJM('sptjm_in_nama_pejabat'));
+            
+            const tglSuratVal = getVal_SPTJM('sptjm_in_tanggal_surat');
+            if (tglSuratVal) {
+                const tahunVal = tglSuratVal.split("-")[0];
+                const partsNomor = nomorVal.split("/");
+                if (partsNomor.length > 0) {
+                    const angkaSeq = parseInt(partsNomor[0].replace(/\D/g, ''));
+                    if (!isNaN(angkaSeq)) {
+                        saveNextNomorSurat('SPTJM', tahunVal, angkaSeq);
+                    }
+                }
+            }
+
             setTimeout(() => { document.body.removeChild(a); window.URL.revokeObjectURL(url); }, 100);
         } catch (error) { 
             showModal("Gagal Menyusun Berkas SPTJM", `Terjadi kesalahan saat menyusun file Word SPTJM:\n\n${error.message}`); 
@@ -1411,7 +1570,8 @@
 
         // Init Nota Dinas
         const hariIni = new Date();
-        document.getElementById("tanggalKalender").value = `${hariIni.getFullYear()}-${String(hariIni.getMonth() + 1).padStart(2, '0')}-${String(hariIni.getDate()).padStart(2, '0')}`;
+        const tahunIni = hariIni.getFullYear();
+        document.getElementById("tanggalKalender").value = `${tahunIni}-${String(hariIni.getMonth() + 1).padStart(2, '0')}-${String(hariIni.getDate()).padStart(2, '0')}`;
         updateFormatTanggal_Nota();
 
         const containerBAS = document.getElementById("basContainer");
@@ -1422,26 +1582,47 @@
             containerBAS.appendChild(div);
         });
         loadProfilPejabat_Nota();
+        updatePreview_Nota();
 
         // Init SPPD
         loadData_SPPD();
+        const autoSppd = getNextNomorSurat('SPPD', tahunIni);
+        const sppdNomorInput = document.getElementById('sppd_in_nomor');
+        if (sppdNomorInput && (!sppdNomorInput.value || sppdNomorInput.value.includes('SPPD-024'))) {
+            sppdNomorInput.value = `SPPD-${autoSppd.formatted}/PPK/01/${tahunIni}`;
+        }
         if(daftarPengikut_SPPD.length === 0) daftarPengikut_SPPD.push({ nama: "", jabatan: "", ket: "" });
         renderPengikut_SPPD();
         updatePreview_SPPD();
 
         // Init SPTJM
         loadData_SPTJM();
+        const autoSptjm = getNextNomorSurat('SPTJM', tahunIni);
+        const sptjmNomorInput = document.getElementById('sptjm_in_nomor');
+        if (sptjmNomorInput && (!sptjmNomorInput.value || sptjmNomorInput.value.includes('PRIN-'))) {
+            sptjmNomorInput.value = `PRIN-${autoSptjm.formatted}/Q.1.19/Cu.3/${tahunIni}`;
+        }
         updatePreview_SPTJM();
     });
 
-    // Event Listeners Input Realtime
+    // Event Listeners Input Realtime untuk Nota Dinas
+    document.getElementById('notaForm').addEventListener('input', () => {
+        updatePreview_Nota();
+    });
+    document.getElementById('basContainer').addEventListener('change', () => {
+        updatePreview_Nota();
+    });
+
+    // Event Listeners Input Realtime untuk SPPD
     document.getElementById('sppdForm').addEventListener('input', (e) => {
         if (e.target.id === 'sppd_in_nip_utama') enforceNIP_SPPD(e.target, 'sppd_warn_nip_utama');
         if (e.target.id === 'sppd_in_ppk_nip') enforceNIP_SPPD(e.target, 'sppd_warn_ppk_nip');
+        if (e.target.id === 'sppd_in_nomor') e.target.dataset.manual = "true";
         if (e.target.id === 'sppd_in_tgl_berangkat' || e.target.id === 'sppd_in_tgl_kembali') validateAndCalculateDays_SPPD();
         saveData_SPPD(); updatePreview_SPPD();
     });
 
+    // Event Listeners Input Realtime untuk SPTJM
     document.getElementById('sptjmForm').addEventListener('input', (e) => {
         if (e.target.id === 'sptjm_in_nip') {
             let val = e.target.value.replace(/\D/g, ''); if (val.length > 18) val = val.slice(0, 18); e.target.value = val;
