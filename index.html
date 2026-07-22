@@ -49,7 +49,7 @@
         /* Tema Gelap Default */
         body:not(.light) { background-color: #0f172a; color: #e2e8f0; color-scheme: dark; }
         /* Tema Terang */
-        body.light { background-color: #f8fafc; color: #1e293b; color-scheme: light; }
+        body.light { background-color: #f1f5f9; color: #1e293b; color-scheme: light; }
         
         .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
@@ -99,13 +99,13 @@
     </div>
 
     <!-- SIDEBAR NAVIGASI -->
-    <aside id="sidebar" class="fixed md:static inset-y-0 left-0 w-72 bg-slate-900/95 dark:bg-slate-900/95 light:bg-slate-900 backdrop-blur-xl border-r border-slate-800 flex flex-col z-50 shadow-2xl transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out">
-        <div class="h-20 flex items-center px-6 border-b border-slate-800/80">
+    <aside id="sidebar" class="fixed md:static inset-y-0 left-0 w-72 bg-slate-900 dark:bg-slate-900 light:bg-white backdrop-blur-xl border-r border-slate-800 dark:border-slate-800 light:border-slate-200 flex flex-col z-50 shadow-2xl transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out">
+        <div class="h-20 flex items-center px-6 border-b border-slate-800/80 dark:border-slate-800/80 light:border-slate-200">
             <div class="bg-gradient-to-br from-kejaksaan-500 to-kejaksaan-700 p-2.5 rounded-xl text-white mr-3 shadow-lg shadow-kejaksaan-900/50">
                 <i class="ph-bold ph-scales text-xl"></i>
             </div>
             <div>
-                <h1 class="font-extrabold text-white tracking-wide text-lg leading-tight">PAPA<span class="text-kejaksaan-500">CEDA</span></h1>
+                <h1 class="font-extrabold text-white dark:text-white light:text-slate-900 tracking-wide text-lg leading-tight">PAPA<span class="text-kejaksaan-500">CEDA</span></h1>
                 <p class="text-[9px] text-slate-400 font-bold tracking-widest uppercase mt-0.5">GENERATE SURAT OTOMATIS</p>
             </div>
             <button onclick="toggleSidebar()" class="md:hidden ml-auto text-slate-400 hover:text-white"><i class="ph-bold ph-x text-2xl"></i></button>
@@ -114,44 +114,44 @@
         <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto custom-scrollbar">
             <p class="px-3 text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-3">Menu Utama</p>
             
-            <button id="btn-home" onclick="switchTab('home')" class="w-full text-left flex items-center px-4 py-3.5 rounded-2xl text-sm font-bold bg-slate-800 text-white shadow-md transition-all duration-200 border border-slate-700">
-                <div class="p-1.5 rounded-lg bg-slate-700 text-white mr-3"><i class="ph-bold ph-squares-four text-lg"></i></div>
+            <button id="btn-home" onclick="switchTab('home')" class="w-full text-left flex items-center px-4 py-3.5 rounded-2xl text-sm font-bold bg-slate-800 dark:bg-slate-800 light:bg-slate-100 text-white dark:text-white light:text-slate-900 shadow-md transition-all duration-200 border border-slate-700 dark:border-slate-700 light:border-slate-300">
+                <div class="p-1.5 rounded-lg bg-slate-700 dark:bg-slate-700 light:bg-slate-200 text-white dark:text-white light:text-slate-800 mr-3"><i class="ph-bold ph-squares-four text-lg"></i></div>
                 Beranda
             </button>
-            <button id="btn-riwayat" onclick="switchTab('riwayat')" class="w-full text-left flex items-center px-4 py-3 rounded-2xl text-sm font-bold text-slate-400 hover:bg-slate-800 hover:text-white transition-all duration-200 border border-transparent">
-                <div class="p-1.5 rounded-lg bg-slate-800/50 text-slate-400 mr-3"><i class="ph-bold ph-clock-counter-clockwise text-lg"></i></div>
+            <button id="btn-riwayat" onclick="switchTab('riwayat')" class="w-full text-left flex items-center px-4 py-3 rounded-2xl text-sm font-bold text-slate-400 dark:text-slate-400 light:text-slate-600 hover:bg-slate-800 dark:hover:bg-slate-800 light:hover:bg-slate-100 hover:text-white dark:hover:text-white light:hover:text-slate-900 transition-all duration-200 border border-transparent">
+                <div class="p-1.5 rounded-lg bg-slate-800/50 dark:bg-slate-800/50 light:bg-slate-100 text-slate-400 dark:text-slate-400 light:text-slate-600 mr-3"><i class="ph-bold ph-clock-counter-clockwise text-lg"></i></div>
                 Riwayat Surat
             </button>
 
             <p class="px-3 text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-6 mb-3">Generator Dokumen</p>
 
-            <button id="btn-nota" onclick="switchTab('nota')" class="w-full text-left flex items-center px-4 py-3 rounded-2xl text-sm font-bold text-slate-400 hover:bg-slate-800 hover:text-white transition-all duration-200 border border-transparent">
-                <div class="p-1.5 rounded-lg bg-slate-800/50 text-slate-400 mr-3"><i class="ph-bold ph-envelope-open text-lg"></i></div>
+            <button id="btn-nota" onclick="switchTab('nota')" class="w-full text-left flex items-center px-4 py-3 rounded-2xl text-sm font-bold text-slate-400 dark:text-slate-400 light:text-slate-600 hover:bg-slate-800 dark:hover:bg-slate-800 light:hover:bg-slate-100 hover:text-white dark:hover:text-white light:hover:text-slate-900 transition-all duration-200 border border-transparent">
+                <div class="p-1.5 rounded-lg bg-slate-800/50 dark:bg-slate-800/50 light:bg-slate-100 text-slate-400 dark:text-slate-400 light:text-slate-600 mr-3"><i class="ph-bold ph-envelope-open text-lg"></i></div>
                 Nota Dinas
             </button>
-            <button id="btn-sppd" onclick="switchTab('sppd')" class="w-full text-left flex items-center px-4 py-3 rounded-2xl text-sm font-bold text-slate-400 hover:bg-slate-800 hover:text-white transition-all duration-200 border border-transparent">
-                <div class="p-1.5 rounded-lg bg-slate-800/50 text-slate-400 mr-3"><i class="ph-bold ph-car-profile text-lg"></i></div>
+            <button id="btn-sppd" onclick="switchTab('sppd')" class="w-full text-left flex items-center px-4 py-3 rounded-2xl text-sm font-bold text-slate-400 dark:text-slate-400 light:text-slate-600 hover:bg-slate-800 dark:hover:bg-slate-800 light:hover:bg-slate-100 hover:text-white dark:hover:text-white light:hover:text-slate-900 transition-all duration-200 border border-transparent">
+                <div class="p-1.5 rounded-lg bg-slate-800/50 dark:bg-slate-800/50 light:bg-slate-100 text-slate-400 dark:text-slate-400 light:text-slate-600 mr-3"><i class="ph-bold ph-car-profile text-lg"></i></div>
                 Generator SPPD
             </button>
-            <button id="btn-sptjm" onclick="switchTab('sptjm')" class="w-full text-left flex items-center px-4 py-3 rounded-2xl text-sm font-bold text-slate-400 hover:bg-slate-800 hover:text-white transition-all duration-200 border border-transparent">
-                <div class="p-1.5 rounded-lg bg-slate-800/50 text-slate-400 mr-3"><i class="ph-bold ph-file-text text-lg"></i></div>
+            <button id="btn-sptjm" onclick="switchTab('sptjm')" class="w-full text-left flex items-center px-4 py-3 rounded-2xl text-sm font-bold text-slate-400 dark:text-slate-400 light:text-slate-600 hover:bg-slate-800 dark:hover:bg-slate-800 light:hover:bg-slate-100 hover:text-white dark:hover:text-white light:hover:text-slate-900 transition-all duration-200 border border-transparent">
+                <div class="p-1.5 rounded-lg bg-slate-800/50 dark:bg-slate-800/50 light:bg-slate-100 text-slate-400 dark:text-slate-400 light:text-slate-600 mr-3"><i class="ph-bold ph-file-text text-lg"></i></div>
                 Generator SPTJM
             </button>
-            <button id="btn-builder" onclick="switchTab('builder')" class="w-full text-left flex items-center px-4 py-3 rounded-2xl text-sm font-bold text-slate-400 hover:bg-slate-800 hover:text-white transition-all duration-200 border border-transparent">
-                <div class="p-1.5 rounded-lg bg-slate-800/50 text-slate-400 mr-3"><i class="ph-bold ph-sliders text-lg"></i></div>
+            <button id="btn-builder" onclick="switchTab('builder')" class="w-full text-left flex items-center px-4 py-3 rounded-2xl text-sm font-bold text-slate-400 dark:text-slate-400 light:text-slate-600 hover:bg-slate-800 dark:hover:bg-slate-800 light:hover:bg-slate-100 hover:text-white dark:hover:text-white light:hover:text-slate-900 transition-all duration-200 border border-transparent">
+                <div class="p-1.5 rounded-lg bg-slate-800/50 dark:bg-slate-800/50 light:bg-slate-100 text-slate-400 dark:text-slate-400 light:text-slate-600 mr-3"><i class="ph-bold ph-sliders text-lg"></i></div>
                 Template Builder
             </button>
         </nav>
         
-        <div class="p-5 m-4 rounded-2xl border border-slate-800 bg-slate-800/30 text-center relative overflow-hidden">
+        <div class="p-5 m-4 rounded-2xl border border-slate-800 dark:border-slate-800 light:border-slate-200 bg-slate-800/30 dark:bg-slate-800/30 light:bg-slate-100 text-center relative overflow-hidden">
             <div class="absolute -top-4 -right-4 w-16 h-16 bg-kejaksaan-500/10 rounded-full blur-xl"></div>
             <p class="text-[10px] text-slate-500 font-medium">Dibuat oleh</p>
-            <p class="text-xs font-bold text-slate-300 mt-1">Jalo Tuharea</p>
+            <p class="text-xs font-bold text-slate-300 dark:text-slate-300 light:text-slate-700 mt-1">Jalo Tuharea</p>
         </div>
     </aside>
 
     <!-- KONTEN UTAMA -->
-    <main class="flex-1 flex flex-col h-screen overflow-hidden relative bg-[#0f172a] dark:bg-[#0f172a] light:bg-[#f8fafc]">
+    <main class="flex-1 flex flex-col h-screen overflow-hidden relative bg-[#0f172a] dark:bg-[#0f172a] light:bg-slate-100">
         
         <!-- HEADER ATAS -->
         <header class="bg-slate-900/60 dark:bg-slate-900/60 light:bg-white/80 backdrop-blur-xl border-b border-slate-800 dark:border-slate-800 light:border-slate-200 h-20 flex items-center justify-between px-4 md:px-8 z-30 no-print sticky top-0">
@@ -191,12 +191,12 @@
             <!-- TAB 0: BERANDA (HOME) -->
             <div id="tab-home" class="p-4 md:p-8 max-w-7xl mx-auto space-y-6 md:space-y-8 animate-fade-in block pb-20">
                 <!-- Hero Section -->
-                <div class="bg-gradient-to-r from-slate-800 to-slate-900 dark:from-slate-800 dark:to-slate-900 light:from-slate-100 light:to-slate-200 rounded-[2rem] p-8 md:p-12 border border-slate-700/50 dark:border-slate-700/50 light:border-slate-300 shadow-2xl relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-8">
+                <div class="bg-gradient-to-r from-slate-800 to-slate-900 dark:from-slate-800 dark:to-slate-900 light:from-white light:to-slate-100 rounded-[2rem] p-8 md:p-12 border border-slate-700/50 dark:border-slate-700/50 light:border-slate-200 shadow-2xl relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-8">
                     <div class="absolute -top-24 -right-24 w-96 h-96 bg-kejaksaan-500/20 rounded-full blur-3xl pointer-events-none"></div>
                     <div class="absolute -bottom-24 -left-24 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
                     
                     <div class="relative z-10 w-full md:w-2/3 space-y-4">
-                        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-800/50 dark:bg-slate-800/50 light:bg-white border border-slate-700 dark:border-slate-700 light:border-slate-300 text-[10px] font-bold text-kejaksaan-400 uppercase tracking-widest backdrop-blur-sm shadow-sm">
+                        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-800/50 dark:bg-slate-800/50 light:bg-slate-100 border border-slate-700 dark:border-slate-700 light:border-slate-200 text-[10px] font-bold text-kejaksaan-400 uppercase tracking-widest backdrop-blur-sm shadow-sm">
                             <span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-kejaksaan-400 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-kejaksaan-500"></span></span>
                             Sistem Aktif & Terintegrasi
                         </div>
@@ -209,7 +209,7 @@
                     </div>
                     
                     <div class="relative z-10 hidden md:block">
-                        <div class="w-32 h-32 bg-slate-800/80 dark:bg-slate-800/80 light:bg-white rounded-3xl border border-slate-700 dark:border-slate-700 light:border-slate-300 flex items-center justify-center backdrop-blur-md shadow-2xl transform rotate-6 hover:rotate-0 transition-transform duration-500">
+                        <div class="w-32 h-32 bg-slate-800/80 dark:bg-slate-800/80 light:bg-slate-50 rounded-3xl border border-slate-700 dark:border-slate-700 light:border-slate-200 flex items-center justify-center backdrop-blur-md shadow-2xl transform rotate-6 hover:rotate-0 transition-transform duration-500">
                             <i class="ph-fill ph-files text-6xl text-kejaksaan-500"></i>
                         </div>
                     </div>
@@ -813,7 +813,7 @@
     // SISTEM TEMPLATE BUILDER (KUSTOMISASI REDAKSI)
     // ==========================================
     const defaultTemplateConfig = {
-        sptjm_poin2: "Apabila dikemudian hari terbukti pernyataan ini tidak benar, menimbulkan kerugian negara, dan/atau menimbulkan permasalahan hukum, maka saya bersedia bertanggung jawab secara mutlak untuk menyetor kerugian negara tersebut ke Kas Negara sesuai dengan ketentuan peraturan perundang-undangan[cite: 2].",
+        sptjm_poin2: "Apabila dikemudian hari terbukti pernyataan ini tidak benar, menimbulkan kerugian negara, dan/apoptotic menimbulkan permasalahan hukum, maka saya bersedia bertanggung jawab secara mutlak untuk menyetor kerugian negara tersebut ke Kas Negara sesuai dengan ketentuan peraturan perundang-undangan[cite: 2].",
         sptjm_penutup: "Demikian surat pernyataan ini dibuat dengan sebenarnya, untuk dapat dipergunakan sebagaimana mestinya[cite: 2].",
         nota_pengantar: "Sehubungan dengan {kegiatan} pada Kejaksaan Negeri Maluku Tenggara. menimbang adanya biaya yang timbul dengan kegiatan tersebut, maka Bersama ini dengan hormat kami sampaikan Nota Dinas Pencairan Anggaran dalam rangka mendukung kegiatan operasional sebagaimana dimaksud dengan nilai sebesar {nominal} ({terbilang})."
     };
@@ -985,19 +985,19 @@
 
         // Reset Menu Style
         const menus = [
-            {id: 'btn-home', default: 'bg-transparent text-slate-400 border-transparent', active: 'bg-slate-800 text-white border-slate-700 shadow-md', iconBg: 'bg-slate-800/50 text-slate-400', iconActive: 'bg-slate-700 text-white'},
-            {id: 'btn-riwayat', default: 'bg-transparent text-slate-400 border-transparent', active: 'bg-slate-800 text-white border-slate-700 shadow-md', iconBg: 'bg-slate-800/50 text-slate-400', iconActive: 'bg-slate-700 text-white'},
-            {id: 'btn-nota', default: 'bg-transparent text-slate-400 border-transparent', active: 'bg-slate-800 text-white border-slate-700 shadow-md', iconBg: 'bg-slate-800/50 text-slate-400', iconActive: 'bg-blue-500 text-white'},
-            {id: 'btn-sppd', default: 'bg-transparent text-slate-400 border-transparent', active: 'bg-slate-800 text-white border-slate-700 shadow-md', iconBg: 'bg-slate-800/50 text-slate-400', iconActive: 'bg-kejaksaan-500 text-white'},
-            {id: 'btn-sptjm', default: 'bg-transparent text-slate-400 border-transparent', active: 'bg-slate-800 text-white border-slate-700 shadow-md', iconBg: 'bg-slate-800/50 text-slate-400', iconActive: 'bg-purple-500 text-white'},
-            {id: 'btn-builder', default: 'bg-transparent text-slate-400 border-transparent', active: 'bg-slate-800 text-white border-slate-700 shadow-md', iconBg: 'bg-slate-800/50 text-slate-400', iconActive: 'bg-amber-500 text-white'}
+            {id: 'btn-home', default: 'bg-transparent text-slate-400 border-transparent', active: 'bg-slate-800 dark:bg-slate-800 light:bg-slate-100 text-white dark:text-white light:text-slate-900 border-slate-700 dark:border-slate-700 light:border-slate-300 shadow-md', iconBg: 'bg-slate-800/50 dark:bg-slate-800/50 light:bg-slate-100 text-slate-400 dark:text-slate-400 light:text-slate-600', iconActive: 'bg-slate-700 dark:bg-slate-700 light:bg-slate-200 text-white dark:text-white light:text-slate-800'},
+            {id: 'btn-riwayat', default: 'bg-transparent text-slate-400 border-transparent', active: 'bg-slate-800 dark:bg-slate-800 light:bg-slate-100 text-white dark:text-white light:text-slate-900 border-slate-700 dark:border-slate-700 light:border-slate-300 shadow-md', iconBg: 'bg-slate-800/50 dark:bg-slate-800/50 light:bg-slate-100 text-slate-400 dark:text-slate-400 light:text-slate-600', iconActive: 'bg-slate-700 dark:bg-slate-700 light:bg-slate-200 text-white dark:text-white light:text-slate-800'},
+            {id: 'btn-nota', default: 'bg-transparent text-slate-400 border-transparent', active: 'bg-slate-800 dark:bg-slate-800 light:bg-slate-100 text-white dark:text-white light:text-slate-900 border-slate-700 dark:border-slate-700 light:border-slate-300 shadow-md', iconBg: 'bg-slate-800/50 dark:bg-slate-800/50 light:bg-slate-100 text-slate-400 dark:text-slate-400 light:text-slate-600', iconActive: 'bg-blue-500 text-white'},
+            {id: 'btn-sppd', default: 'bg-transparent text-slate-400 border-transparent', active: 'bg-slate-800 dark:bg-slate-800 light:bg-slate-100 text-white dark:text-white light:text-slate-900 border-slate-700 dark:border-slate-700 light:border-slate-300 shadow-md', iconBg: 'bg-slate-800/50 dark:bg-slate-800/50 light:bg-slate-100 text-slate-400 dark:text-slate-400 light:text-slate-600', iconActive: 'bg-kejaksaan-500 text-white'},
+            {id: 'btn-sptjm', default: 'bg-transparent text-slate-400 border-transparent', active: 'bg-slate-800 dark:bg-slate-800 light:bg-slate-100 text-white dark:text-white light:text-slate-900 border-slate-700 dark:border-slate-700 light:border-slate-300 shadow-md', iconBg: 'bg-slate-800/50 dark:bg-slate-800/50 light:bg-slate-100 text-slate-400 dark:text-slate-400 light:text-slate-600', iconActive: 'bg-purple-500 text-white'},
+            {id: 'btn-builder', default: 'bg-transparent text-slate-400 border-transparent', active: 'bg-slate-800 dark:bg-slate-800 light:bg-slate-100 text-white dark:text-white light:text-slate-900 border-slate-700 dark:border-slate-700 light:border-slate-300 shadow-md', iconBg: 'bg-slate-800/50 dark:bg-slate-800/50 light:bg-slate-100 text-slate-400 dark:text-slate-400 light:text-slate-600', iconActive: 'bg-amber-500 text-white'}
         ];
 
         menus.forEach(m => {
             const btn = document.getElementById(m.id);
             if (!btn) return;
             const iconDiv = btn.querySelector('div');
-            btn.className = `w-full text-left flex items-center px-4 py-3.5 rounded-2xl text-sm font-bold transition-all duration-200 border ${m.default} hover:bg-slate-800 hover:text-white`;
+            btn.className = `w-full text-left flex items-center px-4 py-3.5 rounded-2xl text-sm font-bold transition-all duration-200 border ${m.default} hover:bg-slate-800 dark:hover:bg-slate-800 light:hover:bg-slate-100 hover:text-white dark:hover:text-white light:hover:text-slate-900`;
             iconDiv.className = `p-1.5 rounded-lg mr-3 ${m.iconBg} transition-colors`;
         });
 
