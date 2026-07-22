@@ -287,7 +287,7 @@
 
             <!-- TAB RIWAYAT SURAT -->
             <div id="tab-riwayat" class="p-4 md:p-8 max-w-7xl mx-auto space-y-6 hidden pb-20 animate-fade-in">
-                <div class="flex items-center justify-between">
+                <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                     <div>
                         <h3 class="text-xl font-bold text-white dark:text-white light:text-slate-900 tracking-tight">Arsip Riwayat Surat</h3>
                         <p class="text-xs text-slate-400 dark:text-slate-400 light:text-slate-600 mt-1">Daftar dokumen surat yang pernah di-generate sebelumnya.</p>
@@ -298,6 +298,31 @@
                         </button>
                         <button onclick="muatUlangTabelRiwayat()" class="flex items-center gap-2 bg-slate-800 dark:bg-slate-800 light:bg-slate-200 hover:bg-slate-700 dark:hover:bg-slate-700 light:hover:bg-slate-300 text-slate-300 dark:text-slate-300 light:text-slate-700 px-4 py-2 rounded-xl text-xs font-bold border border-slate-700 dark:border-slate-700 light:border-slate-300 transition-colors">
                             <i class="ph-bold ph-arrows-clockwise text-sm"></i> Segarkan
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Modul Filter & Pencarian Pintar (Smart Search & Filter) -->
+                <div class="card-modern grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+                    <div>
+                        <label class="label-modern">Pencarian Kata Kunci</label>
+                        <div class="relative">
+                            <i class="ph-bold ph-magnifying-glass absolute left-4 top-3.5 text-slate-400 text-base"></i>
+                            <input type="text" id="filterKeyword" oninput="muatUlangTabelRiwayat()" class="input-modern !pl-11" placeholder="Cari nomor surat, pemohon...">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="label-modern">Filter Jenis Surat</label>
+                        <select id="filterJenis" onchange="muatUlangTabelRiwayat()" class="input-modern cursor-pointer font-bold">
+                            <option value="">-- Semua Jenis Surat --</option>
+                            <option value="Nota Dinas">Nota Dinas</option>
+                            <option value="SPPD">SPPD</option>
+                            <option value="SPTJM">SPTJM</option>
+                        </select>
+                    </div>
+                    <div>
+                        <button onclick="resetFilterRiwayat()" class="w-full py-3.5 px-4 rounded-xl bg-slate-700 hover:bg-slate-600 text-white text-xs font-bold transition-colors flex items-center justify-center gap-2 border border-slate-600">
+                            <i class="ph-bold ph-funnel-x text-sm"></i> Reset Filter
                         </button>
                     </div>
                 </div>
@@ -813,7 +838,7 @@
     // SISTEM TEMPLATE BUILDER (KUSTOMISASI REDAKSI)
     // ==========================================
     const defaultTemplateConfig = {
-        sptjm_poin2: "Apabila dikemudian hari terbukti pernyataan ini tidak benar, menimbulkan kerugian negara, dan/apoptotic menimbulkan permasalahan hukum, maka saya bersedia bertanggung jawab secara mutlak untuk menyetor kerugian negara tersebut ke Kas Negara sesuai dengan ketentuan peraturan perundang-undangan[cite: 2].",
+        sptjm_poin2: "Apabila dikemudian hari terbukti pernyataan ini tidak benar, menimbulkan kerugian negara, dan/atau menimbulkan permasalahan hukum, maka saya bersedia bertanggung jawab secara mutlak untuk menyetor kerugian negara tersebut ke Kas Negara sesuai dengan ketentuan peraturan perundang-undangan[cite: 2].",
         sptjm_penutup: "Demikian surat pernyataan ini dibuat dengan sebenarnya, untuk dapat dipergunakan sebagaimana mestinya[cite: 2].",
         nota_pengantar: "Sehubungan dengan {kegiatan} pada Kejaksaan Negeri Maluku Tenggara. menimbang adanya biaya yang timbul dengan kegiatan tersebut, maka Bersama ini dengan hormat kami sampaikan Nota Dinas Pencairan Anggaran dalam rangka mendukung kegiatan operasional sebagaimana dimaksud dengan nilai sebesar {nominal} ({terbilang})."
     };
@@ -877,7 +902,7 @@
     }
 
     // ==========================================
-    // SISTEM RIWAYAT SURAT (LOG HISTORY)
+    // SISTEM RIWAYAT SURAT (LOG HISTORY) DENGAN SMART SEARCH & FILTER
     // ==========================================
     function catatRiwayatSurat(jenisSurat, nomorSurat, keteranganPemohon) {
         let riwayat = [];
@@ -915,13 +940,27 @@
             if (dataLama) riwayat = JSON.parse(dataLama);
         } catch (e) { riwayat = []; }
 
-        if (riwayat.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-slate-500 italic">Belum ada riwayat dokumen yang di-generate.</td></tr>`;
+        const keyword = (document.getElementById('filterKeyword')?.value || '').toLowerCase();
+        const jenisFilter = document.getElementById('filterJenis')?.value || '';
+
+        const filteredRiwayat = riwayat.filter(item => {
+            const matchKeyword = keyword === '' || 
+                item.nomor.toLowerCase().includes(keyword) || 
+                item.keterangan.toLowerCase().includes(keyword) || 
+                item.waktu.toLowerCase().includes(keyword);
+            
+            const matchJenis = jenisFilter === '' || item.jenis === jenisFilter;
+
+            return matchKeyword && matchJenis;
+        });
+
+        if (filteredRiwayat.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-slate-500 italic">Tidak ada riwayat dokumen yang cocok dengan filter atau pencarian.</td></tr>`;
             return;
         }
 
         tbody.innerHTML = '';
-        riwayat.forEach((item, index) => {
+        filteredRiwayat.forEach((item, index) => {
             let badgeColor = 'bg-blue-500/10 text-blue-400 border-blue-500/20';
             if (item.jenis.includes('SPPD')) badgeColor = 'bg-kejaksaan-500/10 text-kejaksaan-400 border-kejaksaan-500/20';
             if (item.jenis.includes('SPTJM')) badgeColor = 'bg-purple-500/10 text-purple-400 border-purple-500/20';
@@ -940,6 +979,14 @@
                 </tr>
             `;
         });
+    }
+
+    function resetFilterRiwayat() {
+        const kw = document.getElementById('filterKeyword');
+        const jf = document.getElementById('filterJenis');
+        if (kw) kw.value = '';
+        if (jf) jf.value = '';
+        muatUlangTabelRiwayat();
     }
 
     function hapusItemRiwayat(index) {
